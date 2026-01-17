@@ -11,6 +11,7 @@ import { CartProvider } from "./context/CartContext";
 import { FilterProvider } from "./context/FilterContext";
 import { WishlistProvider } from "./context/WishlistContext";
 import WishlistModal from "./components/WishlistModal/WishlistModal";
+import NotFound from "./pages/NotFound";
 
 function App() {
   return (
@@ -25,7 +26,7 @@ function App() {
               <Route path="/products/:id" element={<ProductDetail />} />
               <Route path="/about" element={<About />} />
               <Route path="/contact" element={<Contact />} />
-              <Route path="*" element={<h1>404 Not Found</h1>} />
+              <Route path="*" element={NotFound} />
             </Routes>
           </Layout>
           <WishlistModal />
