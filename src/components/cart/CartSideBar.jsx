@@ -267,7 +267,7 @@ const CartSideBar = () => {
                                 whileHover={{ scale: 1.05 }}
                               >
                                 <img
-                                  src={item.image}
+                                  src={item.images?.[0]}
                                   alt={item.title}
                                   className="w-24 h-24 object-cover rounded-xl shadow-md"
                                 />
