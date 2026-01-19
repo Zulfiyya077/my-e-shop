@@ -1,3 +1,4 @@
+// src/pages/Home.jsx
 import React from "react";
 import Slider from "react-slick";
 import { Link } from "react-router-dom";
@@ -19,7 +20,7 @@ const Home = () => {
     fade: true,
     cssEase: "cubic-bezier(0.87, 0, 0.13, 1)",
     customPaging: (i) => (
-      <div className="w-3 h-3 rounded-full bg-white/50 hover:bg-white hover:scale-125 transition-all duration-300"></div>
+      <div className="w-3 h-3 rounded-full bg-[#607EA2]/50 hover:bg-[#DDE3A3] hover:scale-125 transition-all duration-300"></div>
     ),
     appendDots: (dots) => (
       <div className="absolute bottom-8 w-full flex justify-center gap-3 z-20">
@@ -34,7 +35,7 @@ const Home = () => {
       title: "Summer Sale 50% Off",
       subtitle: "Grab your favorite gadgets now!",
       image: jblImg,
-      gradient: "from-blue-600 via-purple-600 to-pink-600",
+      gradient: "from-[#314B6E] via-[#607EA2] to-[#8197AC]",
       buttons: [
         { text: "Shop Now", link: "/products", primary: true },
         { text: "View Deals", link: "/products", primary: false },
@@ -45,7 +46,7 @@ const Home = () => {
       title: "New Arrivals",
       subtitle: "Check out the latest products",
       image: jblImg,
-      gradient: "from-green-500 via-teal-500 to-blue-500",
+      gradient: "from-[#1a2332] via-[#314B6E] to-[#607EA2]",
       buttons: [
         { text: "Shop Now", link: "/products", primary: true },
         { text: "Explore", link: "/products", primary: false },
@@ -56,7 +57,7 @@ const Home = () => {
       title: "Exclusive Offers",
       subtitle: "Limited time only!",
       image: jblImg,
-      gradient: "from-orange-500 via-red-500 to-pink-500",
+      gradient: "from-[#607EA2] via-[#8197AC] to-[#DDE3A3]",
       buttons: [
         { text: "Shop Now", link: "/products", primary: true },
         { text: "See More", link: "/products", primary: false },
@@ -65,10 +66,10 @@ const Home = () => {
   ];
 
   const stats = [
-    { icon: Users, value: "50K+", label: "Happy Customers", color: "from-blue-500 to-blue-600" },
-    { icon: Package, value: "10K+", label: "Products", color: "from-green-500 to-green-600" },
-    { icon: Award, value: "500+", label: "5-Star Reviews", color: "from-purple-500 to-purple-600" },
-    { icon: TrendingUp, value: "98%", label: "Satisfaction", color: "from-orange-500 to-orange-600" }
+    { icon: Users, value: "50K+", label: "Happy Customers", color: "from-[#607EA2] to-[#8197AC]" },
+    { icon: Package, value: "10K+", label: "Products", color: "from-[#314B6E] to-[#607EA2]" },
+    { icon: Award, value: "500+", label: "5-Star Reviews", color: "from-[#8197AC] to-[#DDE3A3]" },
+    { icon: TrendingUp, value: "98%", label: "Satisfaction", color: "from-[#607EA2] to-[#DDE3A3]" }
   ];
 
   const features = [
@@ -76,25 +77,25 @@ const Home = () => {
       icon: Zap,
       title: "Fast Delivery",
       description: "Free shipping on orders over $50",
-      gradient: "from-yellow-500 to-orange-500"
+      gradient: "from-[#607EA2] to-[#8197AC]"
     },
     {
       icon: Award,
       title: "Quality Products",
       description: "100% authentic guaranteed",
-      gradient: "from-blue-500 to-cyan-500"
+      gradient: "from-[#314B6E] to-[#607EA2]"
     },
     {
       icon: ShoppingBag,
       title: "Easy Returns",
       description: "30-day return policy",
-      gradient: "from-purple-500 to-pink-500"
+      gradient: "from-[#8197AC] to-[#DDE3A3]"
     },
     {
       icon: Star,
       title: "Best Prices",
       description: "Competitive pricing always",
-      gradient: "from-green-500 to-emerald-500"
+      gradient: "from-[#607EA2] to-[#DDE3A3]"
     }
   ];
 
@@ -109,7 +110,7 @@ const Home = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-[#0E141C]">
       {/* Hero Slider */}
       <div className="w-full overflow-hidden">
         <Slider {...settings}>
@@ -123,18 +124,18 @@ const Home = () => {
                     alt={banner.title}
                     className="w-full h-full object-cover"
                   />
-                  <div className={`absolute inset-0 bg-gradient-to-r ${banner.gradient} opacity-80`} />
+                  <div className={`absolute inset-0 bg-gradient-to-r ${banner.gradient} opacity-90`} />
                 </div>
 
                 {/* Animated Shapes */}
                 <div className="absolute inset-0 overflow-hidden">
                   <motion.div
-                    className="absolute top-20 right-20 w-64 h-64 bg-white/10 rounded-full blur-3xl"
+                    className="absolute top-20 right-20 w-64 h-64 bg-[#DDE3A3]/10 rounded-full blur-3xl"
                     animate={{ scale: [1, 1.2, 1], rotate: [0, 90, 0] }}
                     transition={{ duration: 10, repeat: Infinity }}
                   />
                   <motion.div
-                    className="absolute bottom-20 left-20 w-96 h-96 bg-white/10 rounded-full blur-3xl"
+                    className="absolute bottom-20 left-20 w-96 h-96 bg-[#DDE3A3]/10 rounded-full blur-3xl"
                     animate={{ scale: [1, 1.3, 1], rotate: [0, -90, 0] }}
                     transition={{ duration: 15, repeat: Infinity }}
                   />
@@ -147,10 +148,10 @@ const Home = () => {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.2 }}
                   >
-                    <h2 className="text-4xl md:text-7xl font-black mb-4 drop-shadow-2xl">
+                    <h2 className="text-4xl md:text-7xl font-black mb-4 drop-shadow-2xl text-[#DDE3A3]">
                       {banner.title}
                     </h2>
-                    <p className="text-xl md:text-3xl mb-8 font-semibold opacity-90 drop-shadow-lg">
+                    <p className="text-xl md:text-3xl mb-8 font-bold opacity-90 drop-shadow-lg text-white">
                       {banner.subtitle}
                     </p>
 
@@ -162,15 +163,15 @@ const Home = () => {
                           to={btn.link}
                           className={`group relative overflow-hidden ${
                             btn.primary
-                              ? "bg-white text-gray-900 hover:bg-gray-100"
-                              : "bg-white/20 backdrop-blur-sm text-white hover:bg-white/30 border-2 border-white"
-                          } font-bold py-4 px-8 rounded-xl transition-all shadow-2xl hover:shadow-3xl flex items-center gap-2`}
+                              ? "bg-[#DDE3A3] text-[#0E141C] hover:bg-white"
+                              : "bg-[#314B6E]/60 backdrop-blur-sm text-[#DDE3A3] hover:bg-[#314B6E] border-2 border-[#607EA2]"
+                          } font-black py-4 px-8 rounded-xl transition-all shadow-2xl hover:shadow-[#607EA2]/50 flex items-center gap-2`}
                         >
                           <span className="relative z-10">{btn.text}</span>
                           <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
                           {btn.primary && (
                             <motion.div
-                              className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-0 group-hover:opacity-20"
+                              className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-0 group-hover:opacity-30"
                               animate={{ x: ["-100%", "100%"] }}
                               transition={{ duration: 1.5, repeat: Infinity, repeatDelay: 1 }}
                             />
@@ -200,13 +201,13 @@ const Home = () => {
               key={index}
               variants={itemVariants}
               whileHover={{ scale: 1.05, y: -5 }}
-              className="bg-white rounded-2xl shadow-xl p-6 text-center"
+              className="bg-gradient-to-br from-[#314B6E]/40 to-[#1a2332] border border-[#314B6E] rounded-2xl shadow-xl shadow-[#314B6E]/30 p-6 text-center backdrop-blur-sm"
             >
-              <div className={`inline-block p-3 bg-gradient-to-r ${stat.color} rounded-xl mb-3`}>
-                <stat.icon size={28} className="text-white" />
+              <div className={`inline-block p-3 bg-gradient-to-r ${stat.color} rounded-xl mb-3 shadow-lg`}>
+                <stat.icon size={28} className="text-[#0E141C]" />
               </div>
-              <h3 className="text-3xl font-black text-gray-900 mb-1">{stat.value}</h3>
-              <p className="text-gray-600 font-semibold text-sm">{stat.label}</p>
+              <h3 className="text-3xl font-black text-[#DDE3A3] mb-1">{stat.value}</h3>
+              <p className="text-[#8197AC] font-bold text-sm">{stat.label}</p>
             </motion.div>
           ))}
         </div>
@@ -221,10 +222,10 @@ const Home = () => {
         className="max-w-6xl mx-auto px-6 py-20"
       >
         <motion.div variants={itemVariants} className="text-center mb-16">
-          <h2 className="text-5xl font-black mb-6 bg-gradient-to-r from-gray-900 via-blue-900 to-purple-900 bg-clip-text text-transparent">
+          <h2 className="text-5xl font-black mb-6 text-[#DDE3A3]">
             Why Choose Us
           </h2>
-          <div className="w-24 h-1 bg-gradient-to-r from-blue-500 to-purple-500 mx-auto rounded-full" />
+          <div className="w-24 h-1 bg-gradient-to-r from-[#607EA2] to-[#8197AC] mx-auto rounded-full" />
         </motion.div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -232,14 +233,14 @@ const Home = () => {
             <motion.div
               key={index}
               variants={itemVariants}
-              whileHover={{ y: -10 }}
-              className="bg-gradient-to-br from-gray-50 to-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all border-2 border-gray-100"
+              whileHover={{ y: -10, borderColor: "#607EA2" }}
+              className="bg-gradient-to-br from-[#314B6E]/20 to-[#0E141C] rounded-2xl p-8 shadow-lg hover:shadow-2xl hover:shadow-[#314B6E]/40 transition-all border-2 border-[#314B6E]/50 backdrop-blur-sm"
             >
               <div className={`inline-block p-4 bg-gradient-to-r ${feature.gradient} rounded-xl mb-6 shadow-lg`}>
-                <feature.icon size={32} className="text-white" />
+                <feature.icon size={32} className="text-[#0E141C]" />
               </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-3">{feature.title}</h3>
-              <p className="text-gray-600 leading-relaxed">{feature.description}</p>
+              <h3 className="text-xl font-black text-[#DDE3A3] mb-3">{feature.title}</h3>
+              <p className="text-[#8197AC] leading-relaxed">{feature.description}</p>
             </motion.div>
           ))}
         </div>
@@ -250,36 +251,46 @@ const Home = () => {
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
-        className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 py-20 relative overflow-hidden"
+        className="bg-gradient-to-r from-[#314B6E] via-[#607EA2] to-[#8197AC] py-20 relative overflow-hidden border-y border-[#314B6E]"
       >
         {/* Animated Background */}
         <div className="absolute inset-0 opacity-20">
           <motion.div
-            className="absolute top-0 left-0 w-96 h-96 bg-white rounded-full blur-3xl"
+            className="absolute top-0 left-0 w-96 h-96 bg-[#DDE3A3]/30 rounded-full blur-3xl"
             animate={{ x: [0, 100, 0], y: [0, 50, 0] }}
             transition={{ duration: 20, repeat: Infinity }}
           />
           <motion.div
-            className="absolute bottom-0 right-0 w-96 h-96 bg-white rounded-full blur-3xl"
+            className="absolute bottom-0 right-0 w-96 h-96 bg-[#DDE3A3]/30 rounded-full blur-3xl"
             animate={{ x: [0, -100, 0], y: [0, -50, 0] }}
             transition={{ duration: 15, repeat: Infinity }}
           />
         </div>
 
-        <div className="relative z-10 max-w-4xl mx-auto px-6 text-center text-white">
-          <h2 className="text-5xl font-black mb-6">Ready to Start Shopping?</h2>
-          <p className="text-xl mb-8 opacity-90">
-            Discover amazing deals on your favorite tech products
-          </p>
-          <Link
-            to="/products"
-            className="inline-flex items-center gap-3 bg-white text-gray-900 font-bold py-5 px-10 rounded-xl hover:bg-gray-100 transition-all shadow-2xl hover:shadow-3xl group"
+        <div className="relative z-10 max-w-4xl mx-auto px-6 text-center">
+          <motion.div
+            initial={{ scale: 0.8, opacity: 0 }}
+            whileInView={{ scale: 1, opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ type: "spring", stiffness: 100 }}
           >
-            Browse Products
-            <ArrowRight size={24} className="group-hover:translate-x-1 transition-transform" />
-          </Link>
+            <h2 className="text-5xl font-black mb-6 text-[#DDE3A3]">Ready to Start Shopping?</h2>
+            <p className="text-xl mb-8 text-white font-semibold">
+              Discover amazing deals on your favorite tech products
+            </p>
+            <Link
+              to="/products"
+              className="inline-flex items-center gap-3 bg-[#DDE3A3] text-[#0E141C] font-black py-5 px-10 rounded-xl hover:bg-white transition-all shadow-2xl hover:shadow-[#DDE3A3]/50 group"
+            >
+              Browse Products
+              <ArrowRight size={24} className="group-hover:translate-x-1 transition-transform" />
+            </Link>
+          </motion.div>
         </div>
       </motion.section>
+
+      {/* Additional decorative section */}
+      <div className="h-20 bg-gradient-to-b from-[#0E141C] to-[#1a2332]" />
     </div>
   );
 };

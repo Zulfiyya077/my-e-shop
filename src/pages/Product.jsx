@@ -1,8 +1,7 @@
-// src/pages/Product.jsx
 import { useEffect, useState, useCallback } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Heart, ShoppingCart, Star, Filter, Search, ChevronLeft, ChevronRight, X } from "lucide-react";
+import { Heart, ShoppingCart, Star, Filter, Search, ChevronLeft, ChevronRight, X, Zap } from "lucide-react";
 import { useCart } from "../context/CartContext";
 import { useWishlist } from "../context/WishlistContext";
 import { getProducts, getBrands, getCategories } from "../services/api";
@@ -24,7 +23,6 @@ const Product = () => {
   const [addedProducts, setAddedProducts] = useState(new Set());
   const [searchTerm, setSearchTerm] = useState(params.get("search") || "");
 
-  // URL parametrləri
   const category = params.get("category") || "all";
   const brand = params.get("brand") || "all";
   const color = params.get("color") || "";
@@ -41,21 +39,21 @@ const Product = () => {
     setParams(newParams);
   };
 
-  // ✅ Debounce hook for search
-  const debounce = (func, delay) => {
+  // Debounce function - prevents too many API calls while typing
+  const debounce = useCallback((func, delay) => {
     let timeoutId;
     return (...args) => {
       clearTimeout(timeoutId);
       timeoutId = setTimeout(() => func(...args), delay);
     };
-  };
+  }, []);
 
-  // ✅ Debounced search function
+  // Debounced search - waits 500ms after user stops typing
   const debouncedSearch = useCallback(
     debounce((value) => {
       updateParam("search", value);
     }, 500),
-    []
+    [debounce]
   );
 
   const handleSearchChange = (e) => {
@@ -64,7 +62,6 @@ const Product = () => {
     debouncedSearch(value);
   };
 
-  // Fetch products
   useEffect(() => {
     const fetchProducts = async () => {
       setLoading(true);
@@ -101,7 +98,6 @@ const Product = () => {
     fetchProducts();
   }, [category, brand, color, min, max, search, page]);
 
-  // Fetch brands & categories
   useEffect(() => {
     const fetchFilters = async () => {
       try {
@@ -130,111 +126,139 @@ const Product = () => {
   };
 
   const colorOptions = [
-    { name: "black", bg: "bg-black", ring: "ring-black" },
-    { name: "white", bg: "bg-white border border-gray-300", ring: "ring-gray-400" },
-    { name: "red", bg: "bg-red-500", ring: "ring-red-500" },
-    { name: "gray", bg: "bg-gray-500", ring: "ring-gray-500" },
-    { name: "blue", bg: "bg-blue-500", ring: "ring-blue-500" },
+    { name: "black", bg: "bg-zinc-900", ring: "ring-zinc-600" },
+    { name: "white", bg: "bg-zinc-100 border border-zinc-700", ring: "ring-zinc-400" },
+    { name: "red", bg: "bg-red-600", ring: "ring-red-500" },
+    { name: "gray", bg: "bg-zinc-600", ring: "ring-zinc-500" },
+    { name: "blue", bg: "bg-blue-600", ring: "ring-blue-500" },
   ];
 
   const containerVariants = {
     hidden: { opacity: 0 },
-    visible: { opacity: 1, transition: { staggerChildren: 0.08 } }
+    visible: { opacity: 1, transition: { staggerChildren: 0.06 } }
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0 }
+    hidden: { opacity: 0, y: 30 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" } }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50/50 via-purple-50/30 to-pink-50/30">
-      {/* ✨ Colorful Header */}
+    <div className="min-h-screen bg-[#0E141C]">
+      {/* Header */}
       <motion.div 
-        initial={{ y: -50 }}
-        animate={{ y: 0 }}
-        className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 shadow-xl sticky top-0 z-40"
+        initial={{ y: -80, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
+        className="bg-gradient-to-r from-[#314B6E]/30 via-[#607EA2]/20 to-[#314B6E]/30 border-b border-[#314B6E]/50 sticky top-0 z-40 backdrop-blur-xl"
       >
-        <div className="max-w-7xl mx-auto px-4 py-5 flex items-center justify-between">
-          <div className="text-white">
+        <div className="max-w-7xl mx-auto px-6 py-6 flex items-center justify-between">
+          <div>
             <motion.h1 
-              initial={{ opacity: 0, x: -20 }}
+              initial={{ opacity: 0, x: -30 }}
               animate={{ opacity: 1, x: 0 }}
-              className="text-3xl font-black"
+              transition={{ delay: 0.2 }}
+              className="text-4xl font-black tracking-tight"
             >
-              Discover Products
+            
             </motion.h1>
-            <motion.p 
+            <motion.div 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ delay: 0.1 }}
-              className="text-sm opacity-90"
+              transition={{ delay: 0.3 }}
+              className="flex items-center gap-2 mt-1"
             >
-              {products.length} amazing items found
-            </motion.p>
+              <Zap size={16} className="text-[#607EA2]" />
+              <p className="text-sm text-[#607EA2] font-medium">
+                {products.length} premium products
+              </p>
+            </motion.div>
           </div>
+          
           <motion.button
             onClick={() => setShowFilters(!showFilters)}
-            className="flex items-center gap-2 px-5 py-3 bg-white text-gray-900 rounded-xl font-bold shadow-lg hover:shadow-xl transition-all"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+            className="group relative px-6 py-3 bg-[#314B6E]/40 border border-[#314B6E] rounded-xl font-bold text-[#DDE3A3] overflow-hidden backdrop-blur-sm"
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.97 }}
           >
-            {showFilters ? <X size={20} /> : <Filter size={20} />}
-            <span className="hidden sm:inline">{showFilters ? "Hide" : "Show"} Filters</span>
+            <motion.div 
+              className="absolute inset-0 bg-[#607EA2]/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+            />
+            <div className="relative flex items-center gap-2">
+              {showFilters ? <X size={20} /> : <Filter size={20} />}
+              <span className="hidden sm:inline">{showFilters ? "Hide" : "Show"} Filters</span>
+            </div>
+            <motion.div
+              className="absolute bottom-0 left-0 h-0.5 bg-[#DDE3A3]"
+              initial={{ width: 0 }}
+              whileHover={{ width: "100%" }}
+              transition={{ duration: 0.3 }}
+            />
           </motion.button>
         </div>
       </motion.div>
 
-      <div className="flex gap-6 max-w-7xl mx-auto p-4">
-        {/* ✨ Colorful Filters Sidebar */}
+      <div className="flex gap-6 max-w-7xl mx-auto p-6">
+        {/* Filters Sidebar */}
         <AnimatePresence>
           {showFilters && (
             <motion.aside
-              initial={{ x: -250, opacity: 0 }}
+              initial={{ x: -280, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
-              exit={{ x: -250, opacity: 0 }}
-              transition={{ type: "spring", stiffness: 120 }}
-              className="w-64 bg-white rounded-2xl shadow-2xl p-6 space-y-6 sticky top-28 h-fit border-2 border-purple-100"
+              exit={{ x: -280, opacity: 0 }}
+              transition={{ type: "spring", stiffness: 100, damping: 20 }}
+              className="w-72 bg-gradient-to-b from-[#314B6E]/20 to-[#0E141C] rounded-2xl border border-[#314B6E]/50 p-6 space-y-6 sticky top-32 h-fit shadow-2xl backdrop-blur-sm"
             >
               <div className="flex items-center justify-between">
-                <h2 className="text-xl font-black bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                <h2 className="text-xl font-black text-[#DDE3A3] flex items-center gap-2">
+                  <Filter size={20} className="text-[#607EA2]" />
                   Filters
                 </h2>
                 <motion.button
                   onClick={() => setParams({ page: 1 })}
-                  className="text-xs text-red-500 font-bold hover:text-red-600 px-3 py-1 rounded-lg hover:bg-red-50 transition-all"
+                  className="text-xs text-[#8197AC] font-bold hover:text-[#DDE3A3] px-3 py-1.5 rounded-lg hover:bg-[#314B6E]/30 transition-all"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  Reset All
+                  Reset
                 </motion.button>
               </div>
 
-              {/* Search with Debounce */}
+              {/* Search */}
               <div>
-                <label className="text-xs font-bold text-gray-700 mb-2 block">Search Products</label>
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-purple-400" size={18} />
+                <label className="text-xs font-bold text-[#8197AC] mb-2 block uppercase tracking-wider">
+                  Search
+                </label>
+                <div className="relative group">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#607EA2] group-focus-within:text-[#8197AC] transition-colors" size={18} />
                   <input
                     type="text"
-                    placeholder="Type to search..."
+                    placeholder="Find products..."
                     value={searchTerm}
                     onChange={handleSearchChange}
-                    className="w-full pl-10 pr-3 py-3 text-sm border-2 border-purple-200 rounded-xl focus:border-purple-500 focus:ring-4 focus:ring-purple-100 outline-none transition-all"
+                    className="w-full pl-11 pr-4 py-3 text-sm bg-[#0E141C] border border-[#314B6E]/50 rounded-xl text-[#DDE3A3] placeholder-[#607EA2] focus:border-[#607EA2] focus:shadow-lg focus:shadow-[#314B6E]/30 outline-none transition-all"
                   />
+                  {searchTerm && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -5 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="absolute right-3 top-1/2 -translate-y-1/2"
+                    >
+                      <div className="w-2 h-2 bg-[#607EA2] rounded-full animate-pulse" />
+                    </motion.div>
+                  )}
                 </div>
-                {searchTerm && (
-                  <p className="text-xs text-gray-500 mt-1">Searching for "{searchTerm}"...</p>
-                )}
               </div>
 
               {/* Category */}
               <div>
-                <label className="text-xs font-bold text-gray-700 mb-2 block">Category</label>
+                <label className="text-xs font-bold text-[#8197AC] mb-2 block uppercase tracking-wider">
+                  Category
+                </label>
                 <select
                   value={category}
                   onChange={(e) => updateParam("category", e.target.value)}
-                  className="w-full p-3 text-sm border-2 border-blue-200 rounded-xl focus:border-blue-500 focus:ring-4 focus:ring-blue-100 cursor-pointer font-semibold bg-gradient-to-r from-blue-50 to-white"
+                  className="w-full p-3 text-sm bg-[#0E141C] border border-[#314B6E]/50 rounded-xl text-[#DDE3A3] cursor-pointer font-semibold hover:border-[#607EA2] focus:border-[#607EA2] focus:shadow-lg focus:shadow-[#314B6E]/30 outline-none transition-all"
                 >
                   <option value="all">All Categories</option>
                   {categories.map((c) => (
@@ -245,11 +269,13 @@ const Product = () => {
 
               {/* Brand */}
               <div>
-                <label className="text-xs font-bold text-gray-700 mb-2 block">Brand</label>
+                <label className="text-xs font-bold text-[#8197AC] mb-2 block uppercase tracking-wider">
+                  Brand
+                </label>
                 <select
                   value={brand}
                   onChange={(e) => updateParam("brand", e.target.value)}
-                  className="w-full p-3 text-sm border-2 border-purple-200 rounded-xl focus:border-purple-500 focus:ring-4 focus:ring-purple-100 cursor-pointer font-semibold bg-gradient-to-r from-purple-50 to-white"
+                  className="w-full p-3 text-sm bg-[#0E141C] border border-[#314B6E]/50 rounded-xl text-[#DDE3A3] cursor-pointer font-semibold hover:border-[#607EA2] focus:border-[#607EA2] focus:shadow-lg focus:shadow-[#314B6E]/30 outline-none transition-all"
                 >
                   <option value="all">All Brands</option>
                   {brands.map((b) => (
@@ -260,39 +286,53 @@ const Product = () => {
 
               {/* Colors */}
               <div>
-                <label className="text-xs font-bold text-gray-700 mb-3 block">Color</label>
+                <label className="text-xs font-bold text-[#8197AC] mb-3 block uppercase tracking-wider">
+                  Color
+                </label>
                 <div className="flex gap-2 flex-wrap">
                   {colorOptions.map((c) => (
                     <motion.button
                       key={c.name}
                       onClick={() => updateParam("color", c.name)}
-                      className={`w-10 h-10 rounded-xl ${c.bg} ${
-                        color === c.name ? `ring-4 ${c.ring}` : "ring-2 ring-gray-200"
-                      } transition-all shadow-lg hover:shadow-xl`}
-                      whileHover={{ scale: 1.15, y: -3 }}
-                      whileTap={{ scale: 0.9 }}
-                    />
+                      className={`w-11 h-11 rounded-lg ${c.bg} ${
+                        color === c.name 
+                          ? `ring-2 ${c.ring} shadow-lg` 
+                          : "ring-1 ring-[#314B6E] hover:ring-[#607EA2]"
+                      } transition-all relative overflow-hidden`}
+                      whileHover={{ scale: 1.1, y: -2 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      {color === c.name && (
+                        <motion.div
+                          initial={{ scale: 0 }}
+                          animate={{ scale: 1 }}
+                          className="absolute inset-0 bg-gradient-to-br from-[#607EA2]/30 to-transparent"
+                        />
+                      )}
+                    </motion.button>
                   ))}
                 </div>
               </div>
 
               {/* Price */}
               <div>
-                <label className="text-xs font-bold text-gray-700 mb-2 block">Price Range</label>
+                <label className="text-xs font-bold text-[#8197AC] mb-2 block uppercase tracking-wider">
+                  Price Range
+                </label>
                 <div className="flex gap-2">
                   <input
                     type="number"
                     placeholder="Min"
                     value={min || ""}
                     onChange={(e) => updateParam("min", e.target.value)}
-                    className="w-1/2 p-3 text-sm border-2 border-green-200 rounded-xl focus:border-green-500 focus:ring-4 focus:ring-green-100 outline-none font-semibold"
+                    className="w-1/2 p-3 text-sm bg-[#0E141C] border border-[#314B6E]/50 rounded-xl text-[#DDE3A3] placeholder-[#607EA2] focus:border-[#607EA2] focus:shadow-lg focus:shadow-[#314B6E]/30 outline-none font-semibold transition-all"
                   />
                   <input
                     type="number"
                     placeholder="Max"
                     value={max === 9999 ? "" : max}
                     onChange={(e) => updateParam("max", e.target.value)}
-                    className="w-1/2 p-3 text-sm border-2 border-green-200 rounded-xl focus:border-green-500 focus:ring-4 focus:ring-green-100 outline-none font-semibold"
+                    className="w-1/2 p-3 text-sm bg-[#0E141C] border border-[#314B6E]/50 rounded-xl text-[#DDE3A3] placeholder-[#607EA2] focus:border-[#607EA2] focus:shadow-lg focus:shadow-[#314B6E]/30 outline-none font-semibold transition-all"
                   />
                 </div>
               </div>
@@ -300,7 +340,7 @@ const Product = () => {
           )}
         </AnimatePresence>
 
-        {/* ✨ Products Grid */}
+        {/* Products Grid */}
         <div className="flex-1">
           <motion.div 
             variants={containerVariants}
@@ -310,64 +350,80 @@ const Product = () => {
           >
             {loading
               ? Array.from({ length: PER_PAGE }).map((_, i) => <Skeleton key={i} />)
-              : products.map((product, idx) => (
+              : products.map((product) => (
                   <motion.div
                     key={product.id}
                     variants={itemVariants}
-                    className="bg-white rounded-2xl shadow-xl overflow-hidden group hover:shadow-2xl transition-all border-2 border-transparent hover:border-purple-200"
-                    whileHover={{ y: -8, scale: 1.02 }}
+                    className="group bg-gradient-to-b from-[#314B6E]/20 to-[#0E141C] rounded-2xl border border-[#314B6E]/50 overflow-hidden hover:border-[#607EA2] transition-all duration-300 backdrop-blur-sm"
+                    whileHover={{ y: -8 }}
+                    style={{
+                      boxShadow: "0 4px 20px rgba(49, 75, 110, 0.3)"
+                    }}
                   >
                     <Link to={`/products/${product.id}`}>
                       {/* Image */}
-                      <div className="relative h-56 overflow-hidden bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50">
+                      <div className="relative h-64 overflow-hidden bg-gradient-to-br from-[#0E141C] via-[#314B6E]/10 to-[#0E141C]">
                         <motion.button
                           onClick={(e) => { e.preventDefault(); toggleWishlist(product); }}
-                          className="absolute top-3 right-3 z-10 bg-white/95 backdrop-blur-sm rounded-full p-2.5 shadow-lg"
-                          whileHover={{ scale: 1.15 }}
+                          className="absolute top-4 right-4 z-10 bg-[#314B6E]/60 backdrop-blur-sm border border-[#607EA2]/50 rounded-xl p-2.5 hover:border-red-400 transition-all"
+                          whileHover={{ scale: 1.15, rotate: [0, -10, 10, 0] }}
                           whileTap={{ scale: 0.9 }}
                         >
                           <Heart 
                             size={18} 
-                            className={`transition-all ${isInWishlist(product.id) ? 'fill-red-500 text-red-500' : 'text-gray-400'}`} 
+                            className={`transition-all ${isInWishlist(product.id) ? 'fill-red-400 text-red-400' : 'text-[#8197AC]'}`} 
                           />
                         </motion.button>
+
+                        <motion.div
+                          className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                          style={{
+                            background: "radial-gradient(circle at center, rgba(96, 126, 162, 0.15), transparent 70%)"
+                          }}
+                        />
 
                         <motion.img 
                           src={product.images?.[0] || "/placeholder.jpg"} 
                           alt={product.title} 
-                          className="w-full h-full object-contain p-6 group-hover:scale-110 transition-transform duration-500"
+                          className="w-full h-full object-contain p-8"
+                          whileHover={{ scale: 1.08 }}
+                          transition={{ duration: 0.4, ease: "easeOut" }}
                         />
-                        
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                       </div>
 
                       {/* Content */}
                       <div className="p-5 space-y-3">
-                        <span className="inline-block px-4 py-1.5 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-full text-xs font-bold shadow-md">
+                        <motion.span 
+                          className="inline-block px-3 py-1 bg-[#607EA2]/30 text-[#DDE3A3] rounded-lg text-xs font-black uppercase tracking-wider border border-[#607EA2]/50"
+                          whileHover={{ scale: 1.05 }}
+                        >
                           {product.category}
-                        </span>
+                        </motion.span>
 
-                        <h2 className="font-black text-lg text-gray-900 line-clamp-1 group-hover:bg-gradient-to-r group-hover:from-blue-600 group-hover:to-purple-600 group-hover:bg-clip-text group-hover:text-transparent transition-all">
+                        <h2 className="font-black text-lg text-[#DDE3A3] line-clamp-1 group-hover:text-[#8197AC] transition-colors">
                           {product.title}
                         </h2>
 
-                        <p className="text-gray-600 text-sm line-clamp-2 leading-relaxed">
+                        <p className="text-[#607EA2] text-sm line-clamp-2 leading-relaxed">
                           {product.description}
                         </p>
 
-                        <div className="flex items-center gap-1.5">
+                        <div className="flex items-center gap-1">
                           {[...Array(5)].map((_, i) => (
                             <Star 
                               key={i} 
                               size={14} 
-                              className={`${i < Math.floor(product.rating) ? "fill-yellow-400 text-yellow-400" : "text-gray-300"}`} 
+                              className={`${i < Math.floor(product.rating) ? "fill-[#8197AC] text-[#8197AC]" : "text-[#314B6E]"}`} 
                             />
                           ))}
-                          <span className="text-gray-700 font-bold text-sm ml-1">{product.rating}</span>
+                          <span className="text-[#8197AC] font-bold text-sm ml-2">{product.rating}</span>
                         </div>
 
-                        <div className="text-3xl font-black bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
-                          ${product.price}
+                        <div className="flex items-baseline gap-2">
+                          <span className="text-3xl font-black text-[#DDE3A3]">
+                            ${product.price}
+                          </span>
+                          <Zap size={16} className="text-[#607EA2]" />
                         </div>
                       </div>
                     </Link>
@@ -375,17 +431,23 @@ const Product = () => {
                     {/* Add to Cart Button */}
                     <motion.button
                       onClick={(e) => handleAddToCart(product, e)}
-                      className="w-full bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 text-white py-4 flex items-center justify-center gap-2 font-bold text-base relative overflow-hidden group/btn"
+                      className="relative w-full bg-gradient-to-r from-[#607EA2] to-[#8197AC] text-[#0E141C] py-4 flex items-center justify-center gap-2 font-black text-base overflow-hidden group/btn"
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
                     >
                       <motion.div
-                        className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-0 group-hover/btn:opacity-30"
+                        className="absolute inset-0 bg-gradient-to-r from-transparent via-[#DDE3A3]/20 to-transparent"
                         animate={{ x: ["-100%", "100%"] }}
-                        transition={{ duration: 1.5, repeat: Infinity, repeatDelay: 1 }}
+                        transition={{ duration: 2, repeat: Infinity, repeatDelay: 1 }}
                       />
                       
-                      <ShoppingCart size={18} className="relative z-10" />
+                      <motion.div
+                        animate={addedProducts.has(product.id) ? { rotate: [0, -15, 15, 0] } : {}}
+                        transition={{ duration: 0.5 }}
+                      >
+                        <ShoppingCart size={18} className="relative z-10" />
+                      </motion.div>
+                      
                       <AnimatePresence mode="wait">
                         {addedProducts.has(product.id) ? (
                           <motion.span
@@ -395,7 +457,7 @@ const Product = () => {
                             exit={{ opacity: 0, y: -10 }}
                             className="relative z-10"
                           >
-                            ✓ Added to Cart!
+                            ✓ ADDED!
                           </motion.span>
                         ) : (
                           <motion.span
@@ -405,7 +467,7 @@ const Product = () => {
                             exit={{ opacity: 0, y: -10 }}
                             className="relative z-10"
                           >
-                            Add to Cart
+                            ADD TO CART
                           </motion.span>
                         )}
                       </AnimatePresence>
@@ -414,23 +476,23 @@ const Product = () => {
                 ))}
           </motion.div>
 
-          {/* ✨ Colorful Pagination */}
+          {/* Pagination */}
           {!loading && totalPages > 1 && (
             <motion.div 
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-              className="flex items-center justify-center gap-3 mt-12"
+              transition={{ delay: 0.4 }}
+              className="flex items-center justify-center gap-3 mt-16"
             >
               <motion.button
                 onClick={() => page > 1 && updateParam("page", page - 1)}
                 disabled={page === 1}
-                className={`flex items-center gap-2 px-6 py-3 rounded-xl font-bold ${
+                className={`flex items-center gap-2 px-6 py-3 rounded-xl font-bold border transition-all ${
                   page === 1 
-                    ? 'bg-gray-100 text-gray-400 cursor-not-allowed' 
-                    : 'bg-gradient-to-r from-blue-500 to-purple-500 text-white shadow-lg hover:shadow-xl'
+                    ? 'bg-[#314B6E]/20 text-[#607EA2]/50 border-[#314B6E]/30 cursor-not-allowed' 
+                    : 'bg-[#314B6E]/30 text-[#DDE3A3] border-[#314B6E] hover:border-[#607EA2] hover:bg-[#314B6E]/50 backdrop-blur-sm'
                 }`}
-                whileHover={page > 1 ? { scale: 1.05 } : {}}
+                whileHover={page > 1 ? { scale: 1.05, x: -3 } : {}}
                 whileTap={page > 1 ? { scale: 0.95 } : {}}
               >
                 <ChevronLeft size={18} />
@@ -451,19 +513,19 @@ const Product = () => {
                       <motion.button
                         key={pageNum}
                         onClick={() => updateParam("page", pageNum)}
-                        className={`w-12 h-12 rounded-xl font-black text-base ${
+                        className={`w-12 h-12 rounded-xl font-black text-base border transition-all ${
                           isActive
-                            ? 'bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 text-white shadow-xl scale-110'
-                            : 'bg-white text-gray-700 hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 shadow-md border-2 border-gray-200'
+                            ? 'bg-gradient-to-r from-[#607EA2] to-[#8197AC] text-[#0E141C] border-transparent shadow-lg shadow-[#607EA2]/30'
+                            : 'bg-[#314B6E]/30 text-[#8197AC] border-[#314B6E] hover:border-[#607EA2] hover:text-[#DDE3A3] backdrop-blur-sm'
                         }`}
-                        whileHover={{ scale: isActive ? 1.1 : 1.15, y: -2 }}
+                        whileHover={{ scale: 1.1, y: -3 }}
                         whileTap={{ scale: 0.95 }}
                       >
                         {pageNum}
                       </motion.button>
                     );
                   } else if (pageNum === page - 2 || pageNum === page + 2) {
-                    return <span key={pageNum} className="flex items-center text-gray-400 font-bold">...</span>;
+                    return <span key={pageNum} className="flex items-center text-[#607EA2] font-bold">...</span>;
                   }
                   return null;
                 })}
@@ -472,12 +534,12 @@ const Product = () => {
               <motion.button
                 onClick={() => page < totalPages && updateParam("page", page + 1)}
                 disabled={page === totalPages}
-                className={`flex items-center gap-2 px-6 py-3 rounded-xl font-bold ${
+                className={`flex items-center gap-2 px-6 py-3 rounded-xl font-bold border transition-all ${
                   page === totalPages 
-                    ? 'bg-gray-100 text-gray-400 cursor-not-allowed' 
-                    : 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg hover:shadow-xl'
+                    ? 'bg-[#314B6E]/20 text-[#607EA2]/50 border-[#314B6E]/30 cursor-not-allowed' 
+                    : 'bg-[#314B6E]/30 text-[#DDE3A3] border-[#314B6E] hover:border-[#607EA2] hover:bg-[#314B6E]/50 backdrop-blur-sm'
                 }`}
-                whileHover={page < totalPages ? { scale: 1.05 } : {}}
+                whileHover={page < totalPages ? { scale: 1.05, x: 3 } : {}}
                 whileTap={page < totalPages ? { scale: 0.95 } : {}}
               >
                 Next

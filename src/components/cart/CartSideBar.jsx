@@ -1,6 +1,7 @@
+// src/components/cart/CartSideBar.jsx
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Heart, Trash2, ShoppingCart, ShoppingBag, CreditCard, Package } from "lucide-react";
+import { X, Heart, Trash2, ShoppingCart, ShoppingBag, CreditCard, Package, Zap } from "lucide-react";
 import { useCart } from "../../context/CartContext";
 import { useWishlist } from "../../context/WishlistContext";
 
@@ -117,7 +118,7 @@ const CartSideBar = () => {
               initial="hidden"
               animate="visible"
               exit="exit"
-              className="fixed inset-0 bg-black/50 backdrop-blur-md z-40"
+              className="fixed inset-0 bg-[#0E141C]/80 backdrop-blur-md z-40"
               onClick={() => setIsCartOpen(false)}
             />
 
@@ -127,26 +128,32 @@ const CartSideBar = () => {
               initial="hidden"
               animate="visible"
               exit="exit"
-              className="fixed top-0 right-0 w-full sm:w-[450px] h-full bg-gradient-to-br from-white to-gray-50 shadow-2xl z-50"
+              className="fixed top-0 right-0 w-full sm:w-[480px] h-full bg-gradient-to-b from-[#0E141C] via-[#1a2332] to-[#0E141C] shadow-2xl z-50 border-l border-[#314B6E]"
             >
               {/* Header */}
               <motion.div 
                 variants={headerVariants}
                 initial="hidden"
                 animate="visible"
-                className="flex justify-between items-center p-6 border-b-2 border-gray-200 bg-gradient-to-r from-blue-600 to-purple-600"
+                className="flex justify-between items-center p-6 border-b border-[#314B6E] bg-gradient-to-r from-[#314B6E]/30 to-[#607EA2]/20 backdrop-blur-sm"
               >
                 <div className="flex items-center gap-3">
                   <motion.div
                     animate={{ rotate: [0, -10, 10, -10, 0] }}
                     transition={{ duration: 0.5, delay: 0.3 }}
+                    className="relative"
                   >
-                    <ShoppingBag className="w-8 h-8 text-white" />
+                    <ShoppingBag className="w-8 h-8 text-[#DDE3A3]" />
+                    <motion.div
+                      className="absolute -top-1 -right-1 w-3 h-3 bg-[#607EA2] rounded-full"
+                      animate={{ scale: [1, 1.3, 1] }}
+                      transition={{ duration: 2, repeat: Infinity }}
+                    />
                   </motion.div>
                   <div>
-                    <h2 className="text-2xl font-bold text-white">Shopping Cart</h2>
+                    <h2 className="text-2xl font-black text-[#DDE3A3]">Shopping Cart</h2>
                     <motion.p 
-                      className="text-sm text-blue-100"
+                      className="text-sm text-[#8197AC]"
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       transition={{ delay: 0.4 }}
@@ -157,17 +164,17 @@ const CartSideBar = () => {
                 </div>
                 <motion.button
                   onClick={() => setIsCartOpen(false)}
-                  className="p-2 bg-white/20 hover:bg-white/30 rounded-full transition-colors duration-200"
+                  className="p-2 bg-[#314B6E]/50 hover:bg-[#314B6E] rounded-xl transition-colors duration-200 border border-[#314B6E]"
                   whileHover={{ scale: 1.1, rotate: 90 }}
                   whileTap={{ scale: 0.9 }}
                 >
-                  <X className="w-6 h-6 text-white" />
+                  <X className="w-6 h-6 text-[#DDE3A3]" />
                 </motion.button>
               </motion.div>
 
               {/* Content */}
               <div className="flex flex-col h-[calc(100%-88px)]">
-                <div className="flex-1 overflow-y-auto p-4 space-y-4">
+                <div className="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar">
                   <AnimatePresence mode="wait">
                     {loading ? (
                       // Loading Skeleton
@@ -178,22 +185,22 @@ const CartSideBar = () => {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: i * 0.1 }}
-                            className="flex gap-4 items-center bg-gray-100 p-4 rounded-2xl"
+                            className="flex gap-4 items-center bg-[#314B6E]/20 p-4 rounded-2xl border border-[#314B6E]/50"
                           >
                             <motion.div 
-                              className="w-24 h-24 bg-gray-300 rounded-xl"
-                              animate={{ opacity: [0.5, 1, 0.5] }}
+                              className="w-24 h-24 bg-[#314B6E]/40 rounded-xl"
+                              animate={{ opacity: [0.3, 0.6, 0.3] }}
                               transition={{ duration: 1.5, repeat: Infinity }}
                             />
                             <div className="flex-1 space-y-3">
                               <motion.div 
-                                className="h-4 bg-gray-300 rounded-full w-3/4"
-                                animate={{ opacity: [0.5, 1, 0.5] }}
+                                className="h-4 bg-[#314B6E]/40 rounded-full w-3/4"
+                                animate={{ opacity: [0.3, 0.6, 0.3] }}
                                 transition={{ duration: 1.5, repeat: Infinity, delay: 0.2 }}
                               />
                               <motion.div 
-                                className="h-4 bg-gray-300 rounded-full w-1/2"
-                                animate={{ opacity: [0.5, 1, 0.5] }}
+                                className="h-4 bg-[#314B6E]/40 rounded-full w-1/2"
+                                animate={{ opacity: [0.3, 0.6, 0.3] }}
                                 transition={{ duration: 1.5, repeat: Infinity, delay: 0.4 }}
                               />
                             </div>
@@ -219,10 +226,10 @@ const CartSideBar = () => {
                             ease: "easeInOut"
                           }}
                         >
-                          <ShoppingCart className="w-32 h-32 text-gray-300 mb-4" />
+                          <ShoppingCart className="w-32 h-32 text-[#314B6E] mb-4" />
                         </motion.div>
                         <motion.p 
-                          className="text-xl font-semibold text-gray-600 mb-2"
+                          className="text-xl font-black text-[#8197AC] mb-2"
                           initial={{ opacity: 0, y: 10 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ delay: 0.2 }}
@@ -230,7 +237,7 @@ const CartSideBar = () => {
                           Your cart is empty
                         </motion.p>
                         <motion.p 
-                          className="text-gray-400"
+                          className="text-[#607EA2]"
                           initial={{ opacity: 0 }}
                           animate={{ opacity: 1 }}
                           transition={{ delay: 0.3 }}
@@ -250,12 +257,12 @@ const CartSideBar = () => {
                             animate="visible"
                             exit="exit"
                             layout
-                            className="bg-white border-2 border-gray-100 rounded-2xl p-4 hover:shadow-2xl transition-shadow duration-300 relative overflow-hidden"
-                            whileHover={{ y: -4 }}
+                            className="bg-gradient-to-br from-[#314B6E]/20 to-[#0E141C] border border-[#314B6E]/50 rounded-2xl p-4 hover:shadow-2xl hover:shadow-[#314B6E]/30 transition-all duration-300 relative overflow-hidden backdrop-blur-sm"
+                            whileHover={{ y: -4, borderColor: "#607EA2" }}
                           >
                             {/* Gradient Background Effect */}
                             <motion.div
-                              className="absolute inset-0 bg-gradient-to-r from-blue-50/50 to-purple-50/50 opacity-0"
+                              className="absolute inset-0 bg-gradient-to-r from-[#607EA2]/10 to-[#8197AC]/10 opacity-0"
                               whileHover={{ opacity: 1 }}
                               transition={{ duration: 0.3 }}
                             />
@@ -269,10 +276,10 @@ const CartSideBar = () => {
                                 <img
                                   src={item.images?.[0]}
                                   alt={item.title}
-                                  className="w-24 h-24 object-cover rounded-xl shadow-md"
+                                  className="w-24 h-24 object-cover rounded-xl shadow-lg border border-[#314B6E]/50"
                                 />
                                 <motion.div
-                                  className="absolute -top-2 -right-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white text-xs font-bold rounded-full w-7 h-7 flex items-center justify-center shadow-lg"
+                                  className="absolute -top-2 -right-2 bg-gradient-to-r from-[#607EA2] to-[#8197AC] text-[#0E141C] text-xs font-black rounded-full w-7 h-7 flex items-center justify-center shadow-lg border border-[#314B6E]"
                                   initial={{ scale: 0 }}
                                   animate={{ scale: 1 }}
                                   transition={{ delay: index * 0.1 + 0.3, type: "spring" }}
@@ -283,11 +290,11 @@ const CartSideBar = () => {
 
                               {/* Info */}
                               <div className="flex-1 min-w-0">
-                                <h3 className="font-bold text-gray-800 mb-1 line-clamp-2 text-sm">
+                                <h3 className="font-black text-[#DDE3A3] mb-1 line-clamp-2 text-sm">
                                   {item.title}
                                 </h3>
                                 <motion.p 
-                                  className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent"
+                                  className="text-xl font-black text-[#8197AC]"
                                   initial={{ opacity: 0, scale: 0.8 }}
                                   animate={{ opacity: 1, scale: 1 }}
                                   transition={{ delay: index * 0.1 + 0.2 }}
@@ -299,23 +306,23 @@ const CartSideBar = () => {
                                 <div className="flex items-center gap-3 mt-3">
                                   <motion.button
                                     onClick={() => decreaseQty(item.id)}
-                                    className="w-9 h-9 flex items-center justify-center border-2 border-gray-300 rounded-xl bg-white hover:bg-red-50 hover:border-red-400 hover:text-red-600 transition-all duration-200 font-bold text-gray-600 shadow-sm"
+                                    className="w-9 h-9 flex items-center justify-center border border-[#314B6E] rounded-xl bg-[#0E141C] hover:bg-[#314B6E]/50 hover:border-[#607EA2] text-[#8197AC] hover:text-[#DDE3A3] transition-all duration-200 font-bold shadow-sm"
                                     whileHover={{ scale: 1.1 }}
                                     whileTap={{ scale: 0.9 }}
                                   >
                                     -
                                   </motion.button>
                                   <motion.span 
-                                    className="font-bold text-gray-700 w-10 text-center text-lg"
+                                    className="font-black text-[#DDE3A3] w-10 text-center text-lg"
                                     key={item.quantity}
-                                    initial={{ scale: 1.5, color: "#3B82F6" }}
-                                    animate={{ scale: 1, color: "#374151" }}
+                                    initial={{ scale: 1.5, color: "#607EA2" }}
+                                    animate={{ scale: 1, color: "#DDE3A3" }}
                                   >
                                     {item.quantity}
                                   </motion.span>
                                   <motion.button
                                     onClick={() => increaseQty(item.id)}
-                                    className="w-9 h-9 flex items-center justify-center border-2 border-gray-300 rounded-xl bg-white hover:bg-green-50 hover:border-green-400 hover:text-green-600 transition-all duration-200 font-bold text-gray-600 shadow-sm"
+                                    className="w-9 h-9 flex items-center justify-center border border-[#314B6E] rounded-xl bg-[#0E141C] hover:bg-[#314B6E]/50 hover:border-[#607EA2] text-[#8197AC] hover:text-[#DDE3A3] transition-all duration-200 font-bold shadow-sm"
                                     whileHover={{ scale: 1.1 }}
                                     whileTap={{ scale: 0.9 }}
                                   >
@@ -329,10 +336,10 @@ const CartSideBar = () => {
                                 {/* Wishlist */}
                                 <motion.button
                                   onClick={() => toggleWishlist(item)}
-                                  className={`p-2 rounded-xl transition-all duration-200 ${
+                                  className={`p-2 rounded-xl transition-all duration-200 border ${
                                     isInWishlist(item.id)
-                                      ? "bg-gradient-to-r from-pink-500 to-red-500 text-white shadow-lg"
-                                      : "bg-gray-100 text-gray-400 hover:bg-pink-50 hover:text-pink-400"
+                                      ? "bg-gradient-to-r from-pink-500 to-red-500 text-white border-pink-400 shadow-lg shadow-pink-500/30"
+                                      : "bg-[#314B6E]/30 text-[#607EA2] hover:bg-[#314B6E]/50 hover:text-pink-400 border-[#314B6E]"
                                   }`}
                                   whileHover={{ scale: 1.15, rotate: 10 }}
                                   whileTap={{ scale: 0.9 }}
@@ -350,7 +357,7 @@ const CartSideBar = () => {
                                 {/* Delete */}
                                 <motion.button
                                   onClick={() => removeFromCart(item.id)}
-                                  className="p-2 rounded-xl bg-red-50 text-red-500 hover:bg-red-500 hover:text-white shadow-sm"
+                                  className="p-2 rounded-xl bg-[#314B6E]/30 text-red-400 hover:bg-red-500 hover:text-white border border-[#314B6E] hover:border-red-400 shadow-sm transition-all"
                                   whileHover={{ scale: 1.15, rotate: -10 }}
                                   whileTap={{ scale: 0.9, rotate: 0 }}
                                 >
@@ -361,16 +368,16 @@ const CartSideBar = () => {
 
                             {/* Subtotal */}
                             <motion.div 
-                              className="mt-3 pt-3 border-t border-gray-100 flex justify-between items-center"
+                              className="mt-3 pt-3 border-t border-[#314B6E]/50 flex justify-between items-center"
                               initial={{ opacity: 0 }}
                               animate={{ opacity: 1 }}
                               transition={{ delay: index * 0.1 + 0.3 }}
                             >
-                              <span className="text-sm text-gray-500 flex items-center gap-1">
+                              <span className="text-sm text-[#607EA2] flex items-center gap-1 font-semibold">
                                 <Package size={14} />
                                 Subtotal:
                               </span>
-                              <span className="font-bold text-gray-800 text-lg">
+                              <span className="font-black text-[#DDE3A3] text-lg">
                                 ${(item.price * item.quantity).toFixed(2)}
                               </span>
                             </motion.div>
@@ -387,18 +394,21 @@ const CartSideBar = () => {
                     variants={totalVariants}
                     initial="hidden"
                     animate="visible"
-                    className="border-t-2 border-gray-200 p-6 bg-gradient-to-r from-gray-50 to-white"
+                    className="border-t border-[#314B6E] p-6 bg-gradient-to-r from-[#1a2332] to-[#0E141C]"
                   >
                     {/* Total */}
                     <motion.div 
-                      className="flex justify-between items-center mb-4 p-5 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl shadow-lg"
+                      className="flex justify-between items-center mb-4 p-5 bg-gradient-to-r from-[#607EA2] to-[#8197AC] rounded-2xl shadow-lg shadow-[#607EA2]/30 border border-[#314B6E]"
                       whileHover={{ scale: 1.02 }}
                     >
-                      <span className="text-lg font-semibold text-white">
-                        Total:
-                      </span>
+                      <div className="flex items-center gap-2">
+                        <Zap className="w-5 h-5 text-[#0E141C]" />
+                        <span className="text-lg font-black text-[#0E141C]">
+                          Total:
+                        </span>
+                      </div>
                       <motion.span 
-                        className="text-3xl font-bold text-white"
+                        className="text-3xl font-black text-[#0E141C]"
                         initial={{ scale: 0 }}
                         animate={{ scale: 1 }}
                         transition={{ type: "spring", stiffness: 200 }}
@@ -415,13 +425,13 @@ const CartSideBar = () => {
                           clearCart();
                           setIsCartOpen(false);
                         }}
-                        className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 rounded-xl font-bold shadow-xl flex items-center justify-center gap-2 relative overflow-hidden"
-                        whileHover={{ scale: 1.02, boxShadow: "0 25px 50px -12px rgb(0 0 0 / 0.25)" }}
+                        className="w-full bg-gradient-to-r from-[#607EA2] to-[#8197AC] text-[#0E141C] py-4 rounded-xl font-black shadow-xl shadow-[#607EA2]/30 flex items-center justify-center gap-2 relative overflow-hidden border border-[#314B6E]"
+                        whileHover={{ scale: 1.02, boxShadow: "0 25px 50px -12px rgba(96, 126, 162, 0.5)" }}
                         whileTap={{ scale: 0.98 }}
                       >
                         <motion.div
-                          className="absolute inset-0 bg-white opacity-0"
-                          whileHover={{ opacity: 0.1 }}
+                          className="absolute inset-0 bg-[#DDE3A3] opacity-0"
+                          whileHover={{ opacity: 0.2 }}
                         />
                         <CreditCard size={20} />
                         Checkout Now
@@ -429,7 +439,7 @@ const CartSideBar = () => {
                       
                       <motion.button
                         onClick={clearCart}
-                        className="w-full bg-gray-200 text-gray-700 py-3 rounded-xl font-semibold hover:bg-gray-300 transition-all duration-200"
+                        className="w-full bg-[#314B6E]/40 text-[#8197AC] py-3 rounded-xl font-bold hover:bg-[#314B6E]/60 hover:text-[#DDE3A3] transition-all duration-200 border border-[#314B6E]"
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
                       >
@@ -443,6 +453,23 @@ const CartSideBar = () => {
           </>
         )}
       </AnimatePresence>
+
+      <style jsx>{`
+        .custom-scrollbar::-webkit-scrollbar {
+          width: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+          background: rgba(49, 75, 110, 0.2);
+          border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+          background: rgba(96, 126, 162, 0.5);
+          border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+          background: rgba(96, 126, 162, 0.8);
+        }
+      `}</style>
     </>
   );
 };

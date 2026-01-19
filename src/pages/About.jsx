@@ -13,10 +13,10 @@ const About = () => {
   };
 
   const stats = [
-    { icon: Users, value: "50K+", label: "Happy Customers", color: "from-blue-500 to-blue-600" },
-    { icon: Package, value: "10K+", label: "Products Sold", color: "from-green-500 to-green-600" },
-    { icon: Award, value: "500+", label: "5-Star Reviews", color: "from-purple-500 to-purple-600" },
-    { icon: TrendingUp, value: "98%", label: "Satisfaction Rate", color: "from-orange-500 to-orange-600" }
+    { icon: Users, value: "50K+", label: "Happy Customers", color: "from-[#314B6E] to-[#607EA2]" },
+    { icon: Package, value: "10K+", label: "Products Sold", color: "from-[#607EA2] to-[#8197AC]" },
+    { icon: Award, value: "500+", label: "5-Star Reviews", color: "from-[#8197AC] to-[#607EA2]" },
+    { icon: TrendingUp, value: "98%", label: "Satisfaction Rate", color: "from-[#607EA2] to-[#314B6E]" }
   ];
 
   const values = [
@@ -24,19 +24,19 @@ const About = () => {
       icon: Shield,
       title: "Quality Assurance",
       description: "Every product is thoroughly tested and verified to meet the highest standards of quality and performance.",
-      gradient: "from-blue-500 to-cyan-500"
+      gradient: "from-[#314B6E] to-[#607EA2]"
     },
     {
       icon: Zap,
       title: "Fast Delivery",
       description: "Lightning-fast shipping with real-time tracking. Most orders arrive within 2-3 business days.",
-      gradient: "from-yellow-500 to-orange-500"
+      gradient: "from-[#607EA2] to-[#8197AC]"
     },
     {
       icon: Heart,
       title: "Customer First",
       description: "Your satisfaction is our priority. 24/7 support team ready to help with any questions or concerns.",
-      gradient: "from-pink-500 to-red-500"
+      gradient: "from-[#8197AC] to-[#607EA2]"
     }
   ];
 
@@ -48,22 +48,22 @@ const About = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50/30 to-purple-50/30">
+    <div className="min-h-screen bg-[#0E141C]">
       {/* Hero Section */}
       <motion.section 
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        className="relative overflow-hidden bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 text-white py-24"
+        className="relative overflow-hidden bg-gradient-to-r from-[#314B6E] via-[#607EA2] to-[#314B6E] text-[#EDE3A3] py-24"
       >
         {/* Animated Background */}
         <div className="absolute inset-0 opacity-20">
           <motion.div
-            className="absolute top-0 left-0 w-96 h-96 bg-white rounded-full blur-3xl"
+            className="absolute top-0 left-0 w-96 h-96 bg-[#EDE3A3] rounded-full blur-3xl"
             animate={{ x: [0, 100, 0], y: [0, 50, 0] }}
             transition={{ duration: 20, repeat: Infinity }}
           />
           <motion.div
-            className="absolute bottom-0 right-0 w-96 h-96 bg-white rounded-full blur-3xl"
+            className="absolute bottom-0 right-0 w-96 h-96 bg-[#8197AC] rounded-full blur-3xl"
             animate={{ x: [0, -100, 0], y: [0, -50, 0] }}
             transition={{ duration: 15, repeat: Infinity }}
           />
@@ -103,15 +103,15 @@ const About = () => {
               key={index}
               variants={itemVariants}
               whileHover={{ scale: 1.05, y: -5 }}
-              className="bg-white rounded-2xl shadow-xl p-6 text-center"
+              className="bg-gradient-to-b from-[#314B6E]/20 to-[#0E141C] rounded-2xl shadow-xl p-6 text-center border border-[#314B6E]/50 backdrop-blur-sm"
             >
               <div className={`inline-block p-4 bg-gradient-to-r ${stat.color} rounded-xl mb-4`}>
-                <stat.icon size={32} className="text-white" />
+                <stat.icon size={32} className="text-[#EDE3A3]" />
               </div>
-              <h3 className="text-4xl font-black mb-2 bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">
+              <h3 className="text-4xl font-black mb-2 bg-gradient-to-r from-[#EDE3A3] to-[#8197AC] bg-clip-text text-transparent">
                 {stat.value}
               </h3>
-              <p className="text-gray-600 font-semibold">{stat.label}</p>
+              <p className="text-[#8197AC] font-semibold">{stat.label}</p>
             </motion.div>
           ))}
         </div>
@@ -126,21 +126,21 @@ const About = () => {
         className="max-w-6xl mx-auto px-6 py-20"
       >
         <motion.div variants={itemVariants} className="text-center mb-16">
-          <h2 className="text-5xl font-black mb-6 bg-gradient-to-r from-gray-900 via-blue-900 to-purple-900 bg-clip-text text-transparent">
+          <h2 className="text-5xl font-black mb-6 bg-gradient-to-r from-[#EDE3A3] via-[#8197AC] to-[#607EA2] bg-clip-text text-transparent">
             Our Story
           </h2>
-          <div className="w-24 h-1 bg-gradient-to-r from-blue-500 to-purple-500 mx-auto rounded-full" />
+          <div className="w-24 h-1 bg-gradient-to-r from-[#607EA2] to-[#8197AC] mx-auto rounded-full" />
         </motion.div>
 
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <motion.div variants={itemVariants} className="space-y-6">
-            <p className="text-gray-700 leading-relaxed text-lg">
-              Welcome to <span className="font-bold text-blue-600">My-e-shop</span>! We are dedicated to providing the best electronic products with top-notch customer service. Our mission is to make shopping easy and enjoyable for everyone.
+            <p className="text-[#8197AC] leading-relaxed text-lg">
+              Welcome to <span className="font-bold text-[#EDE3A3]">My-e-shop</span>! We are dedicated to providing the best electronic products with top-notch customer service. Our mission is to make shopping easy and enjoyable for everyone.
             </p>
-            <p className="text-gray-700 leading-relaxed text-lg">
+            <p className="text-[#8197AC] leading-relaxed text-lg">
               Founded in 2026, our store focuses on high-quality devices, laptops, accessories, and tablets. We carefully select our products to ensure they meet our standards for reliability and performance.
             </p>
-            <p className="text-gray-700 leading-relaxed text-lg">
+            <p className="text-[#8197AC] leading-relaxed text-lg">
               Our team is passionate about technology and committed to helping you find the perfect product that fits your needs. Customer satisfaction is our top priority.
             </p>
           </motion.div>
@@ -149,19 +149,19 @@ const About = () => {
             variants={itemVariants}
             className="relative"
           >
-            <div className="relative rounded-2xl overflow-hidden shadow-2xl">
+            <div className="relative rounded-2xl overflow-hidden shadow-2xl border-2 border-[#314B6E]/50">
               <img 
                 src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&q=80" 
                 alt="Team" 
                 className="w-full h-96 object-cover"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0E141C]/80 to-transparent" />
             </div>
             {/* Floating Badge */}
             <motion.div
               animate={{ y: [0, -10, 0] }}
               transition={{ duration: 3, repeat: Infinity }}
-              className="absolute -bottom-6 -right-6 bg-gradient-to-r from-blue-600 to-purple-600 text-white p-6 rounded-2xl shadow-2xl"
+              className="absolute -bottom-6 -right-6 bg-gradient-to-r from-[#607EA2] to-[#8197AC] text-[#0E141C] p-6 rounded-2xl shadow-2xl border-2 border-[#314B6E]"
             >
               <p className="text-4xl font-black">2026</p>
               <p className="text-sm font-semibold">Founded</p>
@@ -176,14 +176,14 @@ const About = () => {
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true }}
-        className="bg-white py-20"
+        className="bg-gradient-to-b from-[#314B6E]/10 to-[#0E141C] py-20"
       >
         <div className="max-w-6xl mx-auto px-6">
           <motion.div variants={itemVariants} className="text-center mb-16">
-            <h2 className="text-5xl font-black mb-6 bg-gradient-to-r from-gray-900 via-blue-900 to-purple-900 bg-clip-text text-transparent">
+            <h2 className="text-5xl font-black mb-6 bg-gradient-to-r from-[#EDE3A3] via-[#8197AC] to-[#607EA2] bg-clip-text text-transparent">
               Our Core Values
             </h2>
-            <div className="w-24 h-1 bg-gradient-to-r from-blue-500 to-purple-500 mx-auto rounded-full" />
+            <div className="w-24 h-1 bg-gradient-to-r from-[#607EA2] to-[#8197AC] mx-auto rounded-full" />
           </motion.div>
 
           <div className="grid md:grid-cols-3 gap-8">
@@ -194,12 +194,12 @@ const About = () => {
                 whileHover={{ y: -10 }}
                 className="relative group"
               >
-                <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-8 shadow-lg group-hover:shadow-2xl transition-all">
+                <div className="bg-gradient-to-br from-[#314B6E]/20 to-[#0E141C] rounded-2xl p-8 shadow-lg group-hover:shadow-2xl transition-all border border-[#314B6E]/50 backdrop-blur-sm">
                   <div className={`inline-block p-4 bg-gradient-to-r ${value.gradient} rounded-xl mb-6`}>
-                    <value.icon size={32} className="text-white" />
+                    <value.icon size={32} className="text-[#EDE3A3]" />
                   </div>
-                  <h3 className="text-2xl font-bold mb-4 text-gray-900">{value.title}</h3>
-                  <p className="text-gray-600 leading-relaxed">{value.description}</p>
+                  <h3 className="text-2xl font-bold mb-4 text-[#EDE3A3]">{value.title}</h3>
+                  <p className="text-[#8197AC] leading-relaxed">{value.description}</p>
                 </div>
               </motion.div>
             ))}
@@ -217,12 +217,12 @@ const About = () => {
       >
         <motion.div 
           variants={itemVariants}
-          className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-3xl p-12 text-white relative overflow-hidden"
+          className="bg-gradient-to-r from-[#314B6E] to-[#607EA2] rounded-3xl p-12 text-[#EDE3A3] relative overflow-hidden border-2 border-[#607EA2]/50"
         >
           {/* Background Pattern */}
           <div className="absolute inset-0 opacity-10">
-            <div className="absolute top-0 right-0 w-64 h-64 bg-white rounded-full blur-3xl" />
-            <div className="absolute bottom-0 left-0 w-64 h-64 bg-white rounded-full blur-3xl" />
+            <div className="absolute top-0 right-0 w-64 h-64 bg-[#EDE3A3] rounded-full blur-3xl" />
+            <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#8197AC] rounded-full blur-3xl" />
           </div>
 
           <div className="relative z-10 text-center max-w-3xl mx-auto">
@@ -248,14 +248,14 @@ const About = () => {
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true }}
-        className="bg-white py-20"
+        className="bg-gradient-to-b from-[#314B6E]/10 to-[#0E141C] py-20"
       >
         <div className="max-w-6xl mx-auto px-6">
           <motion.div variants={itemVariants} className="text-center mb-16">
-            <h2 className="text-5xl font-black mb-6 bg-gradient-to-r from-gray-900 via-blue-900 to-purple-900 bg-clip-text text-transparent">
+            <h2 className="text-5xl font-black mb-6 bg-gradient-to-r from-[#EDE3A3] via-[#8197AC] to-[#607EA2] bg-clip-text text-transparent">
               Meet Our Team
             </h2>
-            <div className="w-24 h-1 bg-gradient-to-r from-blue-500 to-purple-500 mx-auto rounded-full" />
+            <div className="w-24 h-1 bg-gradient-to-r from-[#607EA2] to-[#8197AC] mx-auto rounded-full" />
           </motion.div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -271,12 +271,12 @@ const About = () => {
                     whileHover={{ scale: 1.1 }}
                     src={member.img}
                     alt={member.name}
-                    className="w-32 h-32 rounded-full object-cover shadow-xl"
+                    className="w-32 h-32 rounded-full object-cover shadow-xl border-4 border-[#314B6E]/50"
                   />
-                  <div className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 opacity-0 group-hover:opacity-20 transition-opacity" />
+                  <div className="absolute inset-0 rounded-full bg-gradient-to-r from-[#607EA2] to-[#8197AC] opacity-0 group-hover:opacity-20 transition-opacity" />
                 </div>
-                <h3 className="text-xl font-bold text-gray-900">{member.name}</h3>
-                <p className="text-blue-600 font-semibold">{member.role}</p>
+                <h3 className="text-xl font-bold text-[#EDE3A3]">{member.name}</h3>
+                <p className="text-[#607EA2] font-semibold">{member.role}</p>
               </motion.div>
             ))}
           </div>
@@ -292,29 +292,29 @@ const About = () => {
         className="max-w-6xl mx-auto px-6 py-20"
       >
         <motion.div variants={itemVariants} className="text-center mb-16">
-          <h2 className="text-5xl font-black mb-6 bg-gradient-to-r from-gray-900 via-blue-900 to-purple-900 bg-clip-text text-transparent">
+          <h2 className="text-5xl font-black mb-6 bg-gradient-to-r from-[#EDE3A3] via-[#8197AC] to-[#607EA2] bg-clip-text text-transparent">
             Get In Touch
           </h2>
-          <div className="w-24 h-1 bg-gradient-to-r from-blue-500 to-purple-500 mx-auto rounded-full" />
+          <div className="w-24 h-1 bg-gradient-to-r from-[#607EA2] to-[#8197AC] mx-auto rounded-full" />
         </motion.div>
 
         <div className="grid md:grid-cols-3 gap-8">
           {[
-            { icon: Mail, label: "Email", value: "support@my-e-shop.com", color: "from-blue-500 to-blue-600" },
-            { icon: Phone, label: "Phone", value: "+1 (555) 123-4567", color: "from-green-500 to-green-600" },
-            { icon: MapPin, label: "Address", value: "123 Tech Street, Silicon Valley, CA", color: "from-purple-500 to-purple-600" }
+            { icon: Mail, label: "Email", value: "support@my-e-shop.com", color: "from-[#314B6E] to-[#607EA2]" },
+            { icon: Phone, label: "Phone", value: "+1 (555) 123-4567", color: "from-[#607EA2] to-[#8197AC]" },
+            { icon: MapPin, label: "Address", value: "123 Tech Street, Silicon Valley, CA", color: "from-[#8197AC] to-[#607EA2]" }
           ].map((contact, index) => (
             <motion.div
               key={index}
               variants={itemVariants}
               whileHover={{ scale: 1.05, y: -5 }}
-              className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-8 shadow-lg text-center"
+              className="bg-gradient-to-br from-[#314B6E]/20 to-[#0E141C] rounded-2xl p-8 shadow-lg text-center border border-[#314B6E]/50 backdrop-blur-sm"
             >
               <div className={`inline-block p-4 bg-gradient-to-r ${contact.color} rounded-xl mb-4`}>
-                <contact.icon size={28} className="text-white" />
+                <contact.icon size={28} className="text-[#EDE3A3]" />
               </div>
-              <h3 className="text-xl font-bold mb-2 text-gray-900">{contact.label}</h3>
-              <p className="text-blue-600 font-semibold">{contact.value}</p>
+              <h3 className="text-xl font-bold mb-2 text-[#EDE3A3]">{contact.label}</h3>
+              <p className="text-[#607EA2] font-semibold">{contact.value}</p>
             </motion.div>
           ))}
         </div>

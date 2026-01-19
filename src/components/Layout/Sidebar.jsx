@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 const Sidebar = ({ isOpen, toggleSidebar }) => {
   return (
     <div
-      className={`fixed top-0 left-0 w-64 h-full bg-white shadow-lg z-50 transform transition-transform duration-300 ${
+      className={`fixed top-0 left-0 w-64 h-full bg-gradient-to-br from-[#314B6E] to-[#0E141C] shadow-lg z-50 transform transition-transform duration-300 ${
         isOpen ? "translate-x-0" : "-translate-x-full"
       }`}
     >
