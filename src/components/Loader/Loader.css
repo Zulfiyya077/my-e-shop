@@ -1,0 +1,556 @@
+.loader-container {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #0E141C 0%, #1a2530 50%, #0E141C 100%);
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+}
+
+/* Animated background gradient */
+.loader-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 30% 40%, rgba(49, 75, 110, 0.3) 0%, transparent 50%),
+              radial-gradient(circle at 70% 60%, rgba(96, 126, 162, 0.2) 0%, transparent 50%);
+  animation: bgPulse 4s ease-in-out infinite;
+}
+
+@keyframes bgPulse {
+  0%, 100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.macbook {
+  width: 250px;
+  height: 160px;
+  position: relative;
+  margin-bottom: 60px;
+  perspective: 800px;
+  z-index: 1;
+}
+
+/* Larger size for bigger screens (Mac displays) */
+@media (min-width: 1440px) {
+  .macbook {
+    width: 320px;
+    height: 205px;
+    perspective: 1000px;
+  }
+}
+
+@media (min-width: 1920px) {
+  .macbook {
+    width: 380px;
+    height: 243px;
+    perspective: 1200px;
+  }
+}
+
+.macbook .shadow {
+  position: absolute;
+  width: 100px;
+  height: 0px;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: -60px;
+  box-shadow: 0 0 80px 50px rgba(49, 75, 110, 0.4);
+  animation: shadow infinite 7s ease;
+}
+
+@media (min-width: 1440px) {
+  .macbook .shadow {
+    width: 130px;
+    bottom: -75px;
+    box-shadow: 0 0 100px 60px rgba(49, 75, 110, 0.4);
+  }
+}
+
+@media (min-width: 1920px) {
+  .macbook .shadow {
+    width: 160px;
+    bottom: -90px;
+    box-shadow: 0 0 120px 70px rgba(49, 75, 110, 0.4);
+  }
+}
+
+.macbook .inner {
+  z-index: 20;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  transform-style: preserve-3d;
+  transform: rotateX(-20deg) rotateY(0deg) rotateZ(0deg);
+  animation: rotate infinite 7s ease;
+}
+
+.macbook .screen {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  border-radius: 12px;
+  background: linear-gradient(145deg, #8197AC 0%, #607EA2 100%);
+  transform-style: preserve-3d;
+  transform-origin: 50% 97%;
+  transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+  animation: lid-screen infinite 7s ease;
+  box-shadow: inset 0 3px 10px rgba(237, 227, 163, 0.3),
+              0 0 30px rgba(96, 126, 162, 0.3);
+}
+
+.macbook .screen .face-one {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  border-radius: 12px;
+  background: linear-gradient(145deg, #607EA2 0%, #314B6E 100%);
+  transform: translateZ(3px);
+}
+
+.macbook .screen .face-one .camera {
+  width: 5px;
+  height: 5px;
+  border-radius: 100%;
+  background: #0E141C;
+  position: absolute;
+  left: 50%;
+  top: 8px;
+  margin-left: -2.5px;
+  box-shadow: inset 0 0 2px rgba(237, 227, 163, 0.5);
+}
+
+.macbook .screen .face-one .display {
+  width: calc(100% - 20px);
+  height: calc(100% - 30px);
+  margin: 18px 10px 12px;
+  background: linear-gradient(135deg, #0E141C 0%, #1a2530 100%);
+  border-radius: 4px;
+  position: relative;
+  box-shadow: inset 0 0 5px rgba(0,0,0,0.8),
+              0 0 15px rgba(49, 75, 110, 0.3);
+  overflow: hidden;
+}
+
+.macbook .screen .face-one .display .shade {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(-135deg, rgba(237, 227, 163, 0) 0%, rgba(237, 227, 163, 0.15) 47%, rgba(237, 227, 163, 0) 48%);
+  animation: screen-shade infinite 7s ease;
+  background-size: 300px 200px;
+  background-position: 0px 0px;
+}
+
+/* Screen glow effect */
+.macbook .screen .face-one .display::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 60%;
+  height: 60%;
+  background: radial-gradient(ellipse, rgba(96, 126, 162, 0.4) 0%, transparent 70%);
+  animation: screenGlow 2s ease-in-out infinite;
+}
+
+@keyframes screenGlow {
+  0%, 100% {
+    opacity: 0.3;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: translate(-50%, -50%) scale(1.1);
+  }
+}
+
+.macbook .screen .face-one span {
+  position: absolute;
+  bottom: 3px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 8px;
+  color: #EDE3A3;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.macbook .macbody {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  border-radius: 12px;
+  background: linear-gradient(145deg, #8197AC 0%, #607EA2 100%);
+  transform-style: preserve-3d;
+  transform-origin: 50% bottom;
+  transform: rotateX(-90deg);
+  animation: lid-macbody infinite 7s ease;
+}
+
+.macbook .macbody .face-one {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  border-radius: 12px;
+  transform-style: preserve-3d;
+  background: linear-gradient(145deg, #607EA2 0%, #314B6E 100%);
+  animation: lid-keyboard-area infinite 7s ease;
+  transform: translateZ(-3px);
+}
+
+.macbook .macbody .touchpad {
+  width: 28%;
+  height: 32%;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  border-radius: 6px;
+  transform: translate(-50%, -60%);
+  background: linear-gradient(145deg, #314B6E 0%, #0E141C 100%);
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5),
+              0 0 3px rgba(237, 227, 163, 0.1);
+}
+
+.macbook .macbody .keyboard {
+  width: calc(100% - 20px);
+  height: 48%;
+  position: absolute;
+  left: 10px;
+  top: 42%;
+  border-radius: 6px;
+  transform-style: preserve-3d;
+  background: linear-gradient(145deg, #314B6E 0%, #0E141C 100%);
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5);
+  padding: 3px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1px;
+  align-content: flex-start;
+}
+
+.macbook .keyboard .key {
+  width: 4%;
+  height: 28%;
+  background: linear-gradient(145deg, #607EA2 0%, #314B6E 100%);
+  margin: 0.5px;
+  transform: translateZ(-2px);
+  border-radius: 2px;
+  box-shadow: 0 -2px 0 rgba(237, 227, 163, 0.2);
+  animation: keys infinite 7s ease;
+}
+
+.macbook .key.space {
+  width: 30%;
+}
+
+.macbook .key.f {
+  height: 14%;
+}
+
+.macbook .macbody .pad {
+  width: 6px;
+  height: 6px;
+  background: linear-gradient(145deg, #0E141C 0%, #314B6E 100%);
+  border-radius: 100%;
+  position: absolute;
+  box-shadow: inset 0 0 2px rgba(237, 227, 163, 0.2);
+}
+
+.macbook .pad.one {
+  left: 15px;
+  top: 15px;
+}
+
+.macbook .pad.two {
+  right: 15px;
+  top: 15px;
+}
+
+.macbook .pad.three {
+  right: 15px;
+  bottom: 15px;
+}
+
+.macbook .pad.four {
+  left: 15px;
+  bottom: 15px;
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotateX(-20deg) rotateY(0deg) rotateZ(0deg);
+  }
+  5% {
+    transform: rotateX(-20deg) rotateY(-20deg) rotateZ(0deg);
+  }
+  20% {
+    transform: rotateX(30deg) rotateY(200deg) rotateZ(0deg);
+  }
+  25% {
+    transform: rotateX(-60deg) rotateY(150deg) rotateZ(0deg);
+  }
+  60% {
+    transform: rotateX(-20deg) rotateY(130deg) rotateZ(0deg);
+  }
+  65% {
+    transform: rotateX(-20deg) rotateY(120deg) rotateZ(0deg);
+  }
+  80% {
+    transform: rotateX(-20deg) rotateY(375deg) rotateZ(0deg);
+  }
+  85% {
+    transform: rotateX(-20deg) rotateY(357deg) rotateZ(0deg);
+  }
+  87% {
+    transform: rotateX(-20deg) rotateY(360deg) rotateZ(0deg);
+  }
+  100% {
+    transform: rotateX(-20deg) rotateY(360deg) rotateZ(0deg);
+  }
+}
+
+@keyframes lid-screen {
+  0% {
+    transform: rotateX(0deg);
+    background-position: left bottom;
+  }
+  5% {
+    transform: rotateX(50deg);
+    background-position: left bottom;
+  }
+  20% {
+    transform: rotateX(-90deg);
+    background-position: -150px top;
+  }
+  25% {
+    transform: rotateX(15deg);
+    background-position: left bottom;
+  }
+  30% {
+    transform: rotateX(-5deg);
+    background-position: right top;
+  }
+  38% {
+    transform: rotateX(5deg);
+    background-position: right top;
+  }
+  48% {
+    transform: rotateX(0deg);
+    background-position: right top;
+  }
+  90% {
+    transform: rotateX(0deg);
+    background-position: right top;
+  }
+  100% {
+    transform: rotateX(0deg);
+    background-position: right center;
+  }
+}
+
+@keyframes lid-macbody {
+  0% {
+    transform: rotateX(-90deg);
+  }
+  50% {
+    transform: rotateX(-90deg);
+  }
+  100% {
+    transform: rotateX(-90deg);
+  }
+}
+
+@keyframes lid-keyboard-area {
+  0% {
+    background: linear-gradient(145deg, #607EA2 0%, #314B6E 100%);
+  }
+  50% {
+    background: linear-gradient(145deg, #314B6E 0%, #0E141C 100%);
+  }
+  100% {
+    background: linear-gradient(145deg, #607EA2 0%, #314B6E 100%);
+  }
+}
+
+@keyframes screen-shade {
+  0% {
+    background-position: -20px 0px;
+  }
+  5% {
+    background-position: -40px 0px;
+  }
+  20% {
+    background-position: 200px 0;
+  }
+  50% {
+    background-position: -200px 0;
+  }
+  80% {
+    background-position: 0px 0px;
+  }
+  85% {
+    background-position: -30px 0;
+  }
+  90% {
+    background-position: -20px 0;
+  }
+  100% {
+    background-position: -20px 0px;
+  }
+}
+
+@keyframes keys {
+  0% {
+    box-shadow: 0 -2px 0 rgba(237, 227, 163, 0.2);
+  }
+  5% {
+    box-shadow: 1px -1px 0 rgba(237, 227, 163, 0.3);
+  }
+  20% {
+    box-shadow: -1px 1px 0 rgba(237, 227, 163, 0.15);
+  }
+  25% {
+    box-shadow: -1px 1px 0 rgba(237, 227, 163, 0.15);
+  }
+  60% {
+    box-shadow: -1px 1px 0 rgba(237, 227, 163, 0.15);
+  }
+  80% {
+    box-shadow: 0 -2px 0 rgba(237, 227, 163, 0.2);
+  }
+  85% {
+    box-shadow: 0 -2px 0 rgba(237, 227, 163, 0.2);
+  }
+  87% {
+    box-shadow: 0 -2px 0 rgba(237, 227, 163, 0.2);
+  }
+  100% {
+    box-shadow: 0 -2px 0 rgba(237, 227, 163, 0.2);
+  }
+}
+
+@keyframes shadow {
+  0% {
+    box-shadow: 0 0 80px 50px rgba(49, 75, 110, 0.4);
+  }
+  5% {
+    box-shadow: 0 0 80px 50px rgba(49, 75, 110, 0.4);
+  }
+  20% {
+    box-shadow: 0 0 60px 40px rgba(49, 75, 110, 0.3);
+  }
+  25% {
+    box-shadow: 0 0 40px 20px rgba(49, 75, 110, 0.2);
+  }
+  60% {
+    box-shadow: 0 0 80px 50px rgba(49, 75, 110, 0.4);
+  }
+  100% {
+    box-shadow: 0 0 80px 50px rgba(49, 75, 110, 0.4);
+  }
+}
+
+/* Loading text styles */
+.loader-text {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.loader-text h2 {
+  font-size: 24px;
+  font-weight: 700;
+  color: #EDE3A3;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  animation: textPulse 2s ease-in-out infinite;
+}
+
+@media (min-width: 1440px) {
+  .loader-text h2 {
+    font-size: 28px;
+    letter-spacing: 4px;
+  }
+}
+
+@media (min-width: 1920px) {
+  .loader-text h2 {
+    font-size: 32px;
+    letter-spacing: 5px;
+  }
+}
+
+@keyframes textPulse {
+  0%, 100% {
+    opacity: 0.7;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* Loading dots */
+.loading-dots {
+  display: flex;
+  gap: 8px;
+}
+
+.loading-dots span {
+  width: 10px;
+  height: 10px;
+  background: linear-gradient(145deg, #607EA2 0%, #8197AC 100%);
+  border-radius: 50%;
+  animation: dotBounce 1.4s ease-in-out infinite;
+}
+
+.loading-dots span:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.loading-dots span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.loading-dots span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes dotBounce {
+  0%, 80%, 100% {
+    transform: scale(0.6);
+    opacity: 0.5;
+  }
+  40% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
