@@ -11,7 +11,6 @@ const Loader = () => {
               <div className="display">
                 <div className="shade"></div>
               </div>
-              <span>MacBook Air</span>
             </div>
           </div>
           <div className="macbody">
@@ -104,7 +103,6 @@ const Loader = () => {
         <div className="shadow"></div>
       </div>
       <div className="loader-text">
-        <h2>Loading</h2>
         <div className="loading-dots">
           <span></span>
           <span></span>
