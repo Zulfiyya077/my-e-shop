@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { getProductById } from "../services/api";
+import { showToast } from "../utils/toast.config";
 
 const WishlistContext = createContext(undefined);
 
@@ -53,11 +54,18 @@ export const WishlistProvider = ({ children }) => {
 
   const toggleWishlist = (productOrId) => {
     const id = typeof productOrId === 'object' ? productOrId.id : productOrId;
+    const productName = typeof productOrId === 'object' 
+      ? (productOrId.name || productOrId.title) 
+      : 'Product';
     
     setWishlistIds((prev) => {
       if (prev.includes(id)) {
+        // Wishlist-dən sil
+        showToast.removeFromWishlist(productName);
         return prev.filter((i) => i !== id);
       } else {
+        // Wishlist-ə əlavə et
+        showToast.addToWishlist(productName);
         return [...prev, id];
       }
     });
@@ -69,26 +77,45 @@ export const WishlistProvider = ({ children }) => {
   };
 
   const clearWishlist = () => {
-    setWishlistIds([]);
-    setWishlistProducts([]);
-    try {
-      localStorage.removeItem("wishlist");
-    } catch (error) {
-      console.error("Error clearing wishlist:", error);
+    if (wishlistIds.length > 0) {
+      setWishlistIds([]);
+      setWishlistProducts([]);
+      showToast.warning('Wishlist cleared!');
+      try {
+        localStorage.removeItem("wishlist");
+      } catch (error) {
+        console.error("Error clearing wishlist:", error);
+      }
     }
   };
 
   const removeFromWishlist = (productOrId) => {
     const id = typeof productOrId === 'object' ? productOrId.id : productOrId;
-    setWishlistIds((prev) => prev.filter((i) => i !== id));
+    const productName = typeof productOrId === 'object' 
+      ? (productOrId.name || productOrId.title) 
+      : 'Product';
+    
+    if (wishlistIds.includes(id)) {
+      setWishlistIds((prev) => prev.filter((i) => i !== id));
+      showToast.removeFromWishlist(productName);
+    }
   };
 
   const addToWishlist = (productOrId) => {
     const id = typeof productOrId === 'object' ? productOrId.id : productOrId;
+    const productName = typeof productOrId === 'object' 
+      ? (productOrId.name || productOrId.title) 
+      : 'Product';
+    
     if (!wishlistIds.includes(id)) {
       setWishlistIds((prev) => [...prev, id]);
+      showToast.addToWishlist(productName);
+    } else {
+      showToast.info('Already in wishlist!');
     }
   };
+
+  const getTotalItems = () => wishlistIds.length;
 
   return (
     <WishlistContext.Provider
@@ -103,6 +130,7 @@ export const WishlistProvider = ({ children }) => {
         clearWishlist,
         removeFromWishlist,
         addToWishlist,
+        getTotalItems,
       }}
     >
       {children}

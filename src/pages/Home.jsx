@@ -1,14 +1,59 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Slider from "react-slick";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ShoppingBag, TrendingUp, Zap, Package, Award, Users, Star, ArrowRight } from "lucide-react";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import jblImg from "../assets/jbl.jpg";
-import MacbookLoader from "../components/loaders/MacbookLoader";
+import { getProducts, getCategories } from "../services/api";
+import ProductCarousel from "../components/carusel/ProductCarusel";
 
 const Home = () => {
+  const [bannerProducts, setBannerProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [stats, setStats] = useState({
+    totalProducts: 0,
+    categories: 0,
+    avgRating: 0
+  });
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        
+        // Fetch products for banner
+        const productsResponse = await getProducts({ limit: 3, sort: 'rating', order: 'desc' });
+        console.log('Products Response:', productsResponse);
+        console.log('Products Data:', productsResponse.data);
+        setBannerProducts(productsResponse.data || []);
+        
+        // Fetch categories
+        const categoriesResponse = await getCategories();
+        setCategories(categoriesResponse || []);
+        
+        // Calculate stats
+        const allProductsResponse = await getProducts();
+        const products = allProductsResponse.data || [];
+        const totalRating = products.reduce((sum, p) => sum + (p.rating || 0), 0);
+        
+        setStats({
+          totalProducts: products.length,
+          categories: categoriesResponse?.length || 0,
+          avgRating: products.length > 0 ? (totalRating / products.length).toFixed(1) : 0
+        });
+        
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   const settings = {
     dots: true,
     infinite: true,
@@ -29,47 +74,17 @@ const Home = () => {
     ),
   };
 
-  const bannerData = [
-    {
-      id: 1,
-      title: "Summer Sale 50% Off",
-      subtitle: "Grab your favorite gadgets now!",
-      image: jblImg,
-      gradient: "from-[#314B6E] via-[#607EA2] to-[#8197AC]",
-      buttons: [
-        { text: "Shop Now", link: "/products", primary: true },
-        { text: "View Deals", link: "/products", primary: false },
-      ],
-    },
-    {
-      id: 2,
-      title: "New Arrivals",
-      subtitle: "Check out the latest products",
-      image: jblImg,
-      gradient: "from-[#1a2332] via-[#314B6E] to-[#607EA2]",
-      buttons: [
-        { text: "Shop Now", link: "/products", primary: true },
-        { text: "Explore", link: "/products", primary: false },
-      ],
-    },
-    {
-      id: 3,
-      title: "Exclusive Offers",
-      subtitle: "Limited time only!",
-      image: jblImg,
-      gradient: "from-[#607EA2] via-[#8197AC] to-[#DDE3A3]",
-      buttons: [
-        { text: "Shop Now", link: "/products", primary: true },
-        { text: "See More", link: "/products", primary: false },
-      ],
-    },
+  const gradients = [
+    "from-[#314B6E] via-[#607EA2] to-[#8197AC]",
+    "from-[#1a2332] via-[#314B6E] to-[#607EA2]",
+    "from-[#607EA2] via-[#8197AC] to-[#DDE3A3]"
   ];
 
-  const stats = [
+  const statsData = [
     { icon: Users, value: "50K+", label: "Happy Customers", color: "from-[#607EA2] to-[#8197AC]" },
-    { icon: Package, value: "10K+", label: "Products", color: "from-[#314B6E] to-[#607EA2]" },
-    { icon: Award, value: "500+", label: "5-Star Reviews", color: "from-[#8197AC] to-[#DDE3A3]" },
-    { icon: TrendingUp, value: "98%", label: "Satisfaction", color: "from-[#607EA2] to-[#DDE3A3]" }
+    { icon: Package, value: `${stats.totalProducts}+`, label: "Products", color: "from-[#314B6E] to-[#607EA2]" },
+    { icon: Award, value: stats.avgRating, label: "Avg Rating", color: "from-[#8197AC] to-[#DDE3A3]" },
+    { icon: TrendingUp, value: `${stats.categories}+`, label: "Categories", color: "from-[#607EA2] to-[#DDE3A3]" }
   ];
 
   const features = [
@@ -109,81 +124,117 @@ const Home = () => {
     visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 100 } }
   };
 
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[#0E141C] flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-[#607EA2] border-t-[#DDE3A3] rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-[#DDE3A3] text-xl font-bold">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-[#0E141C]">
       {/* Hero Slider */}
       <div className="w-full overflow-hidden">
         <Slider {...settings}>
-          {bannerData.map((banner) => (
-            <div key={banner.id}>
-              <div className="relative w-full h-[500px] md:h-[600px] overflow-hidden">
-                {/* Background Image with Overlay */}
-                <div className="absolute inset-0">
-                  <img
-                    src={banner.image}
-                    alt={banner.title}
-                    className="w-full h-full object-cover"
-                  />
-                  <div className={`absolute inset-0 bg-gradient-to-r ${banner.gradient} opacity-90`} />
-                </div>
+          {bannerProducts.map((product, index) => {
+            const discount = product.discount || 0;
+            const discountedPrice = (product.price * (1 - discount / 100)).toFixed(2);
+            const imageUrl = product.images?.[1] || '';
+            
+            console.log('Product:', product.title, 'Image URL:', imageUrl);
+            
+            return (
+              <div key={product.id}>
+                <div className="relative w-full h-[500px] md:h-[600px] overflow-hidden">
+                  {/* Background Image with Overlay */}
+                  <div className="absolute inset-0">
+                    <img
+                      src={product.images?.[0]}
+                      alt={product.title}
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        console.error('Image failed to load:', imageUrl);
+                        e.target.src = 'https://via.placeholder.com/800x600?text=Product+Image';
+                      }}
+                    />
+                    <div className={`absolute inset-0 bg-gradient-to-r ${gradients[index % gradients.length]} opacity-90`} />
+                  </div>
 
-                {/* Animated Shapes */}
-                <div className="absolute inset-0 overflow-hidden">
-                  <motion.div
-                    className="absolute top-20 right-20 w-64 h-64 bg-[#DDE3A3]/10 rounded-full blur-3xl"
-                    animate={{ scale: [1, 1.2, 1], rotate: [0, 90, 0] }}
-                    transition={{ duration: 10, repeat: Infinity }}
-                  />
-                  <motion.div
-                    className="absolute bottom-20 left-20 w-96 h-96 bg-[#DDE3A3]/10 rounded-full blur-3xl"
-                    animate={{ scale: [1, 1.3, 1], rotate: [0, -90, 0] }}
-                    transition={{ duration: 15, repeat: Infinity }}
-                  />
-                </div>
+                  {/* Animated Shapes */}
+                  <div className="absolute inset-0 overflow-hidden">
+                    <motion.div
+                      className="absolute top-20 right-20 w-64 h-64 bg-[#DDE3A3]/10 rounded-full blur-3xl"
+                      animate={{ scale: [1, 1.2, 1], rotate: [0, 90, 0] }}
+                      transition={{ duration: 10, repeat: Infinity }}
+                    />
+                    <motion.div
+                      className="absolute bottom-20 left-20 w-96 h-96 bg-[#DDE3A3]/10 rounded-full blur-3xl"
+                      animate={{ scale: [1, 1.3, 1], rotate: [0, -90, 0] }}
+                      transition={{ duration: 15, repeat: Infinity }}
+                    />
+                  </div>
 
-                {/* Content */}
-                <div className="relative z-10 h-full flex flex-col justify-center items-start max-w-6xl mx-auto px-6 md:px-12 text-white">
-                  <motion.div
-                    initial={{ opacity: 0, y: 50 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.2 }}
-                  >
-                    <h2 className="text-4xl md:text-7xl font-black mb-4 drop-shadow-2xl text-[#DDE3A3]">
-                      {banner.title}
-                    </h2>
-                    <p className="text-xl md:text-3xl mb-8 font-bold opacity-90 drop-shadow-lg text-white">
-                      {banner.subtitle}
-                    </p>
+                  {/* Content */}
+                  <div className="relative z-10 h-full flex flex-col justify-center items-start max-w-6xl mx-auto px-6 md:px-12 text-white">
+                    <motion.div
+                      initial={{ opacity: 0, y: 50 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.2 }}
+                    >
+                      {discount > 0 && (
+                        <div className="inline-block bg-[#DDE3A3] text-[#0E141C] font-black px-6 py-2 rounded-full mb-4">
+                          {discount}% OFF
+                        </div>
+                      )}
+                      <h2 className="text-4xl md:text-7xl font-black mb-4 drop-shadow-2xl text-[#DDE3A3]">
+                        {product.name}
+                      </h2>
+                      <p className="text-xl md:text-3xl mb-4 font-bold opacity-90 drop-shadow-lg text-white">
+                        {product.brand?.name || 'Premium Quality'}
+                      </p>
+                      <div className="flex items-center gap-4 mb-8">
+                        <span className="text-5xl font-black text-[#DDE3A3]">
+                          ${discount > 0 ? discountedPrice : product.price.toFixed(2)}
+                        </span>
+                        {discount > 0 && (
+                          <span className="text-3xl text-white/70 line-through">
+                            ${product.price.toFixed(2)}
+                          </span>
+                        )}
+                      </div>
 
-                    {/* Buttons */}
-                    <div className="flex gap-4 flex-wrap">
-                      {banner.buttons.map((btn, idx) => (
+                      {/* Buttons */}
+                      <div className="flex gap-4 flex-wrap">
                         <Link
-                          key={idx}
-                          to={btn.link}
-                          className={`group relative overflow-hidden ${
-                            btn.primary
-                              ? "bg-[#DDE3A3] text-[#0E141C] hover:bg-white"
-                              : "bg-[#314B6E]/60 backdrop-blur-sm text-[#DDE3A3] hover:bg-[#314B6E] border-2 border-[#607EA2]"
-                          } font-black py-4 px-8 rounded-xl transition-all shadow-2xl hover:shadow-[#607EA2]/50 flex items-center gap-2`}
+                          to={`/products/${product.id}`}
+                          className="group relative overflow-hidden bg-[#DDE3A3] text-[#0E141C] hover:bg-white font-black py-4 px-8 rounded-xl transition-all shadow-2xl hover:shadow-[#607EA2]/50 flex items-center gap-2"
                         >
-                          <span className="relative z-10">{btn.text}</span>
+                          <span className="relative z-10">Shop Now</span>
                           <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
-                          {btn.primary && (
-                            <motion.div
-                              className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-0 group-hover:opacity-30"
-                              animate={{ x: ["-100%", "100%"] }}
-                              transition={{ duration: 1.5, repeat: Infinity, repeatDelay: 1 }}
-                            />
-                          )}
+                          <motion.div
+                            className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-0 group-hover:opacity-30"
+                            animate={{ x: ["-100%", "100%"] }}
+                            transition={{ duration: 1.5, repeat: Infinity, repeatDelay: 1 }}
+                          />
                         </Link>
-                      ))}
-                    </div>
-                  </motion.div>
+                        <Link
+                          to="/products"
+                          className="bg-[#314B6E]/60 backdrop-blur-sm text-[#DDE3A3] hover:bg-[#314B6E] border-2 border-[#607EA2] font-black py-4 px-8 rounded-xl transition-all shadow-2xl hover:shadow-[#607EA2]/50 flex items-center gap-2"
+                        >
+                          <span>View All</span>
+                          <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+                        </Link>
+                      </div>
+                    </motion.div>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </Slider>
       </div>
 
@@ -196,7 +247,7 @@ const Home = () => {
         className="max-w-6xl mx-auto px-6 -mt-20 relative z-20 mb-20"
       >
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-          {stats.map((stat, index) => (
+          {statsData.map((stat, index) => (
             <motion.div
               key={index}
               variants={itemVariants}
@@ -212,6 +263,9 @@ const Home = () => {
           ))}
         </div>
       </motion.section>
+
+      {/* Product Carousel */}
+      <ProductCarousel />
 
       {/* Features Section */}
       <motion.section
@@ -291,8 +345,6 @@ const Home = () => {
 
       {/* Additional decorative section */}
       <div className="h-20 bg-gradient-to-b from-[#0E141C] to-[#1a2332]" />
-
-    
     </div>
   );
 };
