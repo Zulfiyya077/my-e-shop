@@ -28,7 +28,6 @@ const NotFound = () => {
 
   return (
     <div className="min-h-screen bg-[#0E141C] flex items-center justify-center px-6 relative overflow-hidden">
-      {/* Animated Background Shapes */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <motion.div
           className="absolute top-20 left-20 w-64 h-64 bg-gradient-to-r from-[#314B6E]/30 to-[#607EA2]/30 rounded-full blur-3xl"
@@ -47,14 +46,12 @@ const NotFound = () => {
         />
       </div>
 
-      {/* Main Content */}
       <motion.div
         variants={containerVariants}
         initial="hidden"
         animate="visible"
         className="relative z-10 max-w-4xl w-full text-center"
       >
-        {/* 404 Number - Animated */}
         <motion.div variants={floatingVariants} animate="animate" className="mb-8">
           <motion.h1
             variants={itemVariants}
@@ -64,8 +61,6 @@ const NotFound = () => {
             404
           </motion.h1>
         </motion.div>
-
-        {/* Error Icon */}
         <motion.div variants={itemVariants} className="mb-8 flex justify-center">
           <div className="relative">
             <motion.div
@@ -79,15 +74,12 @@ const NotFound = () => {
           </div>
         </motion.div>
 
-        {/* Title */}
         <motion.h2
           variants={itemVariants}
           className="text-5xl md:text-6xl font-black mb-6 text-[#EDE3A3]"
         >
           Oops! Page Not Found
         </motion.h2>
-
-        {/* Description */}
         <motion.p
           variants={itemVariants}
           className="text-xl md:text-2xl text-[#8197AC] mb-12 max-w-2xl mx-auto leading-relaxed"
@@ -95,7 +87,6 @@ const NotFound = () => {
           The page you're looking for seems to have gone on a shopping spree and can't be found!
         </motion.p>
 
-        {/* Suggestion Cards */}
         <motion.div variants={itemVariants} className="mb-12">
           <div className="grid md:grid-cols-3 gap-6 max-w-3xl mx-auto">
             {suggestions.map((suggestion, index) => (
@@ -118,7 +109,6 @@ const NotFound = () => {
           </div>
         </motion.div>
 
-        {/* Main Action Button */}
         <motion.div variants={itemVariants}>
           <a href="/">
             <motion.button
@@ -126,7 +116,6 @@ const NotFound = () => {
               whileHover={{ scale: 1.05, boxShadow: "0 25px 50px -12px rgba(96, 126, 162, 0.5)" }}
               whileTap={{ scale: 0.95 }}
             >
-              {/* Shine Effect */}
               <motion.div
                 className="absolute inset-0 bg-gradient-to-r from-transparent via-[#EDE3A3] to-transparent opacity-0 group-hover:opacity-30"
                 animate={{ x: ["-100%", "100%"] }}

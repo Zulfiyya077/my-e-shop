@@ -1,4 +1,3 @@
-// src/components/layout/Navbar.jsx
 import { useState } from "react";
 import { Menu, ShoppingCart, Search, X, Heart, Zap } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
@@ -35,7 +34,6 @@ const Navbar = ({ toggleSidebar }) => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
 
-          {/* LEFT - Logo & Menu */}
           <div className="flex items-center gap-4">
             <motion.button
               onClick={toggleSidebar}
@@ -59,7 +57,6 @@ const Navbar = ({ toggleSidebar }) => {
             </Link>
           </div>
 
-          {/* CENTER - Navigation Links */}
           <ul className="hidden lg:flex items-center gap-1">
             {navLinks.map((link) => (
               <li key={link.name}>
@@ -79,10 +76,8 @@ const Navbar = ({ toggleSidebar }) => {
             ))}
           </ul>
 
-          {/* RIGHT - Search, Wishlist, Cart */}
           <div className="flex items-center gap-2">
 
-            {/* Search */}
             <AnimatePresence mode="wait">
               {searchOpen ? (
                 <motion.form
@@ -131,7 +126,6 @@ const Navbar = ({ toggleSidebar }) => {
               )}
             </AnimatePresence>
 
-            {/* Wishlist */}
             <motion.button
               onClick={() => setIsWishlistOpen(true)}
               className="relative p-2 hover:bg-[#314B6E]/80 rounded-lg group transition-colors"

@@ -34,7 +34,6 @@ const WishlistModal = () => {
 
   return (
     <>
-      {/* Overlay */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -43,7 +42,6 @@ const WishlistModal = () => {
         onClick={() => setIsWishlistOpen(false)}
       />
 
-      {/* Modal */}
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
         <motion.div
           initial={{ scale: 0.9, opacity: 0, y: 20 }}
@@ -53,7 +51,6 @@ const WishlistModal = () => {
           className="bg-gradient-to-b from-[#314B6E]/30 to-[#0E141C] border-2 border-[#314B6E]/50 rounded-2xl shadow-2xl w-full max-w-4xl max-h-[85vh] overflow-hidden backdrop-blur-xl"
           onClick={(e) => e.stopPropagation()}
         >
-          {/* Header */}
           <div className="flex justify-between items-center p-6 border-b border-[#314B6E]/50 bg-gradient-to-r from-[#314B6E]/40 to-transparent">
             <div className="flex items-center gap-3">
               <motion.div
@@ -80,7 +77,6 @@ const WishlistModal = () => {
             </motion.button>
           </div>
 
-          {/* Content */}
           <div className="p-6 overflow-y-auto max-h-[60vh]">
             {loading ? (
               <div className="flex items-center justify-center py-12">
@@ -168,7 +164,6 @@ const WishlistModal = () => {
             )}
           </div>
 
-          {/* Footer */}
           {wishlistProducts.length > 0 && (
             <motion.div
               initial={{ opacity: 0, y: 20 }}

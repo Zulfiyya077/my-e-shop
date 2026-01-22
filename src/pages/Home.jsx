@@ -1,4 +1,3 @@
-// src/pages/Home.jsx
 import React from "react";
 import Slider from "react-slick";
 import { Link } from "react-router-dom";
@@ -7,6 +6,7 @@ import { ShoppingBag, TrendingUp, Zap, Package, Award, Users, Star, ArrowRight }
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import jblImg from "../assets/jbl.jpg";
+import MacbookLoader from "../components/loaders/MacbookLoader";
 
 const Home = () => {
   const settings = {
@@ -291,6 +291,8 @@ const Home = () => {
 
       {/* Additional decorative section */}
       <div className="h-20 bg-gradient-to-b from-[#0E141C] to-[#1a2332]" />
+
+    
     </div>
   );
 };

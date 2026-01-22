@@ -1,4 +1,3 @@
-// src/components/cart/CartSideBar.jsx
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Heart, Trash2, ShoppingCart, ShoppingBag, CreditCard, Package, Zap } from "lucide-react";
@@ -112,7 +111,6 @@ const CartSideBar = () => {
       <AnimatePresence>
         {isCartOpen && (
           <>
-            {/* Backdrop */}
             <motion.div
               variants={overlayVariants}
               initial="hidden"
@@ -122,7 +120,6 @@ const CartSideBar = () => {
               onClick={() => setIsCartOpen(false)}
             />
 
-            {/* Sidebar */}
             <motion.div
               variants={sidebarVariants}
               initial="hidden"
@@ -130,7 +127,6 @@ const CartSideBar = () => {
               exit="exit"
               className="fixed top-0 right-0 w-full sm:w-[480px] h-full bg-gradient-to-b from-[#0E141C] via-[#1a2332] to-[#0E141C] shadow-2xl z-50 border-l border-[#314B6E]"
             >
-              {/* Header */}
               <motion.div 
                 variants={headerVariants}
                 initial="hidden"
@@ -172,12 +168,10 @@ const CartSideBar = () => {
                 </motion.button>
               </motion.div>
 
-              {/* Content */}
               <div className="flex flex-col h-[calc(100%-88px)]">
                 <div className="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar">
                   <AnimatePresence mode="wait">
                     {loading ? (
-                      // Loading Skeleton
                       <>
                         {Array.from({ length: 3 }).map((_, i) => (
                           <motion.div
@@ -208,7 +202,7 @@ const CartSideBar = () => {
                         ))}
                       </>
                     ) : cartItems.length === 0 ? (
-                      // Empty Cart
+                    
                       <motion.div
                         variants={emptyCartVariants}
                         initial="hidden"
@@ -246,7 +240,6 @@ const CartSideBar = () => {
                         </motion.p>
                       </motion.div>
                     ) : (
-                      // Cart Items
                       <>
                         {cartItems.map((item, index) => (
                           <motion.div
@@ -260,7 +253,6 @@ const CartSideBar = () => {
                             className="bg-gradient-to-br from-[#314B6E]/20 to-[#0E141C] border border-[#314B6E]/50 rounded-2xl p-4 hover:shadow-2xl hover:shadow-[#314B6E]/30 transition-all duration-300 relative overflow-hidden backdrop-blur-sm"
                             whileHover={{ y: -4, borderColor: "#607EA2" }}
                           >
-                            {/* Gradient Background Effect */}
                             <motion.div
                               className="absolute inset-0 bg-gradient-to-r from-[#607EA2]/10 to-[#8197AC]/10 opacity-0"
                               whileHover={{ opacity: 1 }}
@@ -268,7 +260,6 @@ const CartSideBar = () => {
                             />
 
                             <div className="flex gap-4 relative z-10">
-                              {/* Image */}
                               <motion.div 
                                 className="relative"
                                 whileHover={{ scale: 1.05 }}
@@ -288,7 +279,6 @@ const CartSideBar = () => {
                                 </motion.div>
                               </motion.div>
 
-                              {/* Info */}
                               <div className="flex-1 min-w-0">
                                 <h3 className="font-black text-[#DDE3A3] mb-1 line-clamp-2 text-sm">
                                   {item.title}
@@ -302,7 +292,6 @@ const CartSideBar = () => {
                                   ${item.price.toFixed(2)}
                                 </motion.p>
 
-                                {/* Quantity Controls */}
                                 <div className="flex items-center gap-3 mt-3">
                                   <motion.button
                                     onClick={() => decreaseQty(item.id)}
@@ -331,9 +320,7 @@ const CartSideBar = () => {
                                 </div>
                               </div>
 
-                              {/* Action Buttons */}
                               <div className="flex flex-col items-center gap-2">
-                                {/* Wishlist */}
                                 <motion.button
                                   onClick={() => toggleWishlist(item)}
                                   className={`p-2 rounded-xl transition-all duration-200 border ${
@@ -354,7 +341,6 @@ const CartSideBar = () => {
                                   />
                                 </motion.button>
 
-                                {/* Delete */}
                                 <motion.button
                                   onClick={() => removeFromCart(item.id)}
                                   className="p-2 rounded-xl bg-[#314B6E]/30 text-red-400 hover:bg-red-500 hover:text-white border border-[#314B6E] hover:border-red-400 shadow-sm transition-all"
@@ -388,7 +374,6 @@ const CartSideBar = () => {
                   </AnimatePresence>
                 </div>
 
-                {/* Footer */}
                 {cartItems.length > 0 && (
                   <motion.div 
                     variants={totalVariants}
@@ -396,7 +381,6 @@ const CartSideBar = () => {
                     animate="visible"
                     className="border-t border-[#314B6E] p-6 bg-gradient-to-r from-[#1a2332] to-[#0E141C]"
                   >
-                    {/* Total */}
                     <motion.div 
                       className="flex justify-between items-center mb-4 p-5 bg-gradient-to-r from-[#607EA2] to-[#8197AC] rounded-2xl shadow-lg shadow-[#607EA2]/30 border border-[#314B6E]"
                       whileHover={{ scale: 1.02 }}
@@ -417,7 +401,6 @@ const CartSideBar = () => {
                       </motion.span>
                     </motion.div>
 
-                    {/* Buttons */}
                     <div className="space-y-3">
                       <motion.button
                         onClick={() => {

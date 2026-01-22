@@ -39,7 +39,7 @@ const Product = () => {
     setParams(newParams);
   };
 
-  // Debounce function - prevents too many API calls while typing
+  
   const debounce = useCallback((func, delay) => {
     let timeoutId;
     return (...args) => {
@@ -48,7 +48,7 @@ const Product = () => {
     };
   }, []);
 
-  // Debounced search - waits 500ms after user stops typing
+  
   const debouncedSearch = useCallback(
     debounce((value) => {
       updateParam("search", value);
@@ -145,7 +145,6 @@ const Product = () => {
 
   return (
     <div className="min-h-screen bg-[#0E141C]">
-      {/* Header */}
       <motion.div 
         initial={{ y: -80, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
@@ -199,7 +198,6 @@ const Product = () => {
       </motion.div>
 
       <div className="flex gap-6 max-w-7xl mx-auto p-6">
-        {/* Filters Sidebar */}
         <AnimatePresence>
           {showFilters && (
             <motion.aside
@@ -224,7 +222,6 @@ const Product = () => {
                 </motion.button>
               </div>
 
-              {/* Search */}
               <div>
                 <label className="text-xs font-bold text-[#8197AC] mb-2 block uppercase tracking-wider">
                   Search
@@ -250,7 +247,6 @@ const Product = () => {
                 </div>
               </div>
 
-              {/* Category */}
               <div>
                 <label className="text-xs font-bold text-[#8197AC] mb-2 block uppercase tracking-wider">
                   Category
@@ -284,7 +280,6 @@ const Product = () => {
                 </select>
               </div>
 
-              {/* Colors */}
               <div>
                 <label className="text-xs font-bold text-[#8197AC] mb-3 block uppercase tracking-wider">
                   Color
@@ -314,7 +309,6 @@ const Product = () => {
                 </div>
               </div>
 
-              {/* Price */}
               <div>
                 <label className="text-xs font-bold text-[#8197AC] mb-2 block uppercase tracking-wider">
                   Price Range
@@ -340,7 +334,6 @@ const Product = () => {
           )}
         </AnimatePresence>
 
-        {/* Products Grid */}
         <div className="flex-1">
           <motion.div 
             variants={containerVariants}
@@ -361,7 +354,6 @@ const Product = () => {
                     }}
                   >
                     <Link to={`/products/${product.id}`}>
-                      {/* Image */}
                       <div className="relative h-64 overflow-hidden bg-gradient-to-br from-[#0E141C] via-[#314B6E]/10 to-[#0E141C]">
                         <motion.button
                           onClick={(e) => { e.preventDefault(); toggleWishlist(product); }}
@@ -391,7 +383,6 @@ const Product = () => {
                         />
                       </div>
 
-                      {/* Content */}
                       <div className="p-5 space-y-3">
                         <motion.span 
                           className="inline-block px-3 py-1 bg-[#607EA2]/30 text-[#DDE3A3] rounded-lg text-xs font-black uppercase tracking-wider border border-[#607EA2]/50"
@@ -427,8 +418,6 @@ const Product = () => {
                         </div>
                       </div>
                     </Link>
-
-                    {/* Add to Cart Button */}
                     <motion.button
                       onClick={(e) => handleAddToCart(product, e)}
                       className="relative w-full bg-gradient-to-r from-[#607EA2] to-[#8197AC] text-[#0E141C] py-4 flex items-center justify-center gap-2 font-black text-base overflow-hidden group/btn"
@@ -476,7 +465,6 @@ const Product = () => {
                 ))}
           </motion.div>
 
-          {/* Pagination */}
           {!loading && totalPages > 1 && (
             <motion.div 
               initial={{ opacity: 0, y: 30 }}
