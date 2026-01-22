@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Layout from "./components/Layout/Layout";
 import Home from "./pages/Home";
@@ -10,8 +11,23 @@ import { FilterProvider } from "./context/FilterContext";
 import { WishlistProvider } from "./context/WishlistContext";
 import WishlistModal from "./components/WishlistModal/WishlistModal";
 import NotFound from "./pages/NotFound";
+import Loader from "./components/Loader/Loader";
 
 function App() {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 3000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) {
+    return <Loader />;
+  }
+
   return (
     <BrowserRouter>
       <CartProvider>
