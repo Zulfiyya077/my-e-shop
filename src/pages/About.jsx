@@ -76,7 +76,7 @@ const About = () => {
             transition={{ type: "spring", stiffness: 100 }}
             className="text-6xl font-black mb-6"
           >
-            About My-e-shop
+            About ZIpTech
           </motion.h1>
           <motion.p 
             initial={{ y: 50, opacity: 0 }}
@@ -135,7 +135,7 @@ const About = () => {
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <motion.div variants={itemVariants} className="space-y-6">
             <p className="text-[#8197AC] leading-relaxed text-lg">
-              Welcome to <span className="font-bold text-[#EDE3A3]">My-e-shop</span>! We are dedicated to providing the best electronic products with top-notch customer service. Our mission is to make shopping easy and enjoyable for everyone.
+              Welcome to <span className="font-bold text-[#EDE3A3]">ZIpTech</span>! We are dedicated to providing the best electronic products with top-notch customer service. Our mission is to make shopping easy and enjoyable for everyone.
             </p>
             <p className="text-[#8197AC] leading-relaxed text-lg">
               Founded in 2026, our store focuses on high-quality devices, laptops, accessories, and tablets. We carefully select our products to ensure they meet our standards for reliability and performance.
@@ -300,7 +300,7 @@ const About = () => {
 
         <div className="grid md:grid-cols-3 gap-8">
           {[
-            { icon: Mail, label: "Email", value: "support@my-e-shop.com", color: "from-[#314B6E] to-[#607EA2]" },
+            { icon: Mail, label: "Email", value: "support@ZIpTech.com", color: "from-[#314B6E] to-[#607EA2]" },
             { icon: Phone, label: "Phone", value: "+1 (555) 123-4567", color: "from-[#607EA2] to-[#8197AC]" },
             { icon: MapPin, label: "Address", value: "123 Tech Street, Silicon Valley, CA", color: "from-[#8197AC] to-[#607EA2]" }
           ].map((contact, index) => (

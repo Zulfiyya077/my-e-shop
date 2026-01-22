@@ -36,7 +36,7 @@ const Contact = () => {
   };
 
   const contactInfo = [
-    { icon: Mail, label: "Email", value: "support@my-e-shop.com", color: "from-[#314B6E] to-[#607EA2]" },
+    { icon: Mail, label: "Email", value: "support@ZIpTech.com", color: "from-[#314B6E] to-[#607EA2]" },
     { icon: Phone, label: "Phone", value: "+1 (555) 123-4567", color: "from-[#607EA2] to-[#8197AC]" },
     { icon: MapPin, label: "Address", value: "123 Tech Street, Silicon Valley, CA", color: "from-[#8197AC] to-[#607EA2]" }
   ];

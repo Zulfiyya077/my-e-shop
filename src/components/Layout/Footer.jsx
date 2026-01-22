@@ -75,7 +75,7 @@ const Footer = () => {
                 <Zap className="w-10 h-10 text-[#DDE3A3]" />
               </motion.div>
               <span className="text-2xl font-black text-[#DDE3A3] group-hover:text-[#607EA2] transition-colors">
-                My-e-shop
+                ZIpTech
               </span>
             </Link>
             <p className="text-[#607EA2] text-sm leading-relaxed">
@@ -150,8 +150,8 @@ const Footer = () => {
                 whileHover={{ x: 5 }}
               >
                 <Mail className="w-4 h-4 text-[#607EA2] mt-0.5 flex-shrink-0" />
-                <a href="mailto:info@myeshop.com" className="hover:text-[#DDE3A3] transition-colors">
-                  info@myeshop.com
+                <a href="mailto:info@ZIpTech.com" className="hover:text-[#DDE3A3] transition-colors">
+                  info@ZIpTech.com
                 </a>
               </motion.li>
               <motion.li 
@@ -223,7 +223,7 @@ const Footer = () => {
               className="text-sm text-[#607EA2]"
               whileHover={{ color: "#8197AC" }}
             >
-              &copy; {new Date().getFullYear()} My-e-shop. All rights reserved.
+              &copy; {new Date().getFullYear()} ZIpTech. All rights reserved.
             </motion.p>
             
             <div className="flex gap-6 text-sm">
