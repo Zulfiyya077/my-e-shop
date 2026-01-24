@@ -32,7 +32,7 @@ const ProductDetailSkeleton = () => {
 
 const ProductDetail = () => {
   const { id } = useParams();
-  const { addToCart } = useCart();
+  const { addToCart, isInCart } = useCart();
   const { toggleWishlist, isInWishlist } = useWishlist();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -151,11 +151,10 @@ const ProductDetail = () => {
                 <motion.button
                   key={index}
                   onClick={() => setSelectedImage(index)}
-                  className={`relative overflow-hidden rounded-xl transition-all ${
-                    selectedImage === index
-                      ? 'ring-2 ring-[#FF6F20] shadow-lg scale-105'
-                      : 'ring-2 ring-[#FFB300]/50 hover:ring-[#FF6F20] shadow-md'
-                  }`}
+                  className={`relative overflow-hidden rounded-xl transition-all ${selectedImage === index
+                    ? 'ring-2 ring-[#FF6F20] shadow-lg scale-105'
+                    : 'ring-2 ring-[#FFB300]/50 hover:ring-[#FF6F20] shadow-md'
+                    }`}
                   whileHover={{ scale: 1.05, y: -2 }}
                   whileTap={{ scale: 0.95 }}
                   initial={{ opacity: 0, y: 10 }}
@@ -166,9 +165,8 @@ const ProductDetail = () => {
                     <img
                       src={image}
                       alt={`Thumbnail ${index + 1}`}
-                      className={`w-16 h-16 object-contain transition-opacity ${
-                        selectedImage === index ? 'opacity-100' : 'opacity-60 hover:opacity-100'
-                      }`}
+                      className={`w-16 h-16 object-contain transition-opacity ${selectedImage === index ? 'opacity-100' : 'opacity-60 hover:opacity-100'
+                        }`}
                     />
                   </div>
                 </motion.button>
@@ -245,21 +243,31 @@ const ProductDetail = () => {
 
             <motion.button
               onClick={handleAddToCart}
-              className="relative bg-gradient-to-r from-[#FF6F20] via-[#FFB300] to-[#FF7043] text-white py-4 px-8 rounded-xl font-bold text-base shadow-xl overflow-hidden group"
+              className={`relative py-4 px-8 rounded-xl font-bold text-base shadow-xl overflow-hidden group transition-all ${isInCart(product.id)
+                ? "bg-gray-100 text-[#4A4A4A]/40"
+                : "bg-gradient-to-r from-[#FF6F20] via-[#FFB300] to-[#FF7043] text-white"
+                }`}
               variants={itemVariants}
-              whileHover={{ scale: 1.02, boxShadow: "0 20px 40px -10px rgba(255, 111, 32, 0.5)" }}
-              whileTap={{ scale: 0.98 }}
+              whileHover={!isInCart(product.id) ? { scale: 1.02, boxShadow: "0 20px 40px -10px rgba(255, 111, 32, 0.5)" } : {}}
+              whileTap={!isInCart(product.id) ? { scale: 0.98 } : {}}
+              disabled={isInCart(product.id)}
             >
-              <motion.div
-                className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-0 group-hover:opacity-20"
-                animate={{ x: ["-100%", "100%"] }}
-                transition={{ duration: 1.5, repeat: Infinity, repeatDelay: 1 }}
-              />
+              {!isInCart(product.id) && (
+                <motion.div
+                  className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-0 group-hover:opacity-20"
+                  animate={{ x: ["-100%", "100%"] }}
+                  transition={{ duration: 1.5, repeat: Infinity, repeatDelay: 1 }}
+                />
+              )}
 
               <span className="flex items-center justify-center gap-2 relative z-10">
                 <ShoppingCart size={20} />
                 <AnimatePresence mode="wait">
-                  {isAdded ? (
+                  {isInCart(product.id) ? (
+                    <motion.span key="incart" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
+                      IN CART
+                    </motion.span>
+                  ) : isAdded ? (
                     <motion.span key="added" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
                       ✓ Added to Cart!
                     </motion.span>
@@ -317,9 +325,8 @@ const ProductDetail = () => {
                 <motion.button
                   key={index}
                   onClick={(e) => { e.stopPropagation(); setSelectedImage(index); }}
-                  className={`w-2.5 h-2.5 rounded-full transition-all ${
-                    selectedImage === index ? 'bg-[#FF6F20] scale-125' : 'bg-[#FFB300]/40'
-                  }`}
+                  className={`w-2.5 h-2.5 rounded-full transition-all ${selectedImage === index ? 'bg-[#FF6F20] scale-125' : 'bg-[#FFB300]/40'
+                    }`}
                   whileHover={{ scale: 1.5 }}
                 />
               ))}

@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Heart, ShoppingCart, Star, Filter, ChevronLeft, ChevronRight, X, Menu, ArrowUpDown, ChevronDown } from "lucide-react";
+import { Heart, ShoppingCart, Star, Filter, ChevronLeft, ChevronRight, X, Menu, ArrowUpDown, ChevronDown, Search } from "lucide-react";
 import { useCart } from "../context/CartContext";
 import { useWishlist } from "../context/WishlistContext";
 import { useFilter } from "../context/FilterContext";
@@ -59,8 +59,8 @@ const CustomDropdown = ({ label, value, onChange, options, icon: Icon }) => {
                                     setIsOpen(false);
                                 }}
                                 className={`w-full text-left px-4 py-3 text-sm font-bold transition-colors capitalize ${value === option.value
-                                        ? "bg-[#FF6F20] text-white"
-                                        : "text-[#4A4A4A] hover:bg-[#FFF3E0] hover:text-[#FF6F20]"
+                                    ? "bg-[#FF6F20] text-white"
+                                    : "text-[#4A4A4A] hover:bg-[#FFF3E0] hover:text-[#FF6F20]"
                                     }`}
                             >
                                 {option.label}
@@ -74,21 +74,37 @@ const CustomDropdown = ({ label, value, onChange, options, icon: Icon }) => {
 };
 
 const Product = () => {
-    const { addToCart } = useCart();
+    const { addToCart, isInCart } = useCart();
     const { toggleWishlist, isInWishlist } = useWishlist();
 
     const {
-        category,
-        setCategory,
-        brand,
-        setBrand,
-        color,
-        setColor,
-        priceRange,
-        setPriceRange,
-        sortBy,
-        setSortBy,
+        category: contextCategory,
+        setCategory: setContextCategory,
+        brand: contextBrand,
+        setBrand: setContextBrand,
+        color: contextColor,
+        setColor: setContextColor,
+        priceRange: contextPriceRange,
+        setPriceRange: setContextPriceRange,
+        sortBy: contextSortBy,
+        setSortBy: setContextSortBy,
     } = useFilter();
+
+    // Local state for batch filtering
+    const [localCategory, setLocalCategory] = useState(contextCategory);
+    const [localBrand, setLocalBrand] = useState(contextBrand);
+    const [localColor, setLocalColor] = useState(contextColor);
+    const [localPriceRange, setLocalPriceRange] = useState(contextPriceRange);
+    const [localSortBy, setLocalSortBy] = useState(contextSortBy);
+
+    // Sync local state when context changes (e.g., direct link or Home page click)
+    useEffect(() => {
+        setLocalCategory(contextCategory);
+        setLocalBrand(contextBrand);
+        setLocalColor(contextColor);
+        setLocalPriceRange(contextPriceRange);
+        setLocalSortBy(contextSortBy);
+    }, [contextCategory, contextBrand, contextColor, contextPriceRange, contextSortBy]);
 
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -99,77 +115,15 @@ const Product = () => {
     const [addedProducts, setAddedProducts] = useState(new Set());
     const [page, setPage] = useState(1);
 
-    useEffect(() => {
-        const fetchProducts = async () => {
-            setLoading(true);
-            try {
-                const response = await getProducts({
-                    category: category !== "all" ? category : undefined,
-                    brand: brand !== "all" ? brand : undefined,
-                    color: color !== "all" ? color : undefined,
-                    minPrice: priceRange[0] || undefined,
-                    maxPrice: priceRange[1] !== 5000 ? priceRange[1] : undefined,
-                    page,
-                    limit: PER_PAGE,
-                });
-
-                let allProducts = [];
-                if (response && Array.isArray(response.data)) {
-                    allProducts = response.data;
-                } else if (response && Array.isArray(response)) {
-                    allProducts = response;
-                }
-
-                const sortedProducts = [...allProducts].sort((a, b) => {
-                    switch (sortBy) {
-                        case "price-asc":
-                            return a.price - b.price;
-                        case "price-desc":
-                            return b.price - a.price;
-                        case "name-asc":
-                            return a.title.localeCompare(b.title);
-                        case "name-desc":
-                            return b.title.localeCompare(a.title);
-                        default:
-                            return 0;
-                    }
-                });
-
-                const start = (page - 1) * PER_PAGE;
-                const end = start + PER_PAGE;
-
-                const paginatedProducts = sortedProducts.slice(start, end);
-
-                setProducts(paginatedProducts);
-                setTotalPages(Math.ceil(sortedProducts.length / PER_PAGE));
-
-            } catch (err) {
-                console.error("Error fetching products:", err);
-                setProducts([]);
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchProducts();
-    }, [category, brand, color, priceRange, sortBy, page]);
-
-    useEffect(() => {
+    const handleApplyFilters = () => {
+        setContextCategory(localCategory);
+        setContextBrand(localBrand);
+        setContextColor(localColor);
+        setContextPriceRange(localPriceRange);
+        setContextSortBy(localSortBy);
         setPage(1);
-    }, [category, brand, color, priceRange, sortBy]);
-
-    useEffect(() => {
-        const fetchFilters = async () => {
-            try {
-                const b = await getBrands();
-                const c = await getCategories();
-                setBrands(Array.isArray(b) ? b : b.data || []);
-                setCategories(Array.isArray(c) ? c : c.data || []);
-            } catch (err) {
-                console.error(err);
-            }
-        };
-        fetchFilters();
-    }, []);
+        setShowFilters(false);
+    };
 
     const handleAddToCart = (product, e) => {
         e.preventDefault();
@@ -185,12 +139,86 @@ const Product = () => {
         }, 2000);
     };
 
+    useEffect(() => {
+        const fetchProducts = async () => {
+            setLoading(true);
+            try {
+                const response = await getProducts({
+                    category: contextCategory !== "all" ? contextCategory : undefined,
+                    brand: contextBrand !== "all" ? contextBrand : undefined,
+                    color: contextColor !== "all" ? contextColor : undefined,
+                    minPrice: contextPriceRange[0] || undefined,
+                    maxPrice: contextPriceRange[1] !== 5000 ? contextPriceRange[1] : undefined,
+                    page,
+                    limit: PER_PAGE,
+                });
+
+                let allProducts = [];
+                if (response && Array.isArray(response.data)) {
+                    allProducts = response.data;
+                } else if (response && Array.isArray(response)) {
+                    allProducts = response;
+                }
+
+                const sortedProducts = [...allProducts].sort((a, b) => {
+                    switch (contextSortBy) {
+                        case "price-asc":
+                            return a.price - b.price;
+                        case "price-desc":
+                            return b.price - a.price;
+                        case "name-asc":
+                            return a.title.localeCompare(b.title);
+                        case "name-desc":
+                            return b.title.localeCompare(a.title);
+                        default:
+                            return 0;
+                    }
+                });
+
+                const start = (page - 1) * PER_PAGE;
+                const end = start + PER_PAGE;
+                const paginatedProducts = sortedProducts.slice(start, end);
+
+                setProducts(paginatedProducts);
+                setTotalPages(Math.ceil(sortedProducts.length / PER_PAGE));
+
+            } catch (err) {
+                console.error("Error fetching products:", err);
+                setProducts([]);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchProducts();
+    }, [contextCategory, contextBrand, contextColor, contextPriceRange, contextSortBy, page]);
+
+    useEffect(() => {
+        const fetchFilters = async () => {
+            try {
+                const b = await getBrands();
+                const c = await getCategories();
+                setBrands(Array.isArray(b) ? b : b.data || []);
+                setCategories(Array.isArray(c) ? c : c.data || []);
+            } catch (err) {
+                console.error(err);
+            }
+        };
+        fetchFilters();
+    }, []);
+
     const resetFilters = () => {
-        setCategory("all");
-        setBrand("all");
-        setColor("all");
-        setPriceRange([0, 5000]);
-        setSortBy("default");
+        setLocalCategory("all");
+        setLocalBrand("all");
+        setLocalColor("all");
+        setLocalPriceRange([0, 5000]);
+        setLocalSortBy("default");
+
+        setContextCategory("all");
+        setContextBrand("all");
+        setContextColor("all");
+        setContextPriceRange([0, 5000]);
+        setContextSortBy("default");
+
         setPage(1);
         setShowFilters(false);
     };
@@ -222,16 +250,16 @@ const Product = () => {
         visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" } }
     };
 
-    const FilterContent = () => (
-        <div className="space-y-4 sm:space-y-6">
+    const filterContentUI = (
+        <div className="space-y-5 sm:space-y-6">
             <div className="flex items-center justify-between">
-                <h2 className="text-lg sm:text-xl font-black text-[#4A4A4A] flex items-center gap-2">
-                    <Filter size={20} className="text-[#FF6F20]" />
+                <h2 className="text-lg font-black text-[#4A4A4A] flex items-center gap-2">
+                    <Filter size={18} className="text-[#FF6F20]" />
                     <span>Filters</span>
                 </h2>
                 <motion.button
                     onClick={resetFilters}
-                    className="text-xs text-[#FF6F20] font-black hover:text-[#FFB300] px-3 py-1.5 rounded-lg hover:bg-[#FFF3E0] transition-all border-2 border-transparent hover:border-[#FF6F20]/10"
+                    className="text-[10px] text-[#FF6F20] font-black hover:text-[#FFB300] px-2 py-1 rounded-lg hover:bg-[#FFF3E0] transition-all"
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                 >
@@ -239,68 +267,80 @@ const Product = () => {
                 </motion.button>
             </div>
 
-            <CustomDropdown
-                label="Sort By"
-                icon={ArrowUpDown}
-                value={sortBy}
-                onChange={setSortBy}
-                options={sortOptions}
-            />
+            <div className="space-y-4">
+                <CustomDropdown
+                    label="Sort By"
+                    icon={ArrowUpDown}
+                    value={localSortBy}
+                    onChange={setLocalSortBy}
+                    options={sortOptions}
+                />
 
-            <CustomDropdown
-                label="Category"
-                value={category}
-                onChange={setCategory}
-                options={[
-                    { label: "All Departments", value: "all" },
-                    ...categories.map(c => ({ label: c, value: c }))
-                ]}
-            />
+                <CustomDropdown
+                    label="Category"
+                    value={localCategory}
+                    onChange={setLocalCategory}
+                    options={[
+                        { label: "All Departments", value: "all" },
+                        ...categories.map(c => ({ label: c, value: c }))
+                    ]}
+                />
 
-            <CustomDropdown
-                label="Brand"
-                value={brand}
-                onChange={setBrand}
-                options={[
-                    { label: "All Brands", value: "all" },
-                    ...brands.map(b => ({ label: b, value: b }))
-                ]}
-            />
+                <CustomDropdown
+                    label="Brand"
+                    value={localBrand}
+                    onChange={setLocalBrand}
+                    options={[
+                        { label: "All Brands", value: "all" },
+                        ...brands.map(b => ({ label: b, value: b }))
+                    ]}
+                />
 
-            <CustomDropdown
-                label="Color"
-                value={color}
-                onChange={setColor}
-                options={colorOptions}
-            />
+                <CustomDropdown
+                    label="Color"
+                    value={localColor}
+                    onChange={setLocalColor}
+                    options={colorOptions}
+                />
 
-            <div>
-                <label className="text-xs font-bold text-[#4A4A4A] mb-3 block uppercase tracking-wider">
-                    Price Range: ${priceRange[0]} - ${priceRange[1]}
-                </label>
-                <div className="flex gap-2">
-                    <div className="relative w-1/2">
-                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#FF6F20] font-bold">$</span>
-                        <input
-                            type="number"
-                            placeholder="Min"
-                            value={priceRange[0] || ""}
-                            onChange={(e) => setPriceRange([Number(e.target.value) || 0, priceRange[1]])}
-                            className="w-full pl-7 pr-3 py-3 text-sm bg-white border-2 border-[#FF6F20] rounded-xl text-[#4A4A4A] placeholder-gray-400 hover:border-[#FFB300] focus:border-[#FF7043] outline-none font-bold transition-all shadow-sm"
-                        />
-                    </div>
-                    <div className="relative w-1/2">
-                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#FF6F20] font-bold">$</span>
-                        <input
-                            type="number"
-                            placeholder="Max"
-                            value={priceRange[1] === 5000 ? "" : priceRange[1]}
-                            onChange={(e) => setPriceRange([priceRange[0], Number(e.target.value) || 5000])}
-                            className="w-full pl-7 pr-3 py-3 text-sm bg-white border-2 border-[#FF6F20] rounded-xl text-[#4A4A4A] placeholder-gray-400 hover:border-[#FFB300] focus:border-[#FF7043] outline-none font-bold transition-all shadow-sm"
-                        />
+                <div>
+                    <label className="text-[10px] font-black text-[#4A4A4A]/50 mb-3 block uppercase tracking-widest">
+                        Price Range: ${localPriceRange[0]} - ${localPriceRange[1]}
+                    </label>
+                    <div className="flex gap-2">
+                        <div className="relative w-1/2">
+                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#FF6F20] font-bold text-xs">$</span>
+                            <input
+                                type="number"
+                                placeholder="Min"
+                                value={localPriceRange[0] || ""}
+                                onChange={(e) => setLocalPriceRange([Number(e.target.value) || 0, localPriceRange[1]])}
+                                className="w-full pl-6 pr-2 py-3 text-xs bg-[#FFF3E0]/10 border-2 border-[#FF6F20]/20 rounded-xl text-[#4A4A4A] outline-none font-bold transition-all focus:border-[#FF6F20]"
+                            />
+                        </div>
+                        <div className="relative w-1/2">
+                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#FF6F20] font-bold text-xs">$</span>
+                            <input
+                                type="number"
+                                placeholder="Max"
+                                value={localPriceRange[1] === 5000 ? "" : localPriceRange[1]}
+                                onChange={(e) => setLocalPriceRange([localPriceRange[0], Number(e.target.value) || 5000])}
+                                className="w-full pl-6 pr-2 py-3 text-xs bg-[#FFF3E0]/10 border-2 border-[#FF6F20]/20 rounded-xl text-[#4A4A4A] outline-none font-bold transition-all focus:border-[#FF6F20]"
+                            />
+                        </div>
                     </div>
                 </div>
             </div>
+
+            <motion.button
+                onClick={handleApplyFilters}
+                className="w-full bg-gradient-to-r from-[#FF6F20] to-[#FFB300] text-white py-4 rounded-xl font-black shadow-lg shadow-[#FF6F20]/20 hover:shadow-[#FF6F20]/40 transition-all flex items-center justify-center gap-2 mt-4 uppercase tracking-[0.1em] text-sm"
+                whileHover={{ y: -2 }}
+                whileTap={{ scale: 0.98 }}
+            >
+                <Search size={18} />
+                Find Products
+            </motion.button>
         </div>
     );
 
@@ -312,39 +352,39 @@ const Product = () => {
                 transition={{ duration: 0.5, ease: "easeOut" }}
                 className="bg-gradient-to-r from-[#FF6F20] via-[#FFB300] to-[#FF7043] border-b-2 border-[#FF6F20] sticky top-0 z-40 shadow-xl"
             >
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-4 lg:py-5 flex items-center justify-between gap-3 text-white">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between gap-3 text-white">
                     <div className="flex-1 min-w-0">
                         <motion.h1
                             initial={{ opacity: 0, x: -30 }}
                             animate={{ opacity: 1, x: 0 }}
                             transition={{ delay: 0.2 }}
-                            className="text-xl sm:text-2xl lg:text-3xl font-black tracking-tight truncate"
+                            className="text-xl sm:text-2xl font-black tracking-tight truncate"
                         >
-                            Products
+                            Explore Gear
                         </motion.h1>
                         <motion.p
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             transition={{ delay: 0.3 }}
-                            className="text-xs sm:text-sm font-bold opacity-90"
+                            className="text-[10px] sm:text-xs font-black uppercase tracking-widest opacity-80"
                         >
-                            {products.length} results found
+                            {products.length} Items Found
                         </motion.p>
                     </div>
 
                     <motion.button
                         onClick={() => setShowFilters(!showFilters)}
-                        className="lg:hidden group bg-white text-[#FF6F20] px-4 py-2.5 rounded-xl font-black flex items-center gap-2 shadow-lg hover:shadow-white/20 transition-all"
+                        className="lg:hidden group bg-white text-[#FF6F20] px-4 py-2 rounded-xl font-black flex items-center gap-2 shadow-lg"
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                     >
                         {showFilters ? <X size={18} /> : <Filter size={18} />}
-                        <span className="text-sm">Filters</span>
+                        <span className="text-xs">Filters</span>
                     </motion.button>
                 </div>
             </motion.div>
 
-            <div className="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
+            <div className="max-w-7xl mx-auto p-4 sm:p-6">
                 <AnimatePresence mode="wait">
                     {showFilters && (
                         <>
@@ -374,7 +414,7 @@ const Product = () => {
                                         <X size={24} />
                                     </button>
                                 </div>
-                                <FilterContent />
+                                {filterContentUI}
                             </motion.div>
                         </>
                     )}
@@ -382,8 +422,8 @@ const Product = () => {
 
                 <div className="flex gap-8 relative">
                     <aside className="hidden lg:block w-72 shrink-0">
-                        <div className="bg-white rounded-3xl border-2 border-[#FF6F20]/10 p-6 sticky top-32 shadow-xl shadow-[#FF6F20]/5">
-                            <FilterContent />
+                        <div className="bg-white rounded-3xl border-2 border-[#FF6F20]/5 p-6 sticky top-28 shadow-xl shadow-[#FF6F20]/5">
+                            {filterContentUI}
                         </div>
                     </aside>
 
@@ -392,90 +432,131 @@ const Product = () => {
                             variants={containerVariants}
                             initial="hidden"
                             animate="visible"
-                            className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6"
+                            className={!loading && products.length === 0 ? "flex flex-col items-center justify-center py-20 w-full col-span-full" : "grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6"}
                         >
                             {loading
                                 ? Array.from({ length: PER_PAGE }).map((_, i) => <Skeleton key={i} />)
-                                : products.map((product) => (
-                                    <motion.div
-                                        key={product.id}
-                                        variants={itemVariants}
-                                        className="group bg-white rounded-3xl border-2 border-[#FF6F20]/5 overflow-hidden hover:border-[#FF6F20] transition-all duration-500 shadow-xl shadow-[#FF6F20]/5 hover:shadow-[#FF6F20]/20"
-                                        whileHover={{ y: -8 }}
-                                    >
-                                        <Link to={`/products/${product.id}`}>
-                                            <div className="relative h-56 sm:h-64 bg-[#FFF3E0]/50 p-6 overflow-hidden">
-                                                <motion.button
-                                                    onClick={(e) => { e.preventDefault(); toggleWishlist(product); }}
-                                                    className="absolute top-4 right-4 z-10 bg-white border-2 border-[#FF6F20] rounded-2xl p-2.5 text-[#FF6F20] shadow-lg transition-all"
-                                                    whileHover={{ scale: 1.1, rotate: 10 }}
-                                                    whileTap={{ scale: 0.9 }}
-                                                >
-                                                    <Heart
-                                                        size={18}
-                                                        className={isInWishlist(product.id) ? 'fill-[#FF6F20]' : ''}
-                                                    />
-                                                </motion.button>
-
-                                                <motion.img
-                                                    src={product.images?.[0] || "/placeholder.jpg"}
-                                                    alt={product.title}
-                                                    className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-700"
-                                                />
-                                            </div>
-
-                                            <div className="p-6 space-y-3">
-                                                <span className="inline-block px-3 py-1 bg-[#FFF3E0] border border-[#FF6F20]/20 text-[#FF6F20] rounded-full text-[10px] font-black uppercase tracking-wider">
-                                                    {product.category}
-                                                </span>
-
-                                                <h2 className="font-black text-lg text-[#4A4A4A] line-clamp-2 group-hover:text-[#FF6F20] transition-colors leading-tight min-h-[3.5rem]">
-                                                    {product.title}
-                                                </h2>
-
-                                                <div className="flex items-center gap-2">
-                                                    <div className="flex gap-0.5 text-[#FFB300]">
-                                                        {[...Array(5)].map((_, i) => (
-                                                            <Star
-                                                                key={i}
-                                                                size={14}
-                                                                className={i < Math.floor(product.rating) ? "fill-current" : "text-gray-200"}
-                                                            />
-                                                        ))}
-                                                    </div>
-                                                    <span className="text-[#4A4A4A] font-black text-xs">
-                                                        {product.rating}
-                                                    </span>
-                                                </div>
-
-                                                <div className="flex items-end gap-1.5 pt-2">
-                                                    <span className="text-3xl font-black text-[#FF6F20]">
-                                                        ${product.price ? Math.floor(product.price) : 0}
-                                                        <span className="text-sm">.{((product.price % 1) * 100).toFixed(0).padStart(2, '0')}</span>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </Link>
-                                        <motion.button
-                                            onClick={(e) => handleAddToCart(product, e)}
-                                            className="w-full bg-gradient-to-r from-[#FF6F20] to-[#FFB300] text-white py-4 font-black flex items-center justify-center gap-2 hover:hue-rotate-15 transition-all relative overflow-hidden"
-                                            whileTap={{ scale: 0.95 }}
+                                : products.length === 0
+                                    ? (
+                                        <motion.div
+                                            initial={{ opacity: 0, y: 20 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            className="text-center space-y-4"
                                         >
-                                            <ShoppingCart size={18} className="relative z-10" />
-                                            <AnimatePresence mode="wait">
-                                                <motion.span
-                                                    key={addedProducts.has(product.id) ? "added" : "add"}
-                                                    initial={{ opacity: 0, y: 10 }}
-                                                    animate={{ opacity: 1, y: 0 }}
-                                                    exit={{ opacity: 0, y: -10 }}
-                                                    className="relative z-10"
-                                                >
-                                                    {addedProducts.has(product.id) ? "ADDED!" : "ADD TO CART"}
-                                                </motion.span>
-                                            </AnimatePresence>
-                                        </motion.button>
-                                    </motion.div>
-                                ))}
+                                            <div className="w-24 h-24 bg-[#FFF3E0] rounded-full flex items-center justify-center mx-auto border-4 border-white shadow-xl shadow-[#FF6F20]/5">
+                                                <Search size={40} className="text-[#FF6F20] opacity-40" />
+                                            </div>
+                                            <div className="space-y-2">
+                                                <h3 className="text-2xl font-black text-[#4A4A4A]">No products found</h3>
+                                                <p className="text-[#4A4A4A]/60 font-bold max-w-xs mx-auto text-sm">
+                                                    No products match your selected filters. Please try adjusting them or clearing all filters.
+                                                </p>
+                                            </div>
+                                            <motion.button
+                                                onClick={resetFilters}
+                                                whileHover={{ scale: 1.05 }}
+                                                whileTap={{ scale: 0.95 }}
+                                                className="px-6 py-2.5 bg-white border-2 border-[#FF6F20] text-[#FF6F20] rounded-xl font-black text-xs hover:bg-[#FFF3E0] transition-all"
+                                            >
+                                                Reset All Filters
+                                            </motion.button>
+                                        </motion.div>
+                                    )
+                                    : products.map((product) => (
+                                        <motion.div
+                                            key={product.id}
+                                            variants={itemVariants}
+                                            className="group bg-white rounded-3xl border-2 border-[#FF6F20]/5 overflow-hidden hover:border-[#FF6F20] transition-all duration-500 shadow-xl shadow-[#FF6F20]/5 hover:shadow-[#FF6F20]/20"
+                                            whileHover={{ y: -8 }}
+                                        >
+                                            <Link to={`/products/${product.id}`}>
+                                                <div className="relative h-56 sm:h-64 bg-[#FFF3E0]/30 p-6 overflow-hidden">
+                                                    <motion.button
+                                                        onClick={(e) => { e.preventDefault(); toggleWishlist(product); }}
+                                                        className="absolute top-4 right-4 z-10 bg-white border-2 border-[#FF6F20] rounded-2xl p-2.5 text-[#FF6F20] shadow-lg transition-all"
+                                                        whileHover={{ scale: 1.1 }}
+                                                        whileTap={{ scale: 0.9 }}
+                                                    >
+                                                        <Heart
+                                                            size={18}
+                                                            className={isInWishlist(product.id) ? 'fill-[#FF6F20]' : 'text-[#FF6F20]'}
+                                                        />
+                                                    </motion.button>
+
+                                                    <motion.img
+                                                        src={product.images?.[0] || "/placeholder.jpg"}
+                                                        alt={product.title}
+                                                        className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-700"
+                                                    />
+                                                </div>
+
+                                                <div className="p-6 space-y-3">
+                                                    <span className="inline-block px-3 py-1 bg-[#FFF3E0] border border-[#FF6F20]/20 text-[#FF6F20] rounded-full text-[9px] font-black uppercase tracking-wider">
+                                                        {product.category}
+                                                    </span>
+
+                                                    <h2 className="font-black text-base text-[#4A4A4A] line-clamp-2 group-hover:text-[#FF6F20] transition-colors leading-tight min-h-[3rem]">
+                                                        {product.title}
+                                                    </h2>
+
+                                                    <div className="flex items-center gap-2">
+                                                        <div className="flex gap-0.5 text-[#FFB300]">
+                                                            {[...Array(5)].map((_, i) => (
+                                                                <Star
+                                                                    key={i}
+                                                                    size={12}
+                                                                    className={i < Math.floor(product.rating) ? "fill-current" : "text-gray-200"}
+                                                                />
+                                                            ))}
+                                                        </div>
+                                                        <span className="text-[#4A4A4A] font-black text-[10px]">
+                                                            {product.rating}
+                                                        </span>
+                                                    </div>
+
+                                                    <div className="flex items-end gap-1 pt-2">
+                                                        <span className="text-2xl font-black text-[#FF6F20]">
+                                                            ${product.price ? Math.floor(product.price) : 0}
+                                                            <span className="text-xs">.{((product.price % 1) * 100).toFixed(0).padStart(2, '0')}</span>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </Link>
+                                            <motion.button
+                                                onClick={(e) => handleAddToCart(product, e)}
+                                                className={`w-full py-4 font-black flex items-center justify-center gap-2 transition-all relative overflow-hidden ${isInCart(product.id)
+                                                    ? "bg-gray-100 text-[#4A4A4A]/40"
+                                                    : "bg-gradient-to-r from-[#FF6F20] to-[#FFB300] text-white hover:hue-rotate-15"
+                                                    }`}
+                                                whileTap={{ scale: 0.95 }}
+                                                disabled={isInCart(product.id)}
+                                            >
+                                                <ShoppingCart size={18} className="relative z-10" />
+                                                <AnimatePresence mode="wait">
+                                                    {isInCart(product.id) ? (
+                                                        <motion.span
+                                                            key="incart"
+                                                            initial={{ opacity: 0, y: 10 }}
+                                                            animate={{ opacity: 1, y: 0 }}
+                                                            className="relative z-10 text-xs sm:text-sm"
+                                                        >
+                                                            IN CART
+                                                        </motion.span>
+                                                    ) : (
+                                                        <motion.span
+                                                            key="add"
+                                                            initial={{ opacity: 0, y: 10 }}
+                                                            animate={{ opacity: 1, y: 0 }}
+                                                            exit={{ opacity: 0, y: -10 }}
+                                                            className="relative z-10 text-xs sm:text-sm"
+                                                        >
+                                                            {addedProducts.has(product.id) ? "ADDED!" : "ADD TO CART"}
+                                                        </motion.span>
+                                                    )}
+                                                </AnimatePresence>
+                                            </motion.button>
+                                        </motion.div>
+                                    ))}
                         </motion.div>
 
                         {!loading && totalPages > 1 && (
@@ -483,13 +564,13 @@ const Product = () => {
                                 <motion.button
                                     onClick={() => page > 1 && setPage(page - 1)}
                                     disabled={page === 1}
-                                    className={`p-3 rounded-2xl border-2 transition-all ${page === 1
-                                        ? 'bg-gray-100 text-gray-400 border-gray-200'
-                                        : 'bg-white text-[#FF6F20] border-[#FF6F20] hover:bg-[#FFF3E0] shadow-lg'
+                                    className={`p-3 rounded-xl border-2 transition-all ${page === 1
+                                        ? 'bg-gray-100/50 text-gray-300 border-gray-100'
+                                        : 'bg-white text-[#FF6F20] border-[#FF6F20] hover:bg-[#FFF3E0] shadow-lg shadow-[#FF6F20]/5'
                                         }`}
                                     whileHover={page > 1 ? { scale: 1.1 } : {}}
                                 >
-                                    <ChevronLeft size={20} />
+                                    <ChevronLeft size={18} />
                                 </motion.button>
 
                                 <div className="flex gap-2">
@@ -501,9 +582,9 @@ const Product = () => {
                                                 <motion.button
                                                     key={pageNum}
                                                     onClick={() => setPage(pageNum)}
-                                                    className={`w-10 h-10 sm:w-12 sm:h-12 rounded-2xl border-2 font-black transition-all ${isActive
-                                                        ? 'bg-[#FF6F20] text-white border-transparent shadow-xl'
-                                                        : 'bg-white text-[#4A4A4A] border-[#FF6F20]/20 hover:border-[#FF6F20]'
+                                                    className={`w-10 h-10 rounded-xl border-2 font-black text-xs transition-all ${isActive
+                                                        ? 'bg-[#FF6F20] text-white border-transparent shadow-xl shadow-[#FF6F20]/20'
+                                                        : 'bg-white text-[#4A4A4A] border-[#FF6F20]/10 hover:border-[#FF6F20]'
                                                         }`}
                                                     whileHover={{ scale: 1.1 }}
                                                 >
@@ -511,7 +592,7 @@ const Product = () => {
                                                 </motion.button>
                                             );
                                         }
-                                        if (pageNum === page - 2 || pageNum === page + 2) return <span key={pageNum} className="px-1 text-[#FF6F20]">...</span>;
+                                        if (pageNum === page - 2 || pageNum === page + 2) return <span key={pageNum} className="px-1 text-[#FF6F20] self-center tracking-tighter">...</span>;
                                         return null;
                                     })}
                                 </div>
@@ -519,13 +600,13 @@ const Product = () => {
                                 <motion.button
                                     onClick={() => page < totalPages && setPage(page + 1)}
                                     disabled={page === totalPages}
-                                    className={`p-3 rounded-2xl border-2 transition-all ${page === totalPages
-                                        ? 'bg-gray-100 text-gray-400 border-gray-200'
-                                        : 'bg-white text-[#FF6F20] border-[#FF6F20] hover:bg-[#FFF3E0] shadow-lg'
+                                    className={`p-3 rounded-xl border-2 transition-all ${page === totalPages
+                                        ? 'bg-gray-100/50 text-gray-300 border-gray-100'
+                                        : 'bg-white text-[#FF6F20] border-[#FF6F20] hover:bg-[#FFF3E0] shadow-lg shadow-[#FF6F20]/5'
                                         }`}
                                     whileHover={page < totalPages ? { scale: 1.1 } : {}}
                                 >
-                                    <ChevronRight size={20} />
+                                    <ChevronRight size={18} />
                                 </motion.button>
                             </div>
                         )}
@@ -534,9 +615,10 @@ const Product = () => {
             </div>
 
             <style jsx>{`
-                .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+                .custom-scrollbar::-webkit-scrollbar { width: 4px; }
                 .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-                .custom-scrollbar::-webkit-scrollbar-thumb { background: #FF6F20; border-radius: 10px; }
+                .custom-scrollbar::-webkit-scrollbar-thumb { background: #FF6F20/40; border-radius: 10px; }
+                .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #FF6F20; }
             `}</style>
         </div>
     );

@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { createContext, useContext, useEffect, useMemo, useState, useCallback } from "react";
 import { showToast } from "../utils/toast.config";
 
 const CartContext = createContext(undefined);
@@ -11,16 +11,16 @@ export const CartProvider = ({ children }) => {
 
   const [isCartOpen, setIsCartOpen] = useState(false);
 
+  const isInCart = useCallback((productId) => {
+    return cartItems.some(item => item.id === productId);
+  }, [cartItems]);
+
   const addToCart = (product) => {
     setCartItems((prev) => {
       const existing = prev.find((item) => item.id === product.id);
       if (existing) {
-        showToast.success(`Quantity updated for ${product.name || product.title}!`);
-        return prev.map((item) =>
-          item.id === product.id
-            ? { ...item, quantity: item.quantity + 1 }
-            : item
-        );
+        showToast.info(`${product.name || product.title} is already in your cart!`);
+        return prev; 
       }
       showToast.addToCart(product.name || product.title);
       return [...prev, { ...product, quantity: 1 }];
@@ -37,9 +37,6 @@ export const CartProvider = ({ children }) => {
 
   const increaseQty = (productId) => {
     const product = cartItems.find((item) => item.id === productId);
-    if (product) {
-      showToast.info(`Increased quantity: ${product.name || product.title}`);
-    }
     setCartItems((prev) =>
       prev.map((item) =>
         item.id === productId ? { ...item, quantity: item.quantity + 1 } : item
@@ -49,7 +46,7 @@ export const CartProvider = ({ children }) => {
 
   const decreaseQty = (productId) => {
     const product = cartItems.find((item) => item.id === productId);
-    
+
     setCartItems((prev) => {
       const updatedItems = prev
         .map((item) =>
@@ -58,14 +55,12 @@ export const CartProvider = ({ children }) => {
             : item
         )
         .filter((item) => item.quantity > 0);
-      
+
       const isRemoved = !updatedItems.find((item) => item.id === productId);
       if (isRemoved && product) {
         showToast.removeFromCart(product.name || product.title);
-      } else if (product) {
-        showToast.info(`Decreased quantity: ${product.name || product.title}`);
       }
-      
+
       return updatedItems;
     });
   };
@@ -106,6 +101,7 @@ export const CartProvider = ({ children }) => {
         totalPrice,
         isCartOpen,
         setIsCartOpen,
+        isInCart, 
       }}
     >
       {children}

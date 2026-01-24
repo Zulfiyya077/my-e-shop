@@ -1,30 +1,83 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useEffect, useCallback, useRef } from "react";
+import { useSearchParams } from "react-router-dom";
 
 const FilterContext = createContext();
 
 export const FilterProvider = ({ children }) => {
-  const [category, setCategory] = useState("all");
-  const [brand, setBrand] = useState("all");
-  const [color, setColor] = useState("all");
-  const [priceRange, setPriceRange] = useState([0, 5000]);
-  const [rating, setRating] = useState(0);
-  const [sortBy, setSortBy] = useState("default"); 
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const getParam = (key, defaultValue) => searchParams.get(key) || defaultValue;
+
+  const [category, setCategoryState] = useState(getParam("category", "all"));
+  const [brand, setBrandState] = useState(getParam("brand", "all"));
+  const [color, setColorState] = useState(getParam("color", "all"));
+  const [minPrice, setMinPrice] = useState(Number(getParam("minPrice", 0)));
+  const [maxPrice, setMaxPrice] = useState(Number(getParam("maxPrice", 5000)));
+  const [rating, setRatingState] = useState(Number(getParam("rating", 0)));
+  const [sortBy, setSortByState] = useState(getParam("sortBy", "default"));
+
+  const isInitialSync = useRef(true);
+
+  useEffect(() => {
+    if (isInitialSync.current) {
+      isInitialSync.current = false;
+      return;
+    }
+
+    const params = new URLSearchParams(searchParams);
+
+    if (category !== "all") params.set("category", category); else params.delete("category");
+    if (brand !== "all") params.set("brand", brand); else params.delete("brand");
+    if (color !== "all") params.set("color", color); else params.delete("color");
+    if (minPrice > 0) params.set("minPrice", minPrice); else params.delete("minPrice");
+    if (maxPrice < 5000) params.set("maxPrice", maxPrice); else params.delete("maxPrice");
+    if (rating > 0) params.set("rating", rating); else params.delete("rating");
+    if (sortBy !== "default") params.set("sortBy", sortBy); else params.delete("sortBy");
+
+    if (params.toString() !== searchParams.toString()) {
+      setSearchParams(params, { replace: true });
+    }
+  }, [category, brand, color, minPrice, maxPrice, rating, sortBy]);
+
+
+  useEffect(() => {
+    const urlCategory = getParam("category", "all");
+    const urlBrand = getParam("brand", "all");
+    const urlColor = getParam("color", "all");
+    const urlMin = Number(getParam("minPrice", 0));
+    const urlMax = Number(getParam("maxPrice", 5000));
+    const urlRating = Number(getParam("rating", 0));
+    const urlSort = getParam("sortBy", "default");
+
+    if (urlCategory !== category) setCategoryState(urlCategory);
+    if (urlBrand !== brand) setBrandState(urlBrand);
+    if (urlColor !== color) setColorState(urlColor);
+    if (urlMin !== minPrice) setMinPrice(urlMin);
+    if (urlMax !== maxPrice) setMaxPrice(urlMax);
+    if (urlRating !== rating) setRatingState(urlRating);
+    if (urlSort !== sortBy) setSortByState(urlSort);
+  }, [searchParams]);
+
+  const setPriceRange = useCallback(([min, max]) => {
+    setMinPrice(min);
+    setMaxPrice(max);
+  }, []);
 
   return (
     <FilterContext.Provider
       value={{
         category,
-        setCategory,
+        setCategory: setCategoryState,
         brand,
-        setBrand,
+        setBrand: setBrandState,
         color,
-        setColor,
-        priceRange,
+        setColor: setColorState,
+        priceRange: [minPrice, maxPrice], 
         setPriceRange,
         rating,
-        setRating,
+        setRating: setRatingState,
         sortBy,
-        setSortBy,
+        setSortBy: setSortByState,
       }}
     >
       {children}

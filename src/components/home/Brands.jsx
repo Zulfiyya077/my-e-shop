@@ -6,10 +6,6 @@ import { Cpu, Zap } from "lucide-react";
 import { getBrands } from "../../services/api";
 import { useFilter } from "../../context/FilterContext";
 
-/**
- * BrandIcon Component
- * Renders professional SVG logos for specific brands.
- */
 const BrandIcon = ({ name }) => {
     const lowerName = name.toLowerCase();
     const iconColor = "currentColor";

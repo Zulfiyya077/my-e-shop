@@ -13,14 +13,13 @@ const ProductCarousel = () => {
     const [loading, setLoading] = useState(true);
     const [addedProducts, setAddedProducts] = useState(new Set());
     const [isAutoPlaying, setIsAutoPlaying] = useState(true);
-    const { addToCart } = useCart();
+    const { addToCart, isInCart } = useCart();
     const { toggleWishlist, isInWishlist } = useWishlist();
 
     useEffect(() => {
         const fetchProducts = async () => {
             try {
                 setLoading(true);
-                // Limit to 6 products as requested
                 const response = await getProducts({ limit: 6 });
                 const data = response.data || [];
                 setProducts(data.slice(0, 6));
@@ -71,7 +70,6 @@ const ProductCarousel = () => {
         setCurrentIndex((prev) => (prev <= 0 ? maxIndex : prev - 1));
     }, [maxIndex]);
 
-    // Auto-play effect
     useEffect(() => {
         let interval;
         if (isAutoPlaying && products.length > currentItemsPerView) {
@@ -125,9 +123,7 @@ const ProductCarousel = () => {
         );
     }
 
-    if (products.length === 0) {
-        return null;
-    }
+    if (products.length === 0) return null;
 
     const cardWidth = currentItemsPerView === 1 ? '100%' :
         currentItemsPerView === 2 ? 'calc(50% - 12px)' :
@@ -140,7 +136,6 @@ const ProductCarousel = () => {
             onMouseLeave={() => setIsAutoPlaying(true)}
         >
             <div className="max-w-7xl mx-auto px-4 sm:px-6">
-                {/* Header */}
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
@@ -156,9 +151,7 @@ const ProductCarousel = () => {
                     </p>
                 </motion.div>
 
-                {/* Carousel Container */}
                 <div className="relative">
-                    {/* Navigation Buttons */}
                     {products.length > currentItemsPerView && (
                         <>
                             <button
@@ -177,10 +170,9 @@ const ProductCarousel = () => {
                         </>
                     )}
 
-                    {/* Cards Container */}
                     <div className="overflow-hidden px-1 sm:px-2">
                         <motion.div
-                            animate={{ x: `${-currentIndex * (100 / currentItemsPerView)}%` }}
+                            animate={{ x: `-${currentIndex * (100 / currentItemsPerView)}%` }}
                             transition={{ type: "spring", stiffness: 200, damping: 25 }}
                             className="flex gap-3 sm:gap-4 lg:gap-6"
                         >
@@ -201,14 +193,12 @@ const ProductCarousel = () => {
                                         style={{ width: cardWidth, minWidth: cardWidth }}
                                     >
                                         <div className="group relative bg-white rounded-2xl overflow-hidden border-2 border-[#FF6F20]/10 hover:border-[#FF6F20] transition-all duration-300 shadow-xl hover:shadow-2xl hover:shadow-[#FF6F20]/20">
-                                            {/* Badge */}
                                             {product.discount > 0 && (
                                                 <div className={`absolute top-2 left-2 sm:top-3 sm:left-3 z-20 bg-gradient-to-r ${badge.gradient} px-2 py-1 sm:px-3 sm:py-1 rounded-full shadow-lg`}>
                                                     <span className="text-white font-black text-[10px] sm:text-xs">{badge.text}</span>
                                                 </div>
                                             )}
 
-                                            {/* Action Buttons */}
                                             <AnimatePresence>
                                                 {hoveredCard === product.id && (
                                                     <motion.div
@@ -236,7 +226,6 @@ const ProductCarousel = () => {
                                                 )}
                                             </AnimatePresence>
 
-                                            {/* Image Container */}
                                             <Link to={`/products/${product.id}`}>
                                                 <div className="relative h-44 sm:h-56 lg:h-64 overflow-hidden bg-[#FFF3E0]/50">
                                                     <img
@@ -247,9 +236,7 @@ const ProductCarousel = () => {
                                                 </div>
                                             </Link>
 
-                                            {/* Content */}
                                             <div className="p-4 sm:p-6">
-                                                {/* Rating */}
                                                 <div className="flex items-center gap-2 mb-3">
                                                     <div className="flex items-center gap-0.5">
                                                         {[...Array(5)].map((_, i) => (
@@ -263,14 +250,12 @@ const ProductCarousel = () => {
                                                     <span className="text-[#4A4A4A] text-xs font-black">{product.rating?.toFixed(1)}</span>
                                                 </div>
 
-                                                {/* Product Name */}
                                                 <Link to={`/products/${product.id}`}>
                                                     <h3 className="text-sm sm:text-lg font-black text-[#4A4A4A] mb-3 group-hover:text-[#FF6F20] transition-colors line-clamp-2 min-h-[3rem]">
                                                         {product.title}
                                                     </h3>
                                                 </Link>
 
-                                                {/* Price */}
                                                 <div className="flex items-center gap-3 mb-6">
                                                     <span className="text-xl sm:text-2xl font-black text-[#FF6F20]">
                                                         ${product.discount > 0 ? discountedPrice : product.price.toFixed(2)}
@@ -282,24 +267,38 @@ const ProductCarousel = () => {
                                                     )}
                                                 </div>
 
-                                                {/* Add to Cart Button */}
                                                 <motion.button
                                                     onClick={(e) => handleAddToCart(product, e)}
-                                                    whileHover={{ scale: 1.02 }}
-                                                    whileTap={{ scale: 0.98 }}
-                                                    className="w-full bg-gradient-to-r from-[#FF6F20] to-[#FFB300] text-white font-black py-3 sm:py-4 rounded-xl shadow-lg hover:shadow-[#FF6F20]/40 transition-all flex items-center justify-center gap-2 group/btn relative overflow-hidden"
+                                                    whileHover={!isInCart(product.id) ? { scale: 1.02 } : {}}
+                                                    whileTap={!isInCart(product.id) ? { scale: 0.98 } : {}}
+                                                    className={`w-full py-3 sm:py-4 rounded-xl shadow-lg transition-all flex items-center justify-center gap-2 group/btn relative overflow-hidden font-black ${isInCart(product.id)
+                                                            ? "bg-gray-100 text-[#4A4A4A]/40 shadow-none cursor-default"
+                                                            : "bg-gradient-to-r from-[#FF6F20] to-[#FFB300] text-white hover:shadow-[#FF6F20]/40"
+                                                        }`}
+                                                    disabled={isInCart(product.id)}
                                                 >
-                                                    <motion.div
-                                                        className="absolute inset-0 bg-white/20"
-                                                        initial={{ x: "-100%" }}
-                                                        whileHover={{ x: "100%" }}
-                                                        transition={{ duration: 0.5 }}
-                                                    />
+                                                    {!isInCart(product.id) && (
+                                                        <motion.div
+                                                            className="absolute inset-0 bg-white/20"
+                                                            initial={{ x: "-100%" }}
+                                                            whileHover={{ x: "100%" }}
+                                                            transition={{ duration: 0.5 }}
+                                                        />
+                                                    )}
 
-                                                    <ShoppingCart size={18} className="group-hover/btn:rotate-12 transition-transform relative z-10" />
+                                                    <ShoppingCart size={18} className={`${!isInCart(product.id) ? "group-hover/btn:rotate-12" : ""} transition-transform relative z-10`} />
 
                                                     <AnimatePresence mode="wait">
-                                                        {addedProducts.has(product.id) ? (
+                                                        {isInCart(product.id) ? (
+                                                            <motion.span
+                                                                key="incart"
+                                                                initial={{ opacity: 0, y: 10 }}
+                                                                animate={{ opacity: 1, y: 0 }}
+                                                                className="relative z-10"
+                                                            >
+                                                                IN CART
+                                                            </motion.span>
+                                                        ) : addedProducts.has(product.id) ? (
                                                             <motion.span
                                                                 key="added"
                                                                 initial={{ opacity: 0, y: 10 }}
@@ -330,7 +329,6 @@ const ProductCarousel = () => {
                         </motion.div>
                     </div>
 
-                    {/* Dots Indicator */}
                     {products.length > currentItemsPerView && (
                         <div className="flex justify-center gap-2 mt-8 sm:mt-12">
                             {Array.from({ length: maxIndex + 1 }).map((_, index) => (
@@ -338,8 +336,8 @@ const ProductCarousel = () => {
                                     key={index}
                                     onClick={() => setCurrentIndex(index)}
                                     className={`h-2 rounded-full transition-all duration-500 ${currentIndex === index
-                                        ? "bg-[#FF6F20] w-12"
-                                        : "bg-[#FFB300]/30 hover:bg-[#FFB300] w-3"
+                                            ? "bg-[#FF6F20] w-12"
+                                            : "bg-[#FFB300]/30 hover:bg-[#FFB300] w-3"
                                         }`}
                                 />
                             ))}
