@@ -30,14 +30,15 @@ const Home = () => {
         const categoriesResponse = await getCategories();
         setCategories(categoriesResponse || []);
 
-        const allProductsResponse = await getProducts();
-        const products = allProductsResponse.data || [];
-        const totalRating = products.reduce((sum, p) => sum + (p.rating || 0), 0);
+        // OPTIMIZATION: Fetch a small number of products but use the global 'count' from the metadata
+        const statsResponse = await getProducts({ limit: 10 });
+        const productsForStats = statsResponse.data || [];
+        const totalRating = productsForStats.reduce((sum, p) => sum + (p.rating || 0), 0);
 
         setStats({
-          totalProducts: products.length,
+          totalProducts: statsResponse.count || productsForStats.length,
           categories: categoriesResponse?.length || 0,
-          avgRating: products.length > 0 ? (totalRating / products.length).toFixed(1) : 0
+          avgRating: productsForStats.length > 0 ? (totalRating / productsForStats.length).toFixed(1) : 0
         });
 
       } catch (error) {

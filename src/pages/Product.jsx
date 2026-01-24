@@ -199,7 +199,6 @@ const Product = () => {
                     }
                 });
 
-                // Local pagination
                 const start = Math.max(0, (page - 1) * PER_PAGE);
                 const end = start + PER_PAGE;
                 const paginatedProducts = sortedProducts.slice(start, end);
