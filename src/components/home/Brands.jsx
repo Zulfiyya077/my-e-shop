@@ -98,7 +98,7 @@ const Brands = () => {
         dots: false,
         infinite: true,
         speed: 10000,
-        slidesToShow: 6,
+        slidesToShow: 4,
         slidesToScroll: 1,
         autoplay: true,
         autoplaySpeed: 0,
@@ -107,20 +107,16 @@ const Brands = () => {
         arrows: false,
         responsive: [
             {
-                breakpoint: 1280,
-                settings: { slidesToShow: 5 }
-            },
-            {
                 breakpoint: 1024,
-                settings: { slidesToShow: 4 }
+                settings: { slidesToShow: 3 }
             },
             {
                 breakpoint: 768,
-                settings: { slidesToShow: 2.5 }
+                settings: { slidesToShow: 2 }
             },
             {
                 breakpoint: 480,
-                settings: { slidesToShow: 1.5 }
+                settings: { slidesToShow: 2 }
             }
         ]
     };
