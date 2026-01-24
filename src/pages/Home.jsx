@@ -30,7 +30,7 @@ const Home = () => {
         const categoriesResponse = await getCategories();
         setCategories(categoriesResponse || []);
 
-        // OPTIMIZATION: Fetch a small number of products but use the global 'count' from the metadata
+       
         const statsResponse = await getProducts({ limit: 10 });
         const productsForStats = statsResponse.data || [];
         const totalRating = productsForStats.reduce((sum, p) => sum + (p.rating || 0), 0);
@@ -134,7 +134,6 @@ const Home = () => {
 
   return (
     <div className="min-h-screen bg-[#FFF3E0]">
-      {/* Hero Slider */}
       <div className="w-full overflow-hidden">
         <Slider {...settings}>
           {bannerProducts.map((product, index) => {
@@ -154,13 +153,10 @@ const Home = () => {
                         e.target.src = 'https://via.placeholder.com/800x600?text=Product+Image';
                       }}
                     />
-                    {/* Lighter Gradient Overlay */}
                     <div className={`absolute inset-0 bg-gradient-to-r ${gradients[index % gradients.length]} mix-blend-multiply opacity-60`} />
-                    {/* Bottom fade for readability */}
+                  
                     <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
                   </div>
-
-                  {/* Animated Shapes */}
                   <div className="absolute inset-0 overflow-hidden">
                     <motion.div
                       className="absolute top-20 right-20 w-64 h-64 bg-[#FFB300]/10 rounded-full blur-3xl"
@@ -193,7 +189,7 @@ const Home = () => {
                         {product.category || 'Premium Quality'}
                       </p>
 
-                      {/* Buttons */}
+                     
                       <div className="flex gap-4 flex-wrap">
                         <Link
                           to={`/products/${product.id}`}
