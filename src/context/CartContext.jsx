@@ -15,7 +15,6 @@ export const CartProvider = ({ children }) => {
     setCartItems((prev) => {
       const existing = prev.find((item) => item.id === product.id);
       if (existing) {
-        // Məhsul artıq səbətdə var, miqdarı artırılır
         showToast.success(`Quantity updated for ${product.name || product.title}!`);
         return prev.map((item) =>
           item.id === product.id
@@ -23,7 +22,6 @@ export const CartProvider = ({ children }) => {
             : item
         );
       }
-      // Yeni məhsul əlavə olunur
       showToast.addToCart(product.name || product.title);
       return [...prev, { ...product, quantity: 1 }];
     });
@@ -61,7 +59,6 @@ export const CartProvider = ({ children }) => {
         )
         .filter((item) => item.quantity > 0);
       
-      // Əgər məhsul tamamilə silindisə
       const isRemoved = !updatedItems.find((item) => item.id === productId);
       if (isRemoved && product) {
         showToast.removeFromCart(product.name || product.title);

@@ -38,7 +38,7 @@ const WishlistModal = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 bg-[#0E141C]/90 backdrop-blur-md z-50"
+        className="fixed inset-0 bg-black/50 backdrop-blur-md z-50"
         onClick={() => setIsWishlistOpen(false)}
       />
 
@@ -48,20 +48,20 @@ const WishlistModal = () => {
           animate={{ scale: 1, opacity: 1, y: 0 }}
           exit={{ scale: 0.9, opacity: 0, y: 20 }}
           transition={{ type: "spring", stiffness: 300, damping: 30 }}
-          className="bg-gradient-to-b from-[#314B6E]/30 to-[#0E141C] border-2 border-[#314B6E]/50 rounded-2xl shadow-2xl w-full max-w-4xl max-h-[85vh] overflow-hidden backdrop-blur-xl"
+          className="bg-white border-2 border-[#FF6F20] rounded-2xl shadow-2xl w-full max-w-4xl max-h-[85vh] overflow-hidden"
           onClick={(e) => e.stopPropagation()}
         >
-          <div className="flex justify-between items-center p-6 border-b border-[#314B6E]/50 bg-gradient-to-r from-[#314B6E]/40 to-transparent">
+          <div className="flex justify-between items-center p-6 border-b-2 border-[#FF6F20] bg-gradient-to-r from-[#FFF3E0] to-white">
             <div className="flex items-center gap-3">
               <motion.div
                 animate={{ scale: [1, 1.2, 1] }}
                 transition={{ duration: 2, repeat: Infinity }}
               >
-                <Heart className="w-6 h-6 text-[#EDE3A3]" fill="currentColor" />
+                <Heart className="w-6 h-6 text-[#FF6F20]" fill="currentColor" />
               </motion.div>
               <div>
-                <h2 className="text-2xl font-black text-[#EDE3A3]">My Wishlist</h2>
-                <p className="text-sm text-[#8197AC] font-semibold">
+                <h2 className="text-2xl font-black text-[#FF6F20]">My Wishlist</h2>
+                <p className="text-sm text-gray-600 font-semibold">
                   {wishlistProducts.length} {wishlistProducts.length === 1 ? 'item' : 'items'}
                 </p>
               </div>
@@ -69,21 +69,21 @@ const WishlistModal = () => {
 
             <motion.button
               onClick={() => setIsWishlistOpen(false)}
-              className="p-2 hover:bg-[#314B6E]/30 rounded-xl transition-colors group"
+              className="p-2 hover:bg-[#FFF3E0] rounded-xl transition-colors group"
               whileHover={{ scale: 1.1, rotate: 90 }}
               whileTap={{ scale: 0.9 }}
             >
-              <X className="text-[#8197AC] group-hover:text-[#EDE3A3] transition-colors" />
+              <X className="text-[#FF6F20] transition-colors" />
             </motion.button>
           </div>
 
-          <div className="p-6 overflow-y-auto max-h-[60vh]">
+          <div className="p-6 overflow-y-auto max-h-[60vh] bg-[#FFF3E0]">
             {loading ? (
               <div className="flex items-center justify-center py-12">
                 <motion.div
                   animate={{ rotate: 360 }}
                   transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                  className="w-12 h-12 border-4 border-[#314B6E] border-t-[#607EA2] rounded-full"
+                  className="w-12 h-12 border-4 border-[#FFB300] border-t-[#FF6F20] rounded-full"
                 />
               </div>
             ) : wishlistProducts.length === 0 ? (
@@ -92,8 +92,8 @@ const WishlistModal = () => {
                 animate={{ opacity: 1, y: 0 }}
                 className="text-center py-12"
               >
-                <Heart size={64} className="mx-auto text-[#314B6E] mb-4" />
-                <p className="text-[#8197AC] text-lg font-semibold">Wishlist is empty</p>
+                <Heart size={64} className="mx-auto text-[#FF6F20]/30 mb-4" />
+                <p className="text-gray-600 text-lg font-semibold">Wishlist is empty</p>
               </motion.div>
             ) : (
               <div className="grid md:grid-cols-2 gap-4">
@@ -104,18 +104,18 @@ const WishlistModal = () => {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: index * 0.1 }}
                     whileHover={{ y: -4 }}
-                    className="border border-[#314B6E]/50 rounded-xl p-4 flex gap-4 bg-[#0E141C]/50 backdrop-blur-sm hover:border-[#607EA2] transition-all"
+                    className="border-2 border-[#FF6F20] rounded-xl p-4 flex gap-4 bg-white hover:shadow-lg transition-all"
                   >
                     <div className="relative">
                       <motion.img
                         whileHover={{ scale: 1.1 }}
                         src={item.images?.[0]}
                         alt={item.title}
-                        className="w-24 h-24 object-cover rounded-lg border-2 border-[#314B6E]/30"
+                        className="w-24 h-24 object-cover rounded-lg border-2 border-[#FF6F20]"
                       />
                       <motion.button
                         onClick={() => toggleWishlist(item.id)}
-                        className="absolute -top-2 -right-2 bg-gradient-to-r from-[#607EA2] to-[#8197AC] p-1.5 rounded-full text-[#EDE3A3] shadow-lg"
+                        className="absolute -top-2 -right-2 bg-gradient-to-r from-[#FF6F20] to-[#FFB300] p-1.5 rounded-full text-white shadow-lg"
                         whileHover={{ scale: 1.2, rotate: [0, -10, 10, 0] }}
                         whileTap={{ scale: 0.9 }}
                       >
@@ -124,23 +124,23 @@ const WishlistModal = () => {
                     </div>
 
                     <div className="flex-1">
-                      <h3 className="font-black text-[#EDE3A3] mb-1">{item.title}</h3>
-                      <p className="text-sm text-[#8197AC] line-clamp-2 mb-2">
+                      <h3 className="font-black text-[#4A4A4A] mb-1 line-clamp-1">{item.title}</h3>
+                      <p className="text-sm text-gray-600 line-clamp-2 mb-2">
                         {item.description}
                       </p>
-                      <p className="text-xl font-black text-[#EDE3A3] mb-3">
+                      <p className="text-xl font-black text-[#FF6F20] mb-3">
                         ${item.price}
                       </p>
 
                       <div className="flex gap-2">
                         <motion.button
                           onClick={() => handleAddToCart(item)}
-                          className="flex-1 bg-gradient-to-r from-[#607EA2] to-[#8197AC] text-[#0E141C] py-2 rounded-lg flex items-center justify-center gap-2 font-bold shadow-lg relative overflow-hidden group"
+                          className="flex-1 bg-gradient-to-r from-[#FF6F20] to-[#FFB300] text-white py-2 rounded-lg flex items-center justify-center gap-2 font-bold shadow-lg relative overflow-hidden group"
                           whileHover={{ scale: 1.05 }}
                           whileTap={{ scale: 0.95 }}
                         >
                           <motion.div
-                            className="absolute inset-0 bg-gradient-to-r from-transparent via-[#EDE3A3] to-transparent opacity-0 group-hover:opacity-30"
+                            className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-0 group-hover:opacity-30"
                             animate={{ x: ["-100%", "100%"] }}
                             transition={{ duration: 1.5, repeat: Infinity, repeatDelay: 1 }}
                           />
@@ -150,7 +150,7 @@ const WishlistModal = () => {
 
                         <motion.button
                           onClick={() => toggleWishlist(item.id)}
-                          className="bg-[#314B6E]/30 text-[#8197AC] p-2 rounded-lg hover:bg-[#314B6E]/50 hover:text-[#EDE3A3] transition-colors border border-[#314B6E]/50"
+                          className="bg-[#FFF3E0] text-[#FF6F20] p-2 rounded-lg hover:bg-[#FFE8C5] transition-colors border-2 border-[#FF6F20]"
                           whileHover={{ scale: 1.1 }}
                           whileTap={{ scale: 0.9 }}
                         >
@@ -169,7 +169,7 @@ const WishlistModal = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
-              className="p-6 border-t border-[#314B6E]/50 flex gap-3 bg-gradient-to-r from-transparent to-[#314B6E]/10"
+              className="p-6 border-t-2 border-[#FF6F20] flex gap-3 bg-white"
             >
               <motion.button
                 onClick={() => {
@@ -177,12 +177,12 @@ const WishlistModal = () => {
                   clearWishlist();
                   setIsWishlistOpen(false);
                 }}
-                className="flex-1 bg-gradient-to-r from-[#607EA2] to-[#8197AC] text-[#0E141C] py-3 rounded-xl font-black hover:shadow-2xl transition-shadow relative overflow-hidden group"
+                className="flex-1 bg-gradient-to-r from-[#FF6F20] to-[#FFB300] text-white py-3 rounded-xl font-black hover:shadow-2xl transition-shadow relative overflow-hidden group"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
                 <motion.div
-                  className="absolute inset-0 bg-gradient-to-r from-transparent via-[#EDE3A3] to-transparent opacity-0 group-hover:opacity-30"
+                  className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-0 group-hover:opacity-30"
                   animate={{ x: ["-100%", "100%"] }}
                   transition={{ duration: 1.5, repeat: Infinity, repeatDelay: 1 }}
                 />
@@ -191,7 +191,7 @@ const WishlistModal = () => {
 
               <motion.button
                 onClick={clearWishlist}
-                className="bg-[#314B6E]/30 text-[#8197AC] px-6 rounded-xl font-bold hover:bg-[#314B6E]/50 hover:text-[#EDE3A3] transition-colors border border-[#314B6E]/50"
+                className="bg-[#FFF3E0] text-[#FF6F20] px-6 rounded-xl font-bold hover:bg-[#FFE8C5] transition-colors border-2 border-[#FF6F20]"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >

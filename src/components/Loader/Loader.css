@@ -5,7 +5,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(135deg, #0E141C 0%, #1a2530 50%, #0E141C 100%);
+  background: linear-gradient(135deg, #FFF3E0 0%, #FFE8C5 50%, #FFF3E0 100%);
   position: fixed;
   top: 0;
   left: 0;
@@ -20,8 +20,8 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: radial-gradient(circle at 30% 40%, rgba(49, 75, 110, 0.3) 0%, transparent 50%),
-              radial-gradient(circle at 70% 60%, rgba(96, 126, 162, 0.2) 0%, transparent 50%);
+  background: radial-gradient(circle at 30% 40%, rgba(255, 111, 32, 0.15) 0%, transparent 50%),
+              radial-gradient(circle at 70% 60%, rgba(255, 179, 0, 0.1) 0%, transparent 50%);
   animation: bgPulse 4s ease-in-out infinite;
 }
 
@@ -67,7 +67,7 @@
   left: 50%;
   transform: translateX(-50%);
   bottom: -60px;
-  box-shadow: 0 0 80px 50px rgba(49, 75, 110, 0.4);
+  box-shadow: 0 0 80px 50px rgba(255, 111, 32, 0.3);
   animation: shadow infinite 7s ease;
 }
 
@@ -75,7 +75,7 @@
   .macbook .shadow {
     width: 130px;
     bottom: -75px;
-    box-shadow: 0 0 100px 60px rgba(49, 75, 110, 0.4);
+    box-shadow: 0 0 100px 60px rgba(255, 111, 32, 0.3);
   }
 }
 
@@ -83,7 +83,7 @@
   .macbook .shadow {
     width: 160px;
     bottom: -90px;
-    box-shadow: 0 0 120px 70px rgba(49, 75, 110, 0.4);
+    box-shadow: 0 0 120px 70px rgba(255, 111, 32, 0.3);
   }
 }
 
@@ -106,13 +106,13 @@
   left: 0;
   bottom: 0;
   border-radius: 12px;
-  background: linear-gradient(145deg, #8197AC 0%, #607EA2 100%);
+  background: linear-gradient(145deg, #FFB300 0%, #FF6F20 100%);
   transform-style: preserve-3d;
   transform-origin: 50% 97%;
   transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg);
   animation: lid-screen infinite 7s ease;
-  box-shadow: inset 0 3px 10px rgba(237, 227, 163, 0.3),
-              0 0 30px rgba(96, 126, 162, 0.3);
+  box-shadow: inset 0 3px 10px rgba(255, 179, 0, 0.4),
+              0 0 30px rgba(255, 111, 32, 0.3);
 }
 
 .macbook .screen .face-one {
@@ -122,7 +122,7 @@
   left: 0;
   bottom: 0;
   border-radius: 12px;
-  background: linear-gradient(145deg, #607EA2 0%, #314B6E 100%);
+  background: linear-gradient(145deg, #FF7043 0%, #FF6F20 100%);
   transform: translateZ(3px);
 }
 
@@ -130,23 +130,23 @@
   width: 5px;
   height: 5px;
   border-radius: 100%;
-  background: #0E141C;
+  background: #4A4A4A;
   position: absolute;
   left: 50%;
   top: 8px;
   margin-left: -2.5px;
-  box-shadow: inset 0 0 2px rgba(237, 227, 163, 0.5);
+  box-shadow: inset 0 0 2px rgba(255, 179, 0, 0.5);
 }
 
 .macbook .screen .face-one .display {
   width: calc(100% - 20px);
   height: calc(100% - 30px);
   margin: 18px 10px 12px;
-  background: linear-gradient(135deg, #0E141C 0%, #1a2530 100%);
+  background: linear-gradient(135deg, #FFF3E0 0%, #FFE8C5 100%);
   border-radius: 4px;
   position: relative;
-  box-shadow: inset 0 0 5px rgba(0,0,0,0.8),
-              0 0 15px rgba(49, 75, 110, 0.3);
+  box-shadow: inset 0 0 5px rgba(255, 111, 32, 0.2),
+              0 0 15px rgba(255, 179, 0, 0.3);
   overflow: hidden;
 }
 
@@ -156,7 +156,7 @@
   top: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(-135deg, rgba(237, 227, 163, 0) 0%, rgba(237, 227, 163, 0.15) 47%, rgba(237, 227, 163, 0) 48%);
+  background: linear-gradient(-135deg, rgba(255, 179, 0, 0) 0%, rgba(255, 179, 0, 0.2) 47%, rgba(255, 179, 0, 0) 48%);
   animation: screen-shade infinite 7s ease;
   background-size: 300px 200px;
   background-position: 0px 0px;
@@ -171,7 +171,7 @@
   transform: translate(-50%, -50%);
   width: 60%;
   height: 60%;
-  background: radial-gradient(ellipse, rgba(96, 126, 162, 0.4) 0%, transparent 70%);
+  background: radial-gradient(ellipse, rgba(255, 111, 32, 0.3) 0%, transparent 70%);
   animation: screenGlow 2s ease-in-out infinite;
 }
 
@@ -181,7 +181,7 @@
     transform: translate(-50%, -50%) scale(1);
   }
   50% {
-    opacity: 0.7;
+    opacity: 0.6;
     transform: translate(-50%, -50%) scale(1.1);
   }
 }
@@ -192,7 +192,7 @@
   left: 50%;
   transform: translateX(-50%);
   font-size: 8px;
-  color: #EDE3A3;
+  color: #FF6F20;
   font-weight: 600;
   letter-spacing: 1px;
 }
@@ -204,7 +204,7 @@
   left: 0;
   bottom: 0;
   border-radius: 12px;
-  background: linear-gradient(145deg, #8197AC 0%, #607EA2 100%);
+  background: linear-gradient(145deg, #FFB300 0%, #FF6F20 100%);
   transform-style: preserve-3d;
   transform-origin: 50% bottom;
   transform: rotateX(-90deg);
@@ -219,7 +219,7 @@
   bottom: 0;
   border-radius: 12px;
   transform-style: preserve-3d;
-  background: linear-gradient(145deg, #607EA2 0%, #314B6E 100%);
+  background: linear-gradient(145deg, #FF7043 0%, #FF6F20 100%);
   animation: lid-keyboard-area infinite 7s ease;
   transform: translateZ(-3px);
 }
@@ -232,9 +232,9 @@
   top: 50%;
   border-radius: 6px;
   transform: translate(-50%, -60%);
-  background: linear-gradient(145deg, #314B6E 0%, #0E141C 100%);
-  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5),
-              0 0 3px rgba(237, 227, 163, 0.1);
+  background: linear-gradient(145deg, #FF6F20 0%, #E85D1C 100%);
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2),
+              0 0 3px rgba(255, 179, 0, 0.3);
 }
 
 .macbook .macbody .keyboard {
@@ -245,8 +245,8 @@
   top: 42%;
   border-radius: 6px;
   transform-style: preserve-3d;
-  background: linear-gradient(145deg, #314B6E 0%, #0E141C 100%);
-  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5);
+  background: linear-gradient(145deg, #FF6F20 0%, #E85D1C 100%);
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
   padding: 3px;
   display: flex;
   flex-wrap: wrap;
@@ -257,11 +257,11 @@
 .macbook .keyboard .key {
   width: 4%;
   height: 28%;
-  background: linear-gradient(145deg, #607EA2 0%, #314B6E 100%);
+  background: linear-gradient(145deg, #FFB300 0%, #FF7043 100%);
   margin: 0.5px;
   transform: translateZ(-2px);
   border-radius: 2px;
-  box-shadow: 0 -2px 0 rgba(237, 227, 163, 0.2);
+  box-shadow: 0 -2px 0 rgba(255, 255, 255, 0.3);
   animation: keys infinite 7s ease;
 }
 
@@ -276,10 +276,10 @@
 .macbook .macbody .pad {
   width: 6px;
   height: 6px;
-  background: linear-gradient(145deg, #0E141C 0%, #314B6E 100%);
+  background: linear-gradient(145deg, #E85D1C 0%, #FF6F20 100%);
   border-radius: 100%;
   position: absolute;
-  box-shadow: inset 0 0 2px rgba(237, 227, 163, 0.2);
+  box-shadow: inset 0 0 2px rgba(255, 179, 0, 0.3);
 }
 
 .macbook .pad.one {
@@ -388,13 +388,13 @@
 
 @keyframes lid-keyboard-area {
   0% {
-    background: linear-gradient(145deg, #607EA2 0%, #314B6E 100%);
+    background: linear-gradient(145deg, #FF7043 0%, #FF6F20 100%);
   }
   50% {
-    background: linear-gradient(145deg, #314B6E 0%, #0E141C 100%);
+    background: linear-gradient(145deg, #FFB300 0%, #FF7043 100%);
   }
   100% {
-    background: linear-gradient(145deg, #607EA2 0%, #314B6E 100%);
+    background: linear-gradient(145deg, #FF7043 0%, #FF6F20 100%);
   }
 }
 
@@ -427,52 +427,52 @@
 
 @keyframes keys {
   0% {
-    box-shadow: 0 -2px 0 rgba(237, 227, 163, 0.2);
+    box-shadow: 0 -2px 0 rgba(255, 255, 255, 0.3);
   }
   5% {
-    box-shadow: 1px -1px 0 rgba(237, 227, 163, 0.3);
+    box-shadow: 1px -1px 0 rgba(255, 255, 255, 0.4);
   }
   20% {
-    box-shadow: -1px 1px 0 rgba(237, 227, 163, 0.15);
+    box-shadow: -1px 1px 0 rgba(255, 255, 255, 0.2);
   }
   25% {
-    box-shadow: -1px 1px 0 rgba(237, 227, 163, 0.15);
+    box-shadow: -1px 1px 0 rgba(255, 255, 255, 0.2);
   }
   60% {
-    box-shadow: -1px 1px 0 rgba(237, 227, 163, 0.15);
+    box-shadow: -1px 1px 0 rgba(255, 255, 255, 0.2);
   }
   80% {
-    box-shadow: 0 -2px 0 rgba(237, 227, 163, 0.2);
+    box-shadow: 0 -2px 0 rgba(255, 255, 255, 0.3);
   }
   85% {
-    box-shadow: 0 -2px 0 rgba(237, 227, 163, 0.2);
+    box-shadow: 0 -2px 0 rgba(255, 255, 255, 0.3);
   }
   87% {
-    box-shadow: 0 -2px 0 rgba(237, 227, 163, 0.2);
+    box-shadow: 0 -2px 0 rgba(255, 255, 255, 0.3);
   }
   100% {
-    box-shadow: 0 -2px 0 rgba(237, 227, 163, 0.2);
+    box-shadow: 0 -2px 0 rgba(255, 255, 255, 0.3);
   }
 }
 
 @keyframes shadow {
   0% {
-    box-shadow: 0 0 80px 50px rgba(49, 75, 110, 0.4);
+    box-shadow: 0 0 80px 50px rgba(255, 111, 32, 0.3);
   }
   5% {
-    box-shadow: 0 0 80px 50px rgba(49, 75, 110, 0.4);
+    box-shadow: 0 0 80px 50px rgba(255, 111, 32, 0.3);
   }
   20% {
-    box-shadow: 0 0 60px 40px rgba(49, 75, 110, 0.3);
+    box-shadow: 0 0 60px 40px rgba(255, 111, 32, 0.25);
   }
   25% {
-    box-shadow: 0 0 40px 20px rgba(49, 75, 110, 0.2);
+    box-shadow: 0 0 40px 20px rgba(255, 111, 32, 0.2);
   }
   60% {
-    box-shadow: 0 0 80px 50px rgba(49, 75, 110, 0.4);
+    box-shadow: 0 0 80px 50px rgba(255, 111, 32, 0.3);
   }
   100% {
-    box-shadow: 0 0 80px 50px rgba(49, 75, 110, 0.4);
+    box-shadow: 0 0 80px 50px rgba(255, 111, 32, 0.3);
   }
 }
 
@@ -489,7 +489,10 @@
 .loader-text h2 {
   font-size: 24px;
   font-weight: 700;
-  color: #EDE3A3;
+  background: linear-gradient(90deg, #FF6F20 0%, #FFB300 50%, #FF7043 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
   letter-spacing: 3px;
   text-transform: uppercase;
   animation: textPulse 2s ease-in-out infinite;
@@ -511,7 +514,7 @@
 
 @keyframes textPulse {
   0%, 100% {
-    opacity: 0.7;
+    opacity: 0.8;
   }
   50% {
     opacity: 1;
@@ -527,9 +530,10 @@
 .loading-dots span {
   width: 10px;
   height: 10px;
-  background: linear-gradient(145deg, #607EA2 0%, #8197AC 100%);
+  background: linear-gradient(145deg, #FF6F20 0%, #FFB300 100%);
   border-radius: 50%;
   animation: dotBounce 1.4s ease-in-out infinite;
+  box-shadow: 0 0 10px rgba(255, 111, 32, 0.5);
 }
 
 .loading-dots span:nth-child(1) {

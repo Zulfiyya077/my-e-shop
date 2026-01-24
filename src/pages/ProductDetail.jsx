@@ -7,31 +7,28 @@ import { useCart } from "../context/CartContext";
 import { useWishlist } from "../context/WishlistContext";
 import SimilarProducts from "../components/similar_products/SimilarProducts";
 
-
 const ProductDetailSkeleton = () => {
   return (
-    <div className="p-4 max-w-6xl mx-auto bg-[#0E141C]">
+    <div className="p-4 max-w-6xl mx-auto bg-[#FFF3E0]">
       <div className="flex flex-col lg:flex-row gap-8">
         <div className="lg:w-1/2 space-y-4">
-          <div className="bg-[#314B6E]/20 rounded-2xl h-96 animate-pulse" />
+          <div className="bg-white border-2 border-[#FF6F20] rounded-2xl h-96 animate-pulse" />
           <div className="flex gap-3">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="w-20 h-20 bg-[#314B6E]/20 rounded-xl animate-pulse" />
+              <div key={i} className="w-20 h-20 bg-white border-2 border-[#FF6F20] rounded-xl animate-pulse" />
             ))}
           </div>
         </div>
         <div className="flex-1 space-y-4">
-          <div className="w-24 h-8 bg-[#314B6E]/20 rounded-full animate-pulse" />
-          <div className="w-3/4 h-10 bg-[#314B6E]/20 rounded-lg animate-pulse" />
-          <div className="w-32 h-6 bg-[#314B6E]/20 rounded animate-pulse" />
-          <div className="w-40 h-12 bg-[#314B6E]/20 rounded-xl animate-pulse" />
+          <div className="w-24 h-8 bg-white border-2 border-[#FF6F20] rounded-full animate-pulse" />
+          <div className="w-3/4 h-10 bg-white rounded-lg animate-pulse" />
+          <div className="w-32 h-6 bg-white rounded animate-pulse" />
+          <div className="w-40 h-12 bg-white rounded-xl animate-pulse" />
         </div>
       </div>
     </div>
   );
 };
-
-<SimilarProducts currentProductId={null} category={null} />; 
 
 const ProductDetail = () => {
   const { id } = useParams();
@@ -64,7 +61,7 @@ const ProductDetail = () => {
   }, [product]);
 
   if (loading) return <ProductDetailSkeleton />;
-  if (!product) return <p className="p-6 text-center text-[#8197AC]">Product not found.</p>;
+  if (!product) return <p className="p-6 text-center text-gray-600">Product not found.</p>;
 
   const handleAddToCart = () => {
     addToCart(product);
@@ -83,13 +80,13 @@ const ProductDetail = () => {
   };
 
   const features = [
-    { icon: Truck, text: "Free Shipping", color: "from-[#314B6E] to-[#607EA2]" },
-    { icon: Package, text: "Easy Returns", color: "from-[#607EA2] to-[#8197AC]" },
-    { icon: Shield, text: "Secure Payment", color: "from-[#8197AC] to-[#607EA2]" }
+    { icon: Truck, text: "Free Shipping", color: "from-[#FF6F20] to-[#FFB300]" },
+    { icon: Package, text: "Easy Returns", color: "from-[#FFB300] to-[#FF7043]" },
+    { icon: Shield, text: "Secure Payment", color: "from-[#FF7043] to-[#FF6F20]" }
   ];
 
   return (
-    <div className="bg-[#0E141C] min-h-screen">
+    <div className="bg-[#FFF3E0] min-h-screen">
       <motion.div
         initial="hidden"
         animate="visible"
@@ -101,19 +98,19 @@ const ProductDetail = () => {
             <motion.div className="absolute top-4 right-4 z-20" whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
               <motion.button
                 onClick={() => toggleWishlist(product)}
-                className="bg-[#314B6E]/60 backdrop-blur-md border border-[#607EA2]/50 rounded-full p-2.5 shadow-lg hover:shadow-xl transition-all"
+                className="bg-white border-2 border-[#FF6F20] rounded-full p-2.5 shadow-lg hover:shadow-xl transition-all"
                 animate={{ scale: isInWishlist(product.id) ? [1, 1.15, 1] : 1 }}
               >
-                <Heart size={20} className={`transition-all ${isInWishlist(product.id) ? "fill-red-400 text-red-400" : "text-[#8197AC]"}`} />
+                <Heart size={20} className={`transition-all ${isInWishlist(product.id) ? "fill-[#FF7043] text-[#FF7043]" : "text-[#FF6F20]"}`} />
               </motion.button>
             </motion.div>
 
             <motion.div
-              className="relative bg-gradient-to-br from-[#314B6E]/20 to-[#0E141C] rounded-2xl p-6 shadow-xl overflow-hidden group border-2 border-[#314B6E]/50"
-              whileHover={{ boxShadow: "0 20px 40px -10px rgba(49, 75, 110, 0.4)" }}
+              className="relative bg-white rounded-2xl p-6 shadow-xl overflow-hidden group border-2 border-[#FF6F20]"
+              whileHover={{ boxShadow: "0 20px 40px -10px rgba(255, 111, 32, 0.4)" }}
             >
-              <div className="absolute top-0 left-0 w-32 h-32 bg-gradient-to-br from-[#607EA2]/20 to-transparent rounded-full blur-2xl" />
-              <div className="absolute bottom-0 right-0 w-32 h-32 bg-gradient-to-tl from-[#8197AC]/20 to-transparent rounded-full blur-2xl" />
+              <div className="absolute top-0 left-0 w-32 h-32 bg-gradient-to-br from-[#FFB300]/20 to-transparent rounded-full blur-2xl" />
+              <div className="absolute bottom-0 right-0 w-32 h-32 bg-gradient-to-tl from-[#FF7043]/20 to-transparent rounded-full blur-2xl" />
 
               <AnimatePresence mode="wait">
                 <motion.div
@@ -135,14 +132,14 @@ const ProductDetail = () => {
 
                   <motion.button
                     onClick={() => setIsZoomed(true)}
-                    className="absolute top-3 left-3 bg-[#314B6E]/60 backdrop-blur-sm text-[#EDE3A3] px-3 py-1.5 rounded-full flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity text-xs border border-[#607EA2]/50"
+                    className="absolute top-3 left-3 bg-white border border-[#FF6F20] text-[#FF6F20] px-3 py-1.5 rounded-full flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity text-xs"
                     whileHover={{ scale: 1.05 }}
                   >
                     <ZoomIn size={14} />
                     <span>Zoom</span>
                   </motion.button>
 
-                  <div className="absolute bottom-3 right-3 bg-[#314B6E]/80 backdrop-blur-sm text-[#EDE3A3] px-3 py-1 rounded-full text-xs font-medium border border-[#607EA2]/50">
+                  <div className="absolute bottom-3 right-3 bg-white border border-[#FF6F20] text-[#FF6F20] px-3 py-1 rounded-full text-xs font-medium">
                     {selectedImage + 1} / {product.images?.length || 0}
                   </div>
                 </motion.div>
@@ -156,8 +153,8 @@ const ProductDetail = () => {
                   onClick={() => setSelectedImage(index)}
                   className={`relative overflow-hidden rounded-xl transition-all ${
                     selectedImage === index
-                      ? 'ring-2 ring-[#607EA2] shadow-lg scale-105'
-                      : 'ring-2 ring-[#314B6E]/50 hover:ring-[#607EA2] shadow-md'
+                      ? 'ring-2 ring-[#FF6F20] shadow-lg scale-105'
+                      : 'ring-2 ring-[#FFB300]/50 hover:ring-[#FF6F20] shadow-md'
                   }`}
                   whileHover={{ scale: 1.05, y: -2 }}
                   whileTap={{ scale: 0.95 }}
@@ -165,7 +162,7 @@ const ProductDetail = () => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.08 }}
                 >
-                  <div className="relative bg-gradient-to-br from-[#314B6E]/20 to-[#0E141C] p-2">
+                  <div className="relative bg-white p-2 border-2 border-[#FF6F20]">
                     <img
                       src={image}
                       alt={`Thumbnail ${index + 1}`}
@@ -182,7 +179,7 @@ const ProductDetail = () => {
           <motion.div variants={itemVariants} className="flex-1 flex flex-col">
             <motion.span
               variants={itemVariants}
-              className="inline-block px-4 py-1.5 bg-gradient-to-r from-[#607EA2] to-[#8197AC] text-[#0E141C] rounded-full text-xs font-semibold w-fit mb-3 shadow-md"
+              className="inline-block px-4 py-1.5 bg-gradient-to-r from-[#FF6F20] to-[#FFB300] text-white rounded-full text-xs font-semibold w-fit mb-3 shadow-md"
               whileHover={{ scale: 1.05 }}
             >
               {product.category}
@@ -190,7 +187,7 @@ const ProductDetail = () => {
 
             <motion.h1
               variants={itemVariants}
-              className="text-3xl font-black mb-4 text-[#EDE3A3] leading-tight"
+              className="text-3xl font-black mb-4 text-[#4A4A4A] leading-tight"
             >
               {product.title}
             </motion.h1>
@@ -204,29 +201,29 @@ const ProductDetail = () => {
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: 0.4 + i * 0.06 }}
                   >
-                    <Star size={18} className={`${i < Math.floor(product.rating) ? "fill-[#8197AC] text-[#8197AC]" : "text-[#314B6E]"}`} />
+                    <Star size={18} className={`${i < Math.floor(product.rating) ? "fill-[#FFB300] text-[#FFB300]" : "text-gray-300"}`} />
                   </motion.div>
                 ))}
               </div>
-              <span className="text-base font-bold text-[#8197AC]">{product.rating}</span>
-              <span className="text-[#607EA2] text-sm">• 2,847 reviews</span>
+              <span className="text-base font-bold text-[#4A4A4A]">{product.rating}</span>
+              <span className="text-gray-500 text-sm">• 2,847 reviews</span>
             </motion.div>
 
             <motion.div variants={itemVariants} className="mb-6">
               <motion.div
-                className="inline-block px-6 py-3 bg-gradient-to-r from-[#314B6E]/30 to-[#0E141C] rounded-xl border-2 border-[#607EA2]/50"
+                className="inline-block px-6 py-3 bg-gradient-to-r from-[#FFF3E0] to-white rounded-xl border-2 border-[#FF6F20]"
                 initial={{ scale: 0.8, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ type: "spring", stiffness: 200, delay: 0.5 }}
                 whileHover={{ scale: 1.05 }}
               >
-                <p className="text-3xl font-black text-[#EDE3A3]">
+                <p className="text-3xl font-black text-[#FF6F20]">
                   ${product.price}
                 </p>
               </motion.div>
             </motion.div>
 
-            <motion.p variants={itemVariants} className="text-[#8197AC] mb-6 leading-relaxed text-sm">
+            <motion.p variants={itemVariants} className="text-gray-600 mb-6 leading-relaxed text-sm">
               {product.description}
             </motion.p>
 
@@ -234,7 +231,7 @@ const ProductDetail = () => {
               {features.map((feature, index) => (
                 <motion.div
                   key={index}
-                  className={`flex items-center gap-2 bg-gradient-to-r ${feature.color} text-[#EDE3A3] px-4 py-2 rounded-lg shadow-md`}
+                  className={`flex items-center gap-2 bg-gradient-to-r ${feature.color} text-white px-4 py-2 rounded-lg shadow-md`}
                   whileHover={{ scale: 1.05, y: -2 }}
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
@@ -248,13 +245,13 @@ const ProductDetail = () => {
 
             <motion.button
               onClick={handleAddToCart}
-              className="relative bg-gradient-to-r from-[#607EA2] via-[#8197AC] to-[#607EA2] text-[#0E141C] py-4 px-8 rounded-xl font-bold text-base shadow-xl overflow-hidden group"
+              className="relative bg-gradient-to-r from-[#FF6F20] via-[#FFB300] to-[#FF7043] text-white py-4 px-8 rounded-xl font-bold text-base shadow-xl overflow-hidden group"
               variants={itemVariants}
-              whileHover={{ scale: 1.02, boxShadow: "0 20px 40px -10px rgba(96, 126, 162, 0.5)" }}
+              whileHover={{ scale: 1.02, boxShadow: "0 20px 40px -10px rgba(255, 111, 32, 0.5)" }}
               whileTap={{ scale: 0.98 }}
             >
               <motion.div
-                className="absolute inset-0 bg-gradient-to-r from-transparent via-[#EDE3A3] to-transparent opacity-0 group-hover:opacity-20"
+                className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-0 group-hover:opacity-20"
                 animate={{ x: ["-100%", "100%"] }}
                 transition={{ duration: 1.5, repeat: Infinity, repeatDelay: 1 }}
               />
@@ -286,11 +283,11 @@ const ProductDetail = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-[#0E141C]/95 backdrop-blur-xl z-50 flex items-center justify-center p-6"
+            className="fixed inset-0 bg-black/90 backdrop-blur-xl z-50 flex items-center justify-center p-6"
             onClick={() => setIsZoomed(false)}
           >
             <motion.button
-              className="absolute top-6 right-6 bg-[#314B6E]/60 hover:bg-[#314B6E]/80 text-[#EDE3A3] p-3 rounded-full backdrop-blur-sm transition-colors border border-[#607EA2]/50"
+              className="absolute top-6 right-6 bg-white hover:bg-[#FFF3E0] text-[#FF6F20] p-3 rounded-full transition-colors border-2 border-[#FF6F20]"
               whileHover={{ scale: 1.1, rotate: 90 }}
               whileTap={{ scale: 0.9 }}
               onClick={() => setIsZoomed(false)}
@@ -298,7 +295,7 @@ const ProductDetail = () => {
               <X size={24} />
             </motion.button>
 
-            <div className="absolute top-6 left-6 bg-[#314B6E]/60 backdrop-blur-sm text-[#EDE3A3] px-4 py-2 rounded-full font-bold text-sm border border-[#607EA2]/50">
+            <div className="absolute top-6 left-6 bg-white border-2 border-[#FF6F20] text-[#FF6F20] px-4 py-2 rounded-full font-bold text-sm">
               {selectedImage + 1} / {product.images?.length}
             </div>
 
@@ -321,7 +318,7 @@ const ProductDetail = () => {
                   key={index}
                   onClick={(e) => { e.stopPropagation(); setSelectedImage(index); }}
                   className={`w-2.5 h-2.5 rounded-full transition-all ${
-                    selectedImage === index ? 'bg-[#EDE3A3] scale-125' : 'bg-[#607EA2]/40'
+                    selectedImage === index ? 'bg-[#FF6F20] scale-125' : 'bg-[#FFB300]/40'
                   }`}
                   whileHover={{ scale: 1.5 }}
                 />

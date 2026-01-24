@@ -36,28 +36,26 @@ const Contact = () => {
   };
 
   const contactInfo = [
-    { icon: Mail, label: "Email", value: "support@ZIpTech.com", color: "from-[#314B6E] to-[#607EA2]" },
-    { icon: Phone, label: "Phone", value: "+1 (555) 123-4567", color: "from-[#607EA2] to-[#8197AC]" },
-    { icon: MapPin, label: "Address", value: "123 Tech Street, Silicon Valley, CA", color: "from-[#8197AC] to-[#607EA2]" }
+    { icon: Mail, label: "Email", value: "support@ZIpTech.com", color: "from-[#FF6F20] to-[#FFB300]" },
+    { icon: Phone, label: "Phone", value: "+1 (555) 123-4567", color: "from-[#FFB300] to-[#FF7043]" },
+    { icon: MapPin, label: "Address", value: "123 Tech Street, Silicon Valley, CA", color: "from-[#FF7043] to-[#FF6F20]" }
   ];
 
   return (
-    <div className="min-h-screen bg-[#0E141C]">
-      {/* Hero Section */}
+    <div className="min-h-screen bg-[#FFF3E0]">
       <motion.section 
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        className="relative overflow-hidden bg-gradient-to-r from-[#314B6E] via-[#607EA2] to-[#314B6E] text-[#EDE3A3] py-24"
+        className="relative overflow-hidden bg-gradient-to-r from-[#FF6F20] via-[#FFB300] to-[#FF7043] text-white py-24"
       >
-        {/* Animated Background */}
         <div className="absolute inset-0 opacity-20">
           <motion.div
-            className="absolute top-0 left-0 w-96 h-96 bg-[#EDE3A3] rounded-full blur-3xl"
+            className="absolute top-0 left-0 w-96 h-96 bg-white rounded-full blur-3xl"
             animate={{ x: [0, 100, 0], y: [0, 50, 0] }}
             transition={{ duration: 20, repeat: Infinity }}
           />
           <motion.div
-            className="absolute bottom-0 right-0 w-96 h-96 bg-[#8197AC] rounded-full blur-3xl"
+            className="absolute bottom-0 right-0 w-96 h-96 bg-white rounded-full blur-3xl"
             animate={{ x: [0, -100, 0], y: [0, -50, 0] }}
             transition={{ duration: 15, repeat: Infinity }}
           />
@@ -76,14 +74,13 @@ const Contact = () => {
             initial={{ y: 50, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.2 }}
-            className="text-xl max-w-3xl mx-auto leading-relaxed opacity-90"
+            className="text-xl max-w-3xl mx-auto leading-relaxed opacity-95"
           >
             Have a question or feedback? We'd love to hear from you.
           </motion.p>
         </div>
       </motion.section>
 
-      {/* Contact Info Cards */}
       <motion.section 
         variants={containerVariants}
         initial="hidden"
@@ -97,22 +94,20 @@ const Contact = () => {
               key={index}
               variants={itemVariants}
               whileHover={{ scale: 1.05, y: -5 }}
-              className="bg-gradient-to-b from-[#314B6E]/20 to-[#0E141C] rounded-2xl shadow-xl p-8 text-center border border-[#314B6E]/50 backdrop-blur-sm"
+              className="bg-white rounded-2xl shadow-xl p-8 text-center border-2 border-[#FF6F20]"
             >
               <div className={`inline-block p-4 bg-gradient-to-r ${info.color} rounded-xl mb-4`}>
-                <info.icon size={32} className="text-[#EDE3A3]" />
+                <info.icon size={32} className="text-white" />
               </div>
-              <h3 className="text-xl font-bold text-[#EDE3A3] mb-2">{info.label}</h3>
-              <p className="text-[#8197AC] font-semibold text-sm break-all">{info.value}</p>
+              <h3 className="text-xl font-bold text-[#4A4A4A] mb-2">{info.label}</h3>
+              <p className="text-[#FF6F20] font-semibold text-sm break-all">{info.value}</p>
             </motion.div>
           ))}
         </div>
       </motion.section>
 
-      {/* Main Content */}
       <div className="max-w-6xl mx-auto px-6 pb-20">
         <div className="grid lg:grid-cols-2 gap-12 items-start">
-          {/* Contact Form */}
           <motion.div
             variants={containerVariants}
             initial="hidden"
@@ -120,21 +115,20 @@ const Contact = () => {
             viewport={{ once: true }}
           >
             <motion.div variants={itemVariants} className="mb-8">
-              <h2 className="text-5xl font-black mb-6 bg-gradient-to-r from-[#EDE3A3] via-[#8197AC] to-[#607EA2] bg-clip-text text-transparent">
+              <h2 className="text-5xl font-black mb-6 bg-gradient-to-r from-[#FF6F20] via-[#FFB300] to-[#FF7043] bg-clip-text text-transparent">
                 Send Us a Message
               </h2>
-              <div className="w-24 h-1 bg-gradient-to-r from-[#607EA2] to-[#8197AC] rounded-full" />
+              <div className="w-24 h-1 bg-gradient-to-r from-[#FF6F20] to-[#FFB300] rounded-full" />
             </motion.div>
 
             <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Name Input */}
               <motion.div variants={itemVariants}>
-                <label className="block text-sm font-bold text-[#8197AC] mb-2">
+                <label className="block text-sm font-bold text-[#4A4A4A] mb-2">
                   Your Name
                 </label>
                 <div className="relative">
                   <div className="absolute left-4 top-1/2 -translate-y-1/2">
-                    <User size={20} className="text-[#607EA2]" />
+                    <User size={20} className="text-[#FF6F20]" />
                   </div>
                   <motion.input
                     whileFocus={{ scale: 1.01 }}
@@ -144,19 +138,18 @@ const Contact = () => {
                     onChange={handleChange}
                     required
                     placeholder="John Doe"
-                    className="w-full pl-12 pr-4 py-4 border-2 border-[#314B6E]/50 bg-[#0E141C] rounded-xl focus:border-[#607EA2] focus:ring-4 focus:ring-[#607EA2]/20 focus:outline-none transition-all text-[#EDE3A3] placeholder-[#607EA2]"
+                    className="w-full pl-12 pr-4 py-4 border-2 border-[#FF6F20] bg-white rounded-xl focus:border-[#FFB300] focus:ring-4 focus:ring-[#FFB300]/20 focus:outline-none transition-all text-[#4A4A4A] placeholder-gray-400"
                   />
                 </div>
               </motion.div>
 
-              {/* Email Input */}
               <motion.div variants={itemVariants}>
-                <label className="block text-sm font-bold text-[#8197AC] mb-2">
+                <label className="block text-sm font-bold text-[#4A4A4A] mb-2">
                   Email Address
                 </label>
                 <div className="relative">
                   <div className="absolute left-4 top-1/2 -translate-y-1/2">
-                    <Mail size={20} className="text-[#607EA2]" />
+                    <Mail size={20} className="text-[#FF6F20]" />
                   </div>
                   <motion.input
                     whileFocus={{ scale: 1.01 }}
@@ -166,19 +159,18 @@ const Contact = () => {
                     onChange={handleChange}
                     required
                     placeholder="john@example.com"
-                    className="w-full pl-12 pr-4 py-4 border-2 border-[#314B6E]/50 bg-[#0E141C] rounded-xl focus:border-[#607EA2] focus:ring-4 focus:ring-[#607EA2]/20 focus:outline-none transition-all text-[#EDE3A3] placeholder-[#607EA2]"
+                    className="w-full pl-12 pr-4 py-4 border-2 border-[#FF6F20] bg-white rounded-xl focus:border-[#FFB300] focus:ring-4 focus:ring-[#FFB300]/20 focus:outline-none transition-all text-[#4A4A4A] placeholder-gray-400"
                   />
                 </div>
               </motion.div>
 
-              {/* Message Textarea */}
               <motion.div variants={itemVariants}>
-                <label className="block text-sm font-bold text-[#8197AC] mb-2">
+                <label className="block text-sm font-bold text-[#4A4A4A] mb-2">
                   Your Message
                 </label>
                 <div className="relative">
                   <div className="absolute left-4 top-5">
-                    <MessageSquare size={20} className="text-[#607EA2]" />
+                    <MessageSquare size={20} className="text-[#FF6F20]" />
                   </div>
                   <motion.textarea
                     whileFocus={{ scale: 1.01 }}
@@ -188,23 +180,21 @@ const Contact = () => {
                     required
                     rows="6"
                     placeholder="Tell us what's on your mind..."
-                    className="w-full pl-12 pr-4 py-4 border-2 border-[#314B6E]/50 bg-[#0E141C] rounded-xl focus:border-[#607EA2] focus:ring-4 focus:ring-[#607EA2]/20 focus:outline-none transition-all resize-none text-[#EDE3A3] placeholder-[#607EA2]"
+                    className="w-full pl-12 pr-4 py-4 border-2 border-[#FF6F20] bg-white rounded-xl focus:border-[#FFB300] focus:ring-4 focus:ring-[#FFB300]/20 focus:outline-none transition-all resize-none text-[#4A4A4A] placeholder-gray-400"
                   />
                 </div>
               </motion.div>
 
-              {/* Submit Button */}
               <motion.button
                 variants={itemVariants}
                 type="submit"
                 disabled={isSubmitted}
-                className="w-full bg-gradient-to-r from-[#607EA2] via-[#8197AC] to-[#607EA2] text-[#0E141C] py-5 rounded-xl font-bold text-lg transition-all flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed shadow-2xl hover:shadow-3xl relative overflow-hidden group"
+                className="w-full bg-gradient-to-r from-[#FF6F20] via-[#FFB300] to-[#FF7043] text-white py-5 rounded-xl font-bold text-lg transition-all flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed shadow-2xl hover:shadow-3xl relative overflow-hidden group"
                 whileHover={{ scale: isSubmitted ? 1 : 1.02 }}
                 whileTap={{ scale: isSubmitted ? 1 : 0.98 }}
               >
-                {/* Shine Effect */}
                 <motion.div
-                  className="absolute inset-0 bg-gradient-to-r from-transparent via-[#EDE3A3] to-transparent opacity-0 group-hover:opacity-20"
+                  className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-0 group-hover:opacity-20"
                   animate={{ x: ["-100%", "100%"] }}
                   transition={{ duration: 1.5, repeat: Infinity, repeatDelay: 1 }}
                 />
@@ -238,7 +228,6 @@ const Contact = () => {
             </form>
           </motion.div>
 
-          {/* Map & Info */}
           <motion.div
             variants={containerVariants}
             initial="hidden"
@@ -247,16 +236,15 @@ const Contact = () => {
             className="space-y-6"
           >
             <motion.div variants={itemVariants} className="mb-8">
-              <h2 className="text-5xl font-black mb-6 bg-gradient-to-r from-[#EDE3A3] via-[#8197AC] to-[#607EA2] bg-clip-text text-transparent">
+              <h2 className="text-5xl font-black mb-6 bg-gradient-to-r from-[#FF6F20] via-[#FFB300] to-[#FF7043] bg-clip-text text-transparent">
                 Visit Us
               </h2>
-              <div className="w-24 h-1 bg-gradient-to-r from-[#607EA2] to-[#8197AC] rounded-full" />
+              <div className="w-24 h-1 bg-gradient-to-r from-[#FF6F20] to-[#FFB300] rounded-full" />
             </motion.div>
 
-            {/* Map */}
             <motion.div 
               variants={itemVariants}
-              className="bg-gradient-to-br from-[#314B6E]/20 to-[#0E141C] rounded-2xl overflow-hidden shadow-xl border-2 border-[#314B6E]/50 h-96"
+              className="bg-white rounded-2xl overflow-hidden shadow-xl border-2 border-[#FF6F20] h-96"
             >
               <iframe
                 title="location"
@@ -269,13 +257,12 @@ const Contact = () => {
               />
             </motion.div>
 
-            {/* Office Hours */}
             <motion.div 
               variants={itemVariants}
-              className="bg-gradient-to-br from-[#314B6E]/20 to-[#0E141C] rounded-2xl p-8 border-2 border-[#314B6E]/50 backdrop-blur-sm"
+              className="bg-[#FFF3E0] rounded-2xl p-8 border-2 border-[#FF6F20]"
             >
-              <h3 className="text-2xl font-bold text-[#EDE3A3] mb-4">Office Hours</h3>
-              <div className="space-y-2 text-[#8197AC]">
+              <h3 className="text-2xl font-bold text-[#4A4A4A] mb-4">Office Hours</h3>
+              <div className="space-y-2 text-gray-600">
                 <p className="flex justify-between">
                   <span className="font-semibold">Monday - Friday:</span>
                   <span>9:00 AM - 6:00 PM</span>
@@ -286,7 +273,7 @@ const Contact = () => {
                 </p>
                 <p className="flex justify-between">
                   <span className="font-semibold">Sunday:</span>
-                  <span className="text-red-400 font-semibold">Closed</span>
+                  <span className="text-red-500 font-semibold">Closed</span>
                 </p>
               </div>
             </motion.div>
@@ -294,38 +281,37 @@ const Contact = () => {
         </div>
       </div>
 
-      {/* FAQ Section */}
       <motion.section 
         variants={containerVariants}
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true }}
-        className="bg-gradient-to-b from-[#314B6E]/10 to-[#0E141C] py-24"
+        className="bg-white py-24"
       >
         <div className="max-w-6xl mx-auto px-6">
           <motion.div variants={itemVariants} className="text-center mb-16">
-            <h2 className="text-5xl font-black mb-6 bg-gradient-to-r from-[#EDE3A3] via-[#8197AC] to-[#607EA2] bg-clip-text text-transparent">
+            <h2 className="text-5xl font-black mb-6 bg-gradient-to-r from-[#FF6F20] via-[#FFB300] to-[#FF7043] bg-clip-text text-transparent">
               Frequently Asked Questions
             </h2>
-            <div className="w-24 h-1 bg-gradient-to-r from-[#607EA2] to-[#8197AC] mx-auto rounded-full" />
+            <div className="w-24 h-1 bg-gradient-to-r from-[#FF6F20] to-[#FFB300] mx-auto rounded-full" />
           </motion.div>
 
           <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
             {[
-              { q: "What are your business hours?", a: "We're available Monday to Friday, 9 AM - 6 PM EST.", color: "from-[#314B6E] to-[#607EA2]" },
-              { q: "How fast do you respond?", a: "We aim to respond to all inquiries within 24 hours.", color: "from-[#607EA2] to-[#8197AC]" },
-              { q: "Do you offer phone support?", a: "Yes! Call us at +1 (555) 123-4567 during business hours.", color: "from-[#8197AC] to-[#607EA2]" },
-              { q: "Where are you located?", a: "Our headquarters is in Silicon Valley, California.", color: "from-[#607EA2] to-[#314B6E]" }
+              { q: "What are your business hours?", a: "We're available Monday to Friday, 9 AM - 6 PM EST.", color: "from-[#FF6F20] to-[#FFB300]" },
+              { q: "How fast do you respond?", a: "We aim to respond to all inquiries within 24 hours.", color: "from-[#FFB300] to-[#FF7043]" },
+              { q: "Do you offer phone support?", a: "Yes! Call us at +1 (555) 123-4567 during business hours.", color: "from-[#FF7043] to-[#FF6F20]" },
+              { q: "Where are you located?", a: "Our headquarters is in Silicon Valley, California.", color: "from-[#FF6F20] to-[#FFB300]" }
             ].map((faq, index) => (
               <motion.div
                 key={index}
                 variants={itemVariants}
                 whileHover={{ y: -8 }}
-                className="bg-gradient-to-br from-[#314B6E]/20 to-[#0E141C] rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all relative overflow-hidden group border border-[#314B6E]/50 backdrop-blur-sm"
+                className="bg-[#FFF3E0] rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all relative overflow-hidden group border-2 border-[#FF6F20]"
               >
                 <div className={`absolute top-0 left-0 w-2 h-full bg-gradient-to-b ${faq.color}`} />
-                <h3 className="font-bold text-[#EDE3A3] mb-3 text-lg pl-4">{faq.q}</h3>
-                <p className="text-[#8197AC] leading-relaxed pl-4">{faq.a}</p>
+                <h3 className="font-bold text-[#4A4A4A] mb-3 text-lg pl-4">{faq.q}</h3>
+                <p className="text-gray-600 leading-relaxed pl-4">{faq.a}</p>
               </motion.div>
             ))}
           </div>

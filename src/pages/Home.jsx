@@ -7,6 +7,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { getProducts, getCategories } from "../services/api";
 import ProductCarousel from "../components/carusel/ProductCarusel";
+import Brands from "../components/home/Brands";
 
 const Home = () => {
   const [bannerProducts, setBannerProducts] = useState([]);
@@ -22,28 +23,23 @@ const Home = () => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        
-        // Fetch products for banner
+
         const productsResponse = await getProducts({ limit: 3, sort: 'rating', order: 'desc' });
-        console.log('Products Response:', productsResponse);
-        console.log('Products Data:', productsResponse.data);
         setBannerProducts(productsResponse.data || []);
-        
-        // Fetch categories
+
         const categoriesResponse = await getCategories();
         setCategories(categoriesResponse || []);
-        
-        // Calculate stats
+
         const allProductsResponse = await getProducts();
         const products = allProductsResponse.data || [];
         const totalRating = products.reduce((sum, p) => sum + (p.rating || 0), 0);
-        
+
         setStats({
           totalProducts: products.length,
           categories: categoriesResponse?.length || 0,
           avgRating: products.length > 0 ? (totalRating / products.length).toFixed(1) : 0
         });
-        
+
       } catch (error) {
         console.error('Error fetching data:', error);
       } finally {
@@ -65,7 +61,7 @@ const Home = () => {
     fade: true,
     cssEase: "cubic-bezier(0.87, 0, 0.13, 1)",
     customPaging: (i) => (
-      <div className="w-3 h-3 rounded-full bg-[#607EA2]/50 hover:bg-[#DDE3A3] hover:scale-125 transition-all duration-300"></div>
+      <div className="w-3 h-3 rounded-full bg-[#FF6F20]/50 hover:bg-[#FFB300] hover:scale-125 transition-all duration-300"></div>
     ),
     appendDots: (dots) => (
       <div className="absolute bottom-8 w-full flex justify-center gap-3 z-20">
@@ -75,16 +71,16 @@ const Home = () => {
   };
 
   const gradients = [
-    "from-[#314B6E] via-[#607EA2] to-[#8197AC]",
-    "from-[#1a2332] via-[#314B6E] to-[#607EA2]",
-    "from-[#607EA2] via-[#8197AC] to-[#DDE3A3]"
+    "from-[#FF6F20]/40 via-[#FFB300]/30 to-[#FF7043]/40",
+    "from-[#FF7043]/40 via-[#FF6F20]/30 to-[#FFB300]/40",
+    "from-[#FFB300]/40 via-[#FF7043]/30 to-[#FF6F20]/40"
   ];
 
   const statsData = [
-    { icon: Users, value: "50K+", label: "Happy Customers", color: "from-[#607EA2] to-[#8197AC]" },
-    { icon: Package, value: `${stats.totalProducts}+`, label: "Products", color: "from-[#314B6E] to-[#607EA2]" },
-    { icon: Award, value: stats.avgRating, label: "Avg Rating", color: "from-[#8197AC] to-[#DDE3A3]" },
-    { icon: TrendingUp, value: `${stats.categories}+`, label: "Categories", color: "from-[#607EA2] to-[#DDE3A3]" }
+    { icon: Users, value: "50K+", label: "Happy Customers", color: "from-[#FF6F20] to-[#FFB300]" },
+    { icon: Package, value: `${stats.totalProducts}+`, label: "Products", color: "from-[#FFB300] to-[#FF7043]" },
+    { icon: Award, value: stats.avgRating, label: "Avg Rating", color: "from-[#FF7043] to-[#FF6F20]" },
+    { icon: TrendingUp, value: `${stats.categories}+`, label: "Categories", color: "from-[#FF6F20] to-[#FF7043]" }
   ];
 
   const features = [
@@ -92,25 +88,25 @@ const Home = () => {
       icon: Zap,
       title: "Fast Delivery",
       description: "Free shipping on orders over $50",
-      gradient: "from-[#607EA2] to-[#8197AC]"
+      gradient: "from-[#FF6F20] to-[#FFB300]"
     },
     {
       icon: Award,
       title: "Quality Products",
       description: "100% authentic guaranteed",
-      gradient: "from-[#314B6E] to-[#607EA2]"
+      gradient: "from-[#FFB300] to-[#FF7043]"
     },
     {
       icon: ShoppingBag,
       title: "Easy Returns",
       description: "30-day return policy",
-      gradient: "from-[#8197AC] to-[#DDE3A3]"
+      gradient: "from-[#FF7043] to-[#FF6F20]"
     },
     {
       icon: Star,
       title: "Best Prices",
       description: "Competitive pricing always",
-      gradient: "from-[#607EA2] to-[#DDE3A3]"
+      gradient: "from-[#FF6F20] to-[#FFB300]"
     }
   ];
 
@@ -126,53 +122,52 @@ const Home = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#0E141C] flex items-center justify-center">
+      <div className="min-h-screen bg-[#FFF3E0] flex items-center justify-center">
         <div className="text-center">
-          <div className="w-16 h-16 border-4 border-[#607EA2] border-t-[#DDE3A3] rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-[#DDE3A3] text-xl font-bold">Loading...</p>
+          <div className="w-16 h-16 border-4 border-[#FF6F20] border-t-[#FFB300] rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-[#FF6F20] text-xl font-bold">Loading...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#0E141C]">
+    <div className="min-h-screen bg-[#FFF3E0]">
       {/* Hero Slider */}
       <div className="w-full overflow-hidden">
         <Slider {...settings}>
           {bannerProducts.map((product, index) => {
             const discount = product.discount || 0;
             const discountedPrice = (product.price * (1 - discount / 100)).toFixed(2);
-            const imageUrl = product.images?.[1] || '';
-            
-            console.log('Product:', product.title, 'Image URL:', imageUrl);
-            
+
             return (
               <div key={product.id}>
-                <div className="relative w-full h-[500px] md:h-[600px] overflow-hidden">
+                <div className="relative w-full h-[500px] md:h-[600px] overflow-hidden bg-white">
                   {/* Background Image with Overlay */}
-                  <div className="absolute inset-0">
+                  <div className="absolute inset-0 flex items-center justify-center bg-[#FFF3E0]">
                     <img
                       src={product.images?.[0]}
                       alt={product.title}
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-contain md:object-cover scale-90 md:scale-100"
                       onError={(e) => {
-                        console.error('Image failed to load:', imageUrl);
                         e.target.src = 'https://via.placeholder.com/800x600?text=Product+Image';
                       }}
                     />
-                    <div className={`absolute inset-0 bg-gradient-to-r ${gradients[index % gradients.length]} opacity-90`} />
+                    {/* Lighter Gradient Overlay */}
+                    <div className={`absolute inset-0 bg-gradient-to-r ${gradients[index % gradients.length]} mix-blend-multiply opacity-60`} />
+                    {/* Bottom fade for readability */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
                   </div>
 
                   {/* Animated Shapes */}
                   <div className="absolute inset-0 overflow-hidden">
                     <motion.div
-                      className="absolute top-20 right-20 w-64 h-64 bg-[#DDE3A3]/10 rounded-full blur-3xl"
+                      className="absolute top-20 right-20 w-64 h-64 bg-[#FFB300]/10 rounded-full blur-3xl"
                       animate={{ scale: [1, 1.2, 1], rotate: [0, 90, 0] }}
                       transition={{ duration: 10, repeat: Infinity }}
                     />
                     <motion.div
-                      className="absolute bottom-20 left-20 w-96 h-96 bg-[#DDE3A3]/10 rounded-full blur-3xl"
+                      className="absolute bottom-20 left-20 w-96 h-96 bg-[#FF7043]/10 rounded-full blur-3xl"
                       animate={{ scale: [1, 1.3, 1], rotate: [0, -90, 0] }}
                       transition={{ duration: 15, repeat: Infinity }}
                     />
@@ -186,44 +181,32 @@ const Home = () => {
                       transition={{ delay: 0.2 }}
                     >
                       {discount > 0 && (
-                        <div className="inline-block bg-[#DDE3A3] text-[#0E141C] font-black px-6 py-2 rounded-full mb-4">
+                        <div className="inline-block bg-[#FF6F20] text-white font-black px-6 py-2 rounded-full mb-4 shadow-lg border-2 border-white">
                           {discount}% OFF
                         </div>
                       )}
-                      <h2 className="text-4xl md:text-7xl font-black mb-4 drop-shadow-2xl text-[#DDE3A3]">
-                        {product.name}
+                      <h2 className="text-4xl md:text-7xl font-black mb-4 drop-shadow-2xl text-white">
+                        {product.title}
                       </h2>
-                      <p className="text-xl md:text-3xl mb-4 font-bold opacity-90 drop-shadow-lg text-white">
-                        {product.brand?.name || 'Premium Quality'}
+                      <p className="text-xl md:text-3xl mb-4 font-bold opacity-95 drop-shadow-lg text-white">
+                        {product.category || 'Premium Quality'}
                       </p>
-                      <div className="flex items-center gap-4 mb-8">
-                        <span className="text-5xl font-black text-[#DDE3A3]">
-                          ${discount > 0 ? discountedPrice : product.price.toFixed(2)}
-                        </span>
-                        {discount > 0 && (
-                          <span className="text-3xl text-white/70 line-through">
-                            ${product.price.toFixed(2)}
-                          </span>
-                        )}
-                      </div>
 
                       {/* Buttons */}
                       <div className="flex gap-4 flex-wrap">
                         <Link
                           to={`/products/${product.id}`}
-                          className="group relative overflow-hidden bg-[#DDE3A3] text-[#0E141C] hover:bg-white font-black py-4 px-8 rounded-xl transition-all shadow-2xl hover:shadow-[#607EA2]/50 flex items-center gap-2"
+                          className="group relative overflow-hidden bg-white text-[#FF6F20] hover:bg-[#FF6F20] hover:text-white font-black py-4 px-8 rounded-xl transition-all shadow-2xl hover:shadow-[#FFB300]/50 flex items-center gap-2"
                         >
                           <span className="relative z-10">Shop Now</span>
                           <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
                           <motion.div
-                            className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-0 group-hover:opacity-30"
-                            animate={{ x: ["-100%", "100%"] }}
-                            transition={{ duration: 1.5, repeat: Infinity, repeatDelay: 1 }}
+                            className="absolute inset-0 bg-gradient-to-r from-[#FFB300] to-[#FF6F20] opacity-0 group-hover:opacity-100 transition-opacity"
                           />
                         </Link>
                         <Link
                           to="/products"
-                          className="bg-[#314B6E]/60 backdrop-blur-sm text-[#DDE3A3] hover:bg-[#314B6E] border-2 border-[#607EA2] font-black py-4 px-8 rounded-xl transition-all shadow-2xl hover:shadow-[#607EA2]/50 flex items-center gap-2"
+                          className="bg-black/20 backdrop-blur-md text-white hover:bg-black/40 border-2 border-white font-black py-4 px-8 rounded-xl transition-all shadow-2xl hover:shadow-black/50 flex items-center gap-2"
                         >
                           <span>View All</span>
                           <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
@@ -252,13 +235,13 @@ const Home = () => {
               key={index}
               variants={itemVariants}
               whileHover={{ scale: 1.05, y: -5 }}
-              className="bg-gradient-to-br from-[#314B6E]/40 to-[#1a2332] border border-[#314B6E] rounded-2xl shadow-xl shadow-[#314B6E]/30 p-6 text-center backdrop-blur-sm"
+              className="bg-white border-2 border-[#FF6F20]/20 rounded-2xl shadow-xl shadow-[#FF6F20]/5 p-6 text-center"
             >
               <div className={`inline-block p-3 bg-gradient-to-r ${stat.color} rounded-xl mb-3 shadow-lg`}>
-                <stat.icon size={28} className="text-[#0E141C]" />
+                <stat.icon size={28} className="text-white" />
               </div>
-              <h3 className="text-3xl font-black text-[#DDE3A3] mb-1">{stat.value}</h3>
-              <p className="text-[#8197AC] font-bold text-sm">{stat.label}</p>
+              <h3 className="text-3xl font-black text-[#4A4A4A] mb-1">{stat.value}</h3>
+              <p className="text-[#FF6F20] font-bold text-sm">{stat.label}</p>
             </motion.div>
           ))}
         </div>
@@ -266,6 +249,9 @@ const Home = () => {
 
       {/* Product Carousel */}
       <ProductCarousel />
+
+      {/* Brands Slider */}
+      <Brands />
 
       {/* Features Section */}
       <motion.section
@@ -276,10 +262,10 @@ const Home = () => {
         className="max-w-6xl mx-auto px-6 py-20"
       >
         <motion.div variants={itemVariants} className="text-center mb-16">
-          <h2 className="text-5xl font-black mb-6 text-[#DDE3A3]">
+          <h2 className="text-5xl font-black mb-6 bg-gradient-to-r from-[#FF6F20] via-[#FFB300] to-[#FF7043] bg-clip-text text-transparent">
             Why Choose Us
           </h2>
-          <div className="w-24 h-1 bg-gradient-to-r from-[#607EA2] to-[#8197AC] mx-auto rounded-full" />
+          <div className="w-24 h-1 bg-gradient-to-r from-[#FF6F20] to-[#FFB300] mx-auto rounded-full" />
         </motion.div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -287,14 +273,14 @@ const Home = () => {
             <motion.div
               key={index}
               variants={itemVariants}
-              whileHover={{ y: -10, borderColor: "#607EA2" }}
-              className="bg-gradient-to-br from-[#314B6E]/20 to-[#0E141C] rounded-2xl p-8 shadow-lg hover:shadow-2xl hover:shadow-[#314B6E]/40 transition-all border-2 border-[#314B6E]/50 backdrop-blur-sm"
+              whileHover={{ y: -10, borderColor: "#FF6F20" }}
+              className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl hover:shadow-[#FF6F20]/10 transition-all border-2 border-[#FF6F20]/10 hover:border-[#FF6F20]"
             >
               <div className={`inline-block p-4 bg-gradient-to-r ${feature.gradient} rounded-xl mb-6 shadow-lg`}>
-                <feature.icon size={32} className="text-[#0E141C]" />
+                <feature.icon size={32} className="text-white" />
               </div>
-              <h3 className="text-xl font-black text-[#DDE3A3] mb-3">{feature.title}</h3>
-              <p className="text-[#8197AC] leading-relaxed">{feature.description}</p>
+              <h3 className="text-xl font-black text-[#4A4A4A] mb-3">{feature.title}</h3>
+              <p className="text-[#4A4A4A]/70 leading-relaxed">{feature.description}</p>
             </motion.div>
           ))}
         </div>
@@ -305,17 +291,17 @@ const Home = () => {
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
-        className="bg-gradient-to-r from-[#314B6E] via-[#607EA2] to-[#8197AC] py-20 relative overflow-hidden border-y border-[#314B6E]"
+        className="bg-gradient-to-r from-[#FF6F20] via-[#FFB300] to-[#FF7043] py-20 relative overflow-hidden border-y-4 border-[#FF6F20]"
       >
         {/* Animated Background */}
         <div className="absolute inset-0 opacity-20">
           <motion.div
-            className="absolute top-0 left-0 w-96 h-96 bg-[#DDE3A3]/30 rounded-full blur-3xl"
+            className="absolute top-0 left-0 w-96 h-96 bg-white rounded-full blur-3xl"
             animate={{ x: [0, 100, 0], y: [0, 50, 0] }}
             transition={{ duration: 20, repeat: Infinity }}
           />
           <motion.div
-            className="absolute bottom-0 right-0 w-96 h-96 bg-[#DDE3A3]/30 rounded-full blur-3xl"
+            className="absolute bottom-0 right-0 w-96 h-96 bg-white rounded-full blur-3xl"
             animate={{ x: [0, -100, 0], y: [0, -50, 0] }}
             transition={{ duration: 15, repeat: Infinity }}
           />
@@ -328,13 +314,13 @@ const Home = () => {
             viewport={{ once: true }}
             transition={{ type: "spring", stiffness: 100 }}
           >
-            <h2 className="text-5xl font-black mb-6 text-[#DDE3A3]">Ready to Start Shopping?</h2>
+            <h2 className="text-5xl font-black mb-6 text-white">Ready to Start Shopping?</h2>
             <p className="text-xl mb-8 text-white font-semibold">
               Discover amazing deals on your favorite tech products
             </p>
             <Link
               to="/products"
-              className="inline-flex items-center gap-3 bg-[#DDE3A3] text-[#0E141C] font-black py-5 px-10 rounded-xl hover:bg-white transition-all shadow-2xl hover:shadow-[#DDE3A3]/50 group"
+              className="inline-flex items-center gap-3 bg-white text-[#FF6F20] font-black py-5 px-10 rounded-xl hover:bg-[#FFF3E0] transition-all shadow-2xl hover:shadow-white/50 group"
             >
               Browse Products
               <ArrowRight size={24} className="group-hover:translate-x-1 transition-transform" />
@@ -343,8 +329,7 @@ const Home = () => {
         </div>
       </motion.section>
 
-      {/* Additional decorative section */}
-      <div className="h-20 bg-gradient-to-b from-[#0E141C] to-[#1a2332]" />
+      <div className="h-20 bg-gradient-to-b from-[#FFF3E0] to-white" />
     </div>
   );
 };

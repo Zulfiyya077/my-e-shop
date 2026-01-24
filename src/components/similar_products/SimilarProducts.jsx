@@ -54,15 +54,13 @@ const SimilarProducts = ({ currentProductId, category }) => {
       animate={{ opacity: 1, y: 0 }}
       className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 sm:mt-16 lg:mt-20"
     >
-      {/* Header */}
       <div className="mb-6 sm:mb-8">
-        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black bg-gradient-to-r from-[#DDE3A3] via-[#8197AC] to-[#607EA2] bg-clip-text text-transparent mb-2 sm:mb-3">
+        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black bg-gradient-to-r from-[#FF6F20] via-[#FFB300] to-[#FF7043] bg-clip-text text-transparent mb-2 sm:mb-3">
           Similar Products
         </h2>
-        <div className="w-20 sm:w-24 h-1 bg-gradient-to-r from-[#607EA2] to-[#8197AC] rounded-full" />
+        <div className="w-20 sm:w-24 h-1 bg-gradient-to-r from-[#FF6F20] to-[#FFB300] rounded-full" />
       </div>
 
-      {/* Products Grid */}
       <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
         {products.map((product, index) => (
           <motion.div
@@ -71,19 +69,17 @@ const SimilarProducts = ({ currentProductId, category }) => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.1 }}
             whileHover={{ y: -8 }}
-            className="group bg-gradient-to-b from-[#314B6E]/20 to-[#0E141C] rounded-2xl border border-[#314B6E]/50 overflow-hidden hover:border-[#607EA2] transition-all backdrop-blur-sm shadow-lg hover:shadow-2xl hover:shadow-[#314B6E]/40"
+            className="group bg-white rounded-2xl border-2 border-[#FF6F20] overflow-hidden hover:border-[#FFB300] transition-all shadow-lg hover:shadow-2xl hover:shadow-[#FF6F20]/40"
           >
             <Link to={`/products/${product.id}`}>
-              {/* Image Container */}
-              <div className="relative h-40 sm:h-48 lg:h-52 overflow-hidden bg-gradient-to-br from-[#0E141C] via-[#314B6E]/10 to-[#0E141C]">
-                {/* Wishlist Button */}
+              <div className="relative h-40 sm:h-48 lg:h-52 overflow-hidden bg-[#FFF3E0]">
                 <motion.button
                   onClick={(e) => { 
                     e.preventDefault(); 
                     e.stopPropagation();
                     toggleWishlist(product); 
                   }}
-                  className="absolute top-2 right-2 sm:top-3 sm:right-3 z-10 bg-[#314B6E]/60 backdrop-blur-sm border border-[#607EA2]/50 rounded-xl p-1.5 sm:p-2 hover:border-red-400 transition-all"
+                  className="absolute top-2 right-2 sm:top-3 sm:right-3 z-10 bg-white border-2 border-[#FF6F20] rounded-xl p-1.5 sm:p-2 hover:bg-[#FFF3E0] transition-all"
                   whileHover={{ scale: 1.15, rotate: [0, -10, 10, 0] }}
                   whileTap={{ scale: 0.9 }}
                 >
@@ -91,21 +87,19 @@ const SimilarProducts = ({ currentProductId, category }) => {
                     size={14} 
                     className={`sm:w-4 sm:h-4 transition-all ${
                       isInWishlist(product.id) 
-                        ? 'fill-red-400 text-red-400' 
-                        : 'text-[#8197AC]'
+                        ? 'fill-[#FF7043] text-[#FF7043]' 
+                        : 'text-[#FF6F20]'
                     }`} 
                   />
                 </motion.button>
 
-                {/* Hover Effect Overlay */}
                 <motion.div
                   className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                   style={{
-                    background: "radial-gradient(circle at center, rgba(96, 126, 162, 0.15), transparent 70%)"
+                    background: "radial-gradient(circle at center, rgba(255, 179, 0, 0.15), transparent 70%)"
                   }}
                 />
 
-                {/* Product Image */}
                 <motion.img
                   src={product.images?.[0] || product.thumbnail || product.image}
                   alt={product.title || product.name}
@@ -115,22 +109,18 @@ const SimilarProducts = ({ currentProductId, category }) => {
                 />
               </div>
 
-              {/* Product Info */}
               <div className="p-3 sm:p-4 space-y-2">
-                {/* Category Badge */}
                 <motion.span 
-                  className="inline-block px-2 sm:px-2.5 py-0.5 sm:py-1 bg-[#607EA2]/30 text-[#DDE3A3] rounded-lg text-[10px] sm:text-xs font-black uppercase tracking-wider border border-[#607EA2]/50"
+                  className="inline-block px-2 sm:px-2.5 py-0.5 sm:py-1 bg-gradient-to-r from-[#FF6F20] to-[#FFB300] text-white rounded-lg text-[10px] sm:text-xs font-black uppercase tracking-wider"
                   whileHover={{ scale: 1.05 }}
                 >
                   {product.category}
                 </motion.span>
 
-                {/* Product Title */}
-                <h3 className="font-black text-sm sm:text-base text-[#DDE3A3] line-clamp-1 group-hover:text-[#8197AC] transition-colors">
+                <h3 className="font-black text-sm sm:text-base text-[#4A4A4A] line-clamp-1 group-hover:text-[#FF6F20] transition-colors">
                   {product.title || product.name}
                 </h3>
 
-                {/* Rating */}
                 <div className="flex items-center gap-1">
                   {[...Array(5)].map((_, i) => (
                     <Star 
@@ -138,41 +128,37 @@ const SimilarProducts = ({ currentProductId, category }) => {
                       size={10} 
                       className={`sm:w-3 sm:h-3 ${
                         i < Math.floor(product.rating) 
-                          ? "fill-[#8197AC] text-[#8197AC]" 
-                          : "text-[#314B6E]"
+                          ? "fill-[#FFB300] text-[#FFB300]" 
+                          : "text-gray-300"
                       }`} 
                     />
                   ))}
-                  <span className="text-[#8197AC] font-bold text-[10px] sm:text-xs ml-1">
+                  <span className="text-[#4A4A4A] font-bold text-[10px] sm:text-xs ml-1">
                     {product.rating?.toFixed(1) || '0.0'}
                   </span>
                 </div>
 
-                {/* Price */}
                 <div className="flex items-baseline gap-1.5 sm:gap-2">
-                  <span className="text-xl sm:text-2xl font-black text-[#DDE3A3]">
+                  <span className="text-xl sm:text-2xl font-black text-[#FF6F20]">
                     ${product.price?.toFixed(2) || '0.00'}
                   </span>
-                  <Zap size={12} className="text-[#607EA2] sm:w-[14px] sm:h-[14px]" />
+                  <Zap size={12} className="text-[#FFB300] sm:w-[14px] sm:h-[14px]" />
                 </div>
               </div>
             </Link>
 
-            {/* Add to Cart Button */}
             <motion.button
               onClick={(e) => handleAddToCart(product, e)}
-              className="w-full bg-gradient-to-r from-[#607EA2] to-[#8197AC] text-[#0E141C] py-2.5 sm:py-3 flex items-center justify-center gap-1.5 sm:gap-2 font-black text-sm sm:text-base relative overflow-hidden group/btn"
+              className="w-full bg-gradient-to-r from-[#FF6F20] to-[#FFB300] text-white py-2.5 sm:py-3 flex items-center justify-center gap-1.5 sm:gap-2 font-black text-sm sm:text-base relative overflow-hidden group/btn"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
-              {/* Shine Effect */}
               <motion.div
-                className="absolute inset-0 bg-gradient-to-r from-transparent via-[#DDE3A3]/20 to-transparent"
+                className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
                 animate={{ x: ["-100%", "100%"] }}
                 transition={{ duration: 2, repeat: Infinity, repeatDelay: 1 }}
               />
               
-              {/* Cart Icon */}
               <motion.div
                 animate={addedProducts.has(product.id) ? { rotate: [0, -15, 15, 0] } : {}}
                 transition={{ duration: 0.5 }}
@@ -180,7 +166,6 @@ const SimilarProducts = ({ currentProductId, category }) => {
                 <ShoppingCart size={14} className="relative z-10 sm:w-4 sm:h-4" />
               </motion.div>
               
-              {/* Button Text */}
               <AnimatePresence mode="wait">
                 {addedProducts.has(product.id) ? (
                   <motion.span

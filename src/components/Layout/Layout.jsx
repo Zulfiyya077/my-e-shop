@@ -15,7 +15,7 @@ const Layout = ({ children }) => {
             <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
             <CartSideBar />
 
-         
+
             {isSidebarOpen && (
                 <div
                     className="fixed inset-0  bg-opacity-60 backdrop-blur-sm z-40"
