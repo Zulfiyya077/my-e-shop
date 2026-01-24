@@ -116,11 +116,11 @@ const Brands = () => {
             },
             {
                 breakpoint: 768,
-                settings: { slidesToShow: 3 }
+                settings: { slidesToShow: 2.5 }
             },
             {
                 breakpoint: 480,
-                settings: { slidesToShow: 2 }
+                settings: { slidesToShow: 1.5 }
             }
         ]
     };
