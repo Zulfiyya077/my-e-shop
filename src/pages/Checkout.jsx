@@ -10,7 +10,6 @@ const Checkout = () => {
     const navigate = useNavigate();
     const [step, setStep] = useState(1);
 
-    // Form States
     const [formData, setFormData] = useState({
         email: "",
         firstName: "",
@@ -26,11 +25,62 @@ const Checkout = () => {
 
     const handleInput = (e) => {
         const { name, value } = e.target;
+
+        if (name === "cardNumber") {
+            const val = value.replace(/\D/g, "").slice(0, 16);
+            setFormData(prev => ({ ...prev, [name]: val }));
+            return;
+        }
+
+        if (name === "expiry") {
+            let val = value.replace(/\D/g, "").slice(0, 4);
+            if (val.length > 2) {
+                val = val.slice(0, 2) + "/" + val.slice(2);
+            }
+            setFormData(prev => ({ ...prev, [name]: val }));
+            return;
+        }
+
+        if (name === "cvv") {
+            const val = value.replace(/\D/g, "").slice(0, 4);
+            setFormData(prev => ({ ...prev, [name]: val }));
+            return;
+        }
+
         setFormData(prev => ({ ...prev, [name]: value }));
+    };
+
+    const validatePayment = () => {
+        const { cardNumber, expiry, cvv, cardName } = formData;
+
+        if (!/^\d{16}$/.test(cardNumber)) {
+            toast.error("Please enter a valid 16-digit card number");
+            return false;
+        }
+
+        if (!/^(0[1-9]|1[0-2])\/\d{2}$/.test(expiry)) {
+            toast.error("Please enter a valid expiry date (MM/YY)");
+            return false;
+        }
+
+        if (!/^\d{3,4}$/.test(cvv)) {
+            toast.error("Please enter a valid CVV (3 or 4 digits)");
+            return false;
+        }
+
+        if (cardName.length < 3) {
+            toast.error("Please enter the full name on the card");
+            return false;
+        }
+
+        return true;
     };
 
     const handleCheckout = (e) => {
         e.preventDefault();
+
+        if (!validatePayment()) return;
+
         toast.success("Order Placed Successfully! 🎉", {
             style: { background: "#FF6F20", color: "white" }
         });
@@ -172,10 +222,10 @@ const Checkout = () => {
 
                                         <form onSubmit={handleCheckout} className="space-y-4">
                                             <InputField label="Name on Card" name="cardName" value={formData.cardName} onChange={handleInput} />
-                                            <InputField label="Card Number" name="cardNumber" value={formData.cardNumber} onChange={handleInput} maxLength="16" />
+                                            <InputField label="Card Number" name="cardNumber" value={formData.cardNumber} onChange={handleInput} maxLength="16" inputMode="numeric" placeholder="1234123412341234" />
                                             <div className="grid grid-cols-2 gap-4">
-                                                <InputField label="Expiry" name="expiry" placeholder="MM/YY" value={formData.expiry} onChange={handleInput} />
-                                                <InputField label="CVV" name="cvv" type="password" value={formData.cvv} onChange={handleInput} maxLength="4" />
+                                                <InputField label="Expiry" name="expiry" placeholder="MM/YY" value={formData.expiry} onChange={handleInput} maxLength="5" inputMode="numeric" />
+                                                <InputField label="CVV" name="cvv" type="password" value={formData.cvv} onChange={handleInput} maxLength="4" inputMode="numeric" />
                                             </div>
 
                                             <div className="flex items-center gap-3 p-4 bg-[#FFF3E0]/30 rounded-xl border border-[#FF6F20]/5 mt-2">
@@ -269,7 +319,7 @@ const Checkout = () => {
     );
 };
 
-const InputField = ({ label, name, type = "text", value, onChange, placeholder, maxLength }) => (
+const InputField = ({ label, name, type = "text", value, onChange, placeholder, maxLength, inputMode }) => (
     <div className="space-y-1.5">
         <label className="text-[9px] font-black text-[#4A4A4A]/50 uppercase tracking-widest ml-1">{label}</label>
         <input
@@ -279,6 +329,7 @@ const InputField = ({ label, name, type = "text", value, onChange, placeholder, 
             onChange={onChange}
             placeholder={placeholder}
             maxLength={maxLength}
+            inputMode={inputMode}
             required
             className="w-full px-4 py-3 bg-[#FFF3E0]/15 border-2 border-transparent focus:border-[#FF6F20]/20 rounded-xl text-[#4A4A4A] font-bold text-xs sm:text-sm outline-none transition-all placeholder-[#494949]/20"
         />

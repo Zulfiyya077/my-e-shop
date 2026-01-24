@@ -88,6 +88,9 @@ const Product = () => {
         setPriceRange: setContextPriceRange,
         sortBy: contextSortBy,
         setSortBy: setContextSortBy,
+        page,
+        setPage,
+        resetAllFilters: contextResetAll,
     } = useFilter();
 
     // Local state for batch filtering
@@ -95,7 +98,6 @@ const Product = () => {
     const [localBrand, setLocalBrand] = useState(contextBrand);
     const [localColor, setLocalColor] = useState(contextColor);
     const [localPriceRange, setLocalPriceRange] = useState(contextPriceRange);
-    const [localSortBy, setLocalSortBy] = useState(contextSortBy);
 
     // Sync local state when context changes (e.g., direct link or Home page click)
     useEffect(() => {
@@ -103,8 +105,7 @@ const Product = () => {
         setLocalBrand(contextBrand);
         setLocalColor(contextColor);
         setLocalPriceRange(contextPriceRange);
-        setLocalSortBy(contextSortBy);
-    }, [contextCategory, contextBrand, contextColor, contextPriceRange, contextSortBy]);
+    }, [contextCategory, contextBrand, contextColor, contextPriceRange]);
 
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -113,14 +114,13 @@ const Product = () => {
     const [categories, setCategories] = useState([]);
     const [showFilters, setShowFilters] = useState(false);
     const [addedProducts, setAddedProducts] = useState(new Set());
-    const [page, setPage] = useState(1);
 
     const handleApplyFilters = () => {
         setContextCategory(localCategory);
         setContextBrand(localBrand);
         setContextColor(localColor);
         setContextPriceRange(localPriceRange);
-        setContextSortBy(localSortBy);
+        // We don't setContextSortBy here anymore as it's immediate
         setPage(1);
         setShowFilters(false);
     };
@@ -145,12 +145,6 @@ const Product = () => {
             try {
                 const response = await getProducts({
                     category: contextCategory !== "all" ? contextCategory : undefined,
-                    brand: contextBrand !== "all" ? contextBrand : undefined,
-                    color: contextColor !== "all" ? contextColor : undefined,
-                    minPrice: contextPriceRange[0] || undefined,
-                    maxPrice: contextPriceRange[1] !== 5000 ? contextPriceRange[1] : undefined,
-                    page,
-                    limit: PER_PAGE,
                 });
 
                 let allProducts = [];
@@ -160,27 +154,58 @@ const Product = () => {
                     allProducts = response;
                 }
 
-                const sortedProducts = [...allProducts].sort((a, b) => {
+                // Improved local filtering
+                const filteredProducts = allProducts.filter(product => {
+                    // Category check (redundant but safe)
+                    const categoryMatch = contextCategory === "all" ||
+                        (product.category && product.category.toLowerCase() === contextCategory.toLowerCase());
+
+                    // Case-insensitive brand match
+                    const brandMatch = contextBrand === "all" ||
+                        (product.brand && product.brand.toLowerCase() === contextBrand.toLowerCase());
+
+                    // Normalized color match (handles gray/grey)
+                    const normalizeColor = (c) => c?.toLowerCase().replace('ay', 'ey');
+                    const colorMatch = contextColor === "all" ||
+                        (product.color && normalizeColor(product.color) === normalizeColor(contextColor));
+
+                    const priceMatch = (product.price || 0) >= contextPriceRange[0] && (product.price || 0) <= contextPriceRange[1];
+
+                    return categoryMatch && brandMatch && colorMatch && priceMatch;
+                });
+
+                // Calculate total pages for the filtered set
+                const calculatedTotalPages = Math.ceil(filteredProducts.length / PER_PAGE);
+
+                // CRITICAL: If current page is out of bounds for new filtered results, reset to 1
+                if (page > calculatedTotalPages && calculatedTotalPages > 0) {
+                    setPage(1);
+                    return; // useEffect will re-run with page 1
+                }
+
+                // Apply global sorting to the filtered products
+                const sortedProducts = [...filteredProducts].sort((a, b) => {
                     switch (contextSortBy) {
                         case "price-asc":
-                            return a.price - b.price;
+                            return (a.price || 0) - (b.price || 0);
                         case "price-desc":
-                            return b.price - a.price;
+                            return (b.price || 0) - (a.price || 0);
                         case "name-asc":
-                            return a.title.localeCompare(b.title);
+                            return (a.title || "").localeCompare(b.title || "");
                         case "name-desc":
-                            return b.title.localeCompare(a.title);
+                            return (b.title || "").localeCompare(a.title || "");
                         default:
                             return 0;
                     }
                 });
 
-                const start = (page - 1) * PER_PAGE;
+                // Local pagination
+                const start = Math.max(0, (page - 1) * PER_PAGE);
                 const end = start + PER_PAGE;
                 const paginatedProducts = sortedProducts.slice(start, end);
 
                 setProducts(paginatedProducts);
-                setTotalPages(Math.ceil(sortedProducts.length / PER_PAGE));
+                setTotalPages(calculatedTotalPages);
 
             } catch (err) {
                 console.error("Error fetching products:", err);
@@ -207,19 +232,16 @@ const Product = () => {
     }, []);
 
     const resetFilters = () => {
+        // Atomic reset in context & URL
+        contextResetAll();
+
+        // Immediate local state reset for UI
         setLocalCategory("all");
         setLocalBrand("all");
         setLocalColor("all");
         setLocalPriceRange([0, 5000]);
-        setLocalSortBy("default");
+        // Note: localSortBy is handled by the immediate sortBy context change if needed
 
-        setContextCategory("all");
-        setContextBrand("all");
-        setContextColor("all");
-        setContextPriceRange([0, 5000]);
-        setContextSortBy("default");
-
-        setPage(1);
         setShowFilters(false);
     };
 
@@ -271,8 +293,11 @@ const Product = () => {
                 <CustomDropdown
                     label="Sort By"
                     icon={ArrowUpDown}
-                    value={localSortBy}
-                    onChange={setLocalSortBy}
+                    value={contextSortBy}
+                    onChange={(val) => {
+                        setContextSortBy(val);
+                        setLocalSortBy(val);
+                    }}
                     options={sortOptions}
                 />
 
