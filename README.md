@@ -29,48 +29,9 @@
 -   **Icons**: [Lucide React](https://lucide.dev/)
 -   **Notifications**: [React Toastify](https://fkhadra.github.io/react-toastify/)
 
-## Getting Started
 
-Follow these steps to set up the project locally.
 
-### Prerequisites
 
--   Node.js (v16 or higher)
--   npm or yarn
-
-### Installation
-
-1.  **Clone the repository**
-    ```bash
-    git clone https://github.com/yourusername/ziptech.git
-    cd ziptech
-    ```
-
-2.  **Install dependencies**
-    ```bash
-    npm install
-    ```
-
-3.  **Start the development server**
-    ```bash
-    npm run dev
-    ```
-
-4.  **Open in browser**
-    Visit `http://localhost:5173` to see the app in action.
-
-## Project Structure
-
-```bash
-src/
-├── components/     # Reusable UI components (Product, Skeleton, Dropdowns)
-├── context/        # React Context (Cart, Wishlist, Filter)
-├── services/       # API integration (getProducts, getBrands)
-├── App.jsx         # Main application entry
-└── main.jsx        # DOM rendering
-```
-
-## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
