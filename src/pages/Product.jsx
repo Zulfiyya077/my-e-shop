@@ -656,31 +656,41 @@ const Product = () => {
                         </motion.div>
 
                         {!loading && totalPages > 1 && (
-                            <div className="flex items-center justify-center gap-2 mt-16 px-4">
+                            <div className="flex items-center justify-center gap-1 sm:gap-2 mt-16 px-2 sm:px-4">
                                 <motion.button
                                     onClick={() => page > 1 && setPage(page - 1)}
                                     disabled={page === 1}
-                                    className={`p-3 rounded-xl border-2 transition-all ${page === 1
+                                    className={`p-2 sm:p-3 rounded-xl border-2 transition-all ${page === 1
                                         ? 'bg-gray-100/50 text-gray-300 border-gray-100'
                                         : 'bg-white text-[#FF6F20] border-[#FF6F20] hover:bg-[#FFF3E0] shadow-lg shadow-[#FF6F20]/5'
                                         }`}
                                     whileHover={page > 1 ? { scale: 1.1 } : {}}
                                 >
-                                    <ChevronLeft size={18} />
+                                    <ChevronLeft size={16} className="sm:hidden" />
+                                    <ChevronLeft size={18} className="hidden sm:block" />
                                 </motion.button>
 
-                                <div className="flex gap-2">
+                                <div className="flex gap-1 sm:gap-2">
                                     {[...Array(totalPages)].map((_, idx) => {
                                         const pageNum = idx + 1;
                                         const isActive = pageNum === page;
+
+                                        // Logic to determine if this button is a "neighbor" that should be hidden on mobile
+                                        // We keep First(1), Last(totalPages), and Current(page) always visible
+                                        // We hide page-1 and page+1 on mobile
+                                        const isMobileHidden = (pageNum === page - 1 || pageNum === page + 1) &&
+                                            pageNum !== 1 &&
+                                            pageNum !== totalPages;
+
                                         if (pageNum === 1 || pageNum === totalPages || (pageNum >= page - 1 && pageNum <= page + 1)) {
                                             return (
                                                 <motion.button
                                                     key={pageNum}
                                                     onClick={() => setPage(pageNum)}
-                                                    className={`w-10 h-10 rounded-xl border-2 font-black text-xs transition-all ${isActive
-                                                        ? 'bg-[#FF6F20] text-white border-transparent shadow-xl shadow-[#FF6F20]/20'
-                                                        : 'bg-white text-[#4A4A4A] border-[#FF6F20]/10 hover:border-[#FF6F20]'
+                                                    className={`w-8 h-8 sm:w-10 sm:h-10 rounded-xl border-2 font-black text-[10px] sm:text-xs transition-all ${isMobileHidden ? 'hidden sm:block' : 'block'
+                                                        } ${isActive
+                                                            ? 'bg-[#FF6F20] text-white border-transparent shadow-xl shadow-[#FF6F20]/20'
+                                                            : 'bg-white text-[#4A4A4A] border-[#FF6F20]/10 hover:border-[#FF6F20]'
                                                         }`}
                                                     whileHover={{ scale: 1.1 }}
                                                 >
@@ -688,7 +698,7 @@ const Product = () => {
                                                 </motion.button>
                                             );
                                         }
-                                        if (pageNum === page - 2 || pageNum === page + 2) return <span key={pageNum} className="px-1 text-[#FF6F20] self-center tracking-tighter">...</span>;
+                                        if (pageNum === page - 2 || pageNum === page + 2) return <span key={pageNum} className="px-0.5 sm:px-1 text-[#FF6F20] self-center tracking-tighter text-xs">...</span>;
                                         return null;
                                     })}
                                 </div>
@@ -696,13 +706,14 @@ const Product = () => {
                                 <motion.button
                                     onClick={() => page < totalPages && setPage(page + 1)}
                                     disabled={page === totalPages}
-                                    className={`p-3 rounded-xl border-2 transition-all ${page === totalPages
+                                    className={`p-2 sm:p-3 rounded-xl border-2 transition-all ${page === totalPages
                                         ? 'bg-gray-100/50 text-gray-300 border-gray-100'
                                         : 'bg-white text-[#FF6F20] border-[#FF6F20] hover:bg-[#FFF3E0] shadow-lg shadow-[#FF6F20]/5'
                                         }`}
                                     whileHover={page < totalPages ? { scale: 1.1 } : {}}
                                 >
-                                    <ChevronRight size={18} />
+                                    <ChevronRight size={16} className="sm:hidden" />
+                                    <ChevronRight size={18} className="hidden sm:block" />
                                 </motion.button>
                             </div>
                         )}
