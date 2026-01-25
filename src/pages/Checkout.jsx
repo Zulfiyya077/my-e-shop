@@ -81,7 +81,6 @@ const Checkout = () => {
 
         if (!validatePayment()) return;
 
-        // Save order to localStorage
         const order = {
             id: Date.now(),
             items: [...cartItems],
@@ -135,7 +134,7 @@ const Checkout = () => {
             <div className="max-w-6xl mx-auto px-4 sm:px-6">
                 {step < 3 ? (
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 items-start">
-                        {/* Main Content */}
+                        
                         <div className="lg:col-span-7 xl:col-span-8">
                             <button
                                 onClick={() => step === 2 ? setStep(1) : navigate(-1)}
@@ -258,7 +257,6 @@ const Checkout = () => {
                             </AnimatePresence>
                         </div>
 
-                        {/* Order Summary - More Compact */}
                         <aside className="lg:col-span-5 xl:col-span-4 lg:sticky lg:top-32">
                             <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-xl shadow-[#FF6F20]/5 border border-gray-100">
                                 <h3 className="text-lg font-black text-[#4A4A4A] mb-6 flex items-center gap-2">
@@ -301,7 +299,7 @@ const Checkout = () => {
                         </aside>
                     </div>
                 ) : (
-                    /* Success Step */
+                  
                     <motion.div
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}

@@ -17,7 +17,6 @@ const Contact = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Save message to localStorage
     const messageRecord = {
       id: Date.now(),
       ...formData,

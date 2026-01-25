@@ -180,13 +180,11 @@ const Product = () => {
         resetAllFilters: contextResetAll,
     } = useFilter();
 
-    // Local state for batch filtering
     const [localCategory, setLocalCategory] = useState(contextCategory);
-    const [localBrand, setLocalBrand] = useState(contextBrand); // Now an array
-    const [localColor, setLocalColor] = useState(contextColor); // Now an array
+    const [localBrand, setLocalBrand] = useState(contextBrand);
+    const [localColor, setLocalColor] = useState(contextColor);
     const [localPriceRange, setLocalPriceRange] = useState(contextPriceRange);
 
-    // Sync local state when context changes
     useEffect(() => {
         setLocalCategory(contextCategory);
         setLocalBrand(contextBrand);
@@ -241,16 +239,13 @@ const Product = () => {
                     allProducts = response;
                 }
 
-                // Improved local filtering
                 const filteredProducts = allProducts.filter(product => {
                     const categoryMatch = contextCategory === "all" ||
                         (product.category && product.category.toLowerCase() === contextCategory.toLowerCase());
 
-                    // Multi-brand match
                     const brandMatch = contextBrand.length === 0 ||
                         (product.brand && contextBrand.some(b => b.toLowerCase() === product.brand.toLowerCase()));
 
-                    // Multi-color match
                     const normalizeColor = (c) => c?.toLowerCase().replace('ay', 'ey');
                     const colorMatch = contextColor.length === 0 ||
                         (product.color && contextColor.some(c => normalizeColor(c) === normalizeColor(product.color)));
@@ -260,16 +255,13 @@ const Product = () => {
                     return categoryMatch && brandMatch && colorMatch && priceMatch;
                 });
 
-                // Calculate total pages for the filtered set
                 const calculatedTotalPages = Math.ceil(filteredProducts.length / PER_PAGE);
 
-                // CRITICAL: If current page is out of bounds for new filtered results, reset to 1
                 if (page > calculatedTotalPages && calculatedTotalPages > 0) {
                     setPage(1);
-                    return; // useEffect will re-run with page 1
+                    return;
                 }
 
-                // Apply global sorting to the filtered products
                 const sortedProducts = [...filteredProducts].sort((a, b) => {
                     switch (contextSortBy) {
                         case "price-asc":
@@ -317,15 +309,13 @@ const Product = () => {
     }, []);
 
     const resetFilters = () => {
-        // Atomic reset in context & URL
+
         contextResetAll();
 
-        // Immediate local state reset for UI
         setLocalCategory("all");
         setLocalBrand([]);
         setLocalColor([]);
         setLocalPriceRange([0, 5000]);
-        // Note: localSortBy is handled by the immediate sortBy context change if needed
 
         setShowFilters(false);
     };
@@ -381,7 +371,6 @@ const Product = () => {
                     value={contextSortBy}
                     onChange={(val) => {
                         setContextSortBy(val);
-                        setLocalSortBy(val);
                     }}
                     options={sortOptions}
                 />

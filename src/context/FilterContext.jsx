@@ -23,7 +23,7 @@ export const FilterProvider = ({ children }) => {
 
   const isInitialSync = useRef(true);
 
-  // Effect to sync State -> URL
+
   useEffect(() => {
     if (isInitialSync.current) {
       isInitialSync.current = false;
@@ -47,7 +47,7 @@ export const FilterProvider = ({ children }) => {
   }, [category, brand.join(","), color.join(","), minPrice, maxPrice, rating, sortBy, page]);
 
 
-  // Effect to sync URL -> State (e.g., on Back/Forward)
+ 
   useEffect(() => {
     const urlCategory = getParam("category", "all");
     const urlBrand = getArrayParam("brand");
@@ -83,7 +83,6 @@ export const FilterProvider = ({ children }) => {
     setSortByState("default");
     setPageState(1);
 
-    // Explicitly clear URL params
     setSearchParams(new URLSearchParams(), { replace: true });
   }, [setSearchParams]);
 
