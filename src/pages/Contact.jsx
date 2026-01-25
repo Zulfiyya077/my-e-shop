@@ -16,9 +16,20 @@ const Contact = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    // Save message to localStorage
+    const messageRecord = {
+      id: Date.now(),
+      ...formData,
+      date: new Date().toISOString()
+    };
+
+    const existingMessages = JSON.parse(localStorage.getItem("contactMessages") || "[]");
+    localStorage.setItem("contactMessages", JSON.stringify([...existingMessages, messageRecord]));
+
     console.log("Form submitted:", formData);
     setIsSubmitted(true);
-    
+
     setTimeout(() => {
       setFormData({ name: "", email: "", message: "" });
       setIsSubmitted(false);
@@ -43,7 +54,7 @@ const Contact = () => {
 
   return (
     <div className="min-h-screen bg-[#FFF3E0]">
-      <motion.section 
+      <motion.section
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         className="relative overflow-hidden bg-gradient-to-r from-[#FF6F20] via-[#FFB300] to-[#FF7043] text-white py-24"
@@ -62,7 +73,7 @@ const Contact = () => {
         </div>
 
         <div className="relative max-w-6xl mx-auto px-6 text-center">
-          <motion.h1 
+          <motion.h1
             initial={{ y: -50, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ type: "spring", stiffness: 100 }}
@@ -70,7 +81,7 @@ const Contact = () => {
           >
             Get In Touch
           </motion.h1>
-          <motion.p 
+          <motion.p
             initial={{ y: 50, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.2 }}
@@ -81,7 +92,7 @@ const Contact = () => {
         </div>
       </motion.section>
 
-      <motion.section 
+      <motion.section
         variants={containerVariants}
         initial="hidden"
         whileInView="visible"
@@ -198,7 +209,7 @@ const Contact = () => {
                   animate={{ x: ["-100%", "100%"] }}
                   transition={{ duration: 1.5, repeat: Infinity, repeatDelay: 1 }}
                 />
-                
+
                 <AnimatePresence mode="wait">
                   {isSubmitted ? (
                     <motion.span
@@ -242,7 +253,7 @@ const Contact = () => {
               <div className="w-24 h-1 bg-gradient-to-r from-[#FF6F20] to-[#FFB300] rounded-full" />
             </motion.div>
 
-            <motion.div 
+            <motion.div
               variants={itemVariants}
               className="bg-white rounded-2xl overflow-hidden shadow-xl border-2 border-[#FF6F20] h-96"
             >
@@ -257,7 +268,7 @@ const Contact = () => {
               />
             </motion.div>
 
-            <motion.div 
+            <motion.div
               variants={itemVariants}
               className="bg-[#FFF3E0] rounded-2xl p-8 border-2 border-[#FF6F20]"
             >
@@ -281,7 +292,7 @@ const Contact = () => {
         </div>
       </div>
 
-      <motion.section 
+      <motion.section
         variants={containerVariants}
         initial="hidden"
         whileInView="visible"

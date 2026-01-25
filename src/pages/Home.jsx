@@ -24,20 +24,22 @@ const Home = () => {
       try {
         setLoading(true);
 
-        const productsResponse = await getProducts({ limit: 3, sort: 'rating', order: 'desc' });
-        setBannerProducts(productsResponse.data || []);
+        const [bannerResponse, categoriesResponse, statsResponse] = await Promise.all([
+          getProducts({ limit: 3, sort: 'rating', order: 'desc' }),
+          getCategories(),
+          getProducts({ limit: 10 })
+        ]);
 
-        const categoriesResponse = await getCategories();
-        setCategories(categoriesResponse || []);
+        setBannerProducts(bannerResponse.data || []);
+        const cats = categoriesResponse || [];
+        setCategories(cats);
 
-       
-        const statsResponse = await getProducts({ limit: 10 });
         const productsForStats = statsResponse.data || [];
         const totalRating = productsForStats.reduce((sum, p) => sum + (p.rating || 0), 0);
 
         setStats({
           totalProducts: statsResponse.count || productsForStats.length,
-          categories: categoriesResponse?.length || 0,
+          categories: cats.length,
           avgRating: productsForStats.length > 0 ? (totalRating / productsForStats.length).toFixed(1) : 0
         });
 
@@ -154,7 +156,7 @@ const Home = () => {
                       }}
                     />
                     <div className={`absolute inset-0 bg-gradient-to-r ${gradients[index % gradients.length]} mix-blend-multiply opacity-60`} />
-                  
+
                     <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
                   </div>
                   <div className="absolute inset-0 overflow-hidden">
@@ -189,7 +191,7 @@ const Home = () => {
                         {product.category || 'Premium Quality'}
                       </p>
 
-                     
+
                       <div className="flex gap-4 flex-wrap">
                         <Link
                           to={`/products/${product.id}`}

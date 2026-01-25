@@ -1,14 +1,101 @@
 import { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Heart, ShoppingCart, Star, Filter, ChevronLeft, ChevronRight, X, Menu, ArrowUpDown, ChevronDown, Search } from "lucide-react";
+import { Heart, ShoppingCart, Star, Filter, ChevronLeft, ChevronRight, X, Menu, ArrowUpDown, ChevronDown, Search, Zap } from "lucide-react";
 import { useCart } from "../context/CartContext";
 import { useWishlist } from "../context/WishlistContext";
 import { useFilter } from "../context/FilterContext";
 import { getProducts, getBrands, getCategories } from "../services/api";
 import Skeleton from "../components/Skeleton";
+import { toast } from "react-toastify";
 
 const PER_PAGE = 6;
+
+const MultiSelectDropdown = ({ label, value, onChange, options, icon: Icon }) => {
+    const [isOpen, setIsOpen] = useState(false);
+    const dropdownRef = useRef(null);
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+                setIsOpen(false);
+            }
+        };
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
+
+    const toggleItem = (val) => {
+        if (value.includes(val)) {
+            onChange(value.filter(v => v !== val));
+        } else if (value.length < 3) {
+            onChange([...value, val]);
+        } else {
+            toast.warning("You can select maximum 3 items", {
+                style: { background: "#4A4A4A", color: "white" }
+            });
+        }
+    };
+
+    const getTriggerLabel = () => {
+        if (value.length === 0) return "All";
+        const firstValue = value[0];
+        const label = options.find(o => o.value === firstValue)?.label || firstValue;
+        if (value.length === 1) return label;
+        return `${label} + ${value.length - 1} more`;
+    };
+
+    return (
+        <div className="relative" ref={dropdownRef}>
+            {label && (
+                <label className="text-xs font-bold text-[#4A4A4A] mb-2 flex items-center gap-2 uppercase tracking-wider">
+                    {Icon && <Icon size={14} className="text-[#FF6F20]" />}
+                    {label}
+                </label>
+            )}
+            <button
+                type="button"
+                onClick={() => setIsOpen(!isOpen)}
+                className={`w-full flex items-center justify-between p-3 text-sm bg-white border-2 rounded-xl text-[#4A4A4A] font-bold transition-all shadow-sm ${isOpen || value.length > 0 ? 'border-[#FF6F20]' : 'border-gray-100 hover:border-[#FF6F20]/30'}`}
+            >
+                <span className="truncate capitalize">{getTriggerLabel()}</span>
+                <ChevronDown size={18} className={`text-[#FF6F20] transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
+            </button>
+
+            <AnimatePresence>
+                {isOpen && (
+                    <motion.div
+                        initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                        className="absolute z-[80] w-full mt-2 bg-white border-2 border-[#FF6F20] rounded-xl shadow-2xl overflow-hidden max-h-60 overflow-y-auto custom-scrollbar p-1"
+                    >
+                        <button
+                            onClick={() => { onChange([]); setIsOpen(false); }}
+                            className={`w-full text-left px-4 py-3 text-sm font-bold transition-colors rounded-lg mb-1 ${value.length === 0 ? "bg-[#FF6F20] text-white" : "text-[#4A4A4A] hover:bg-[#FFF3E0]"}`}
+                        >
+                            All Items
+                        </button>
+                        <div className="h-px bg-gray-100 my-1" />
+                        {options.filter(opt => opt.value !== "all").map((option) => (
+                            <button
+                                key={option.value}
+                                onClick={() => toggleItem(option.value)}
+                                className={`w-full flex items-center justify-between px-4 py-3 text-sm font-bold transition-colors rounded-lg mb-1 ${value.includes(option.value)
+                                    ? "bg-[#FFF3E0] text-[#FF6F20]"
+                                    : "text-[#4A4A4A] hover:bg-gray-50"
+                                    }`}
+                            >
+                                <span className="truncate capitalize">{option.label}</span>
+                                {value.includes(option.value) && <Zap size={14} className="fill-[#FF6F20] text-[#FF6F20]" />}
+                            </button>
+                        ))}
+                    </motion.div>
+                )}
+            </AnimatePresence>
+        </div>
+    );
+};
 
 const CustomDropdown = ({ label, value, onChange, options, icon: Icon }) => {
     const [isOpen, setIsOpen] = useState(false);
@@ -95,17 +182,17 @@ const Product = () => {
 
     // Local state for batch filtering
     const [localCategory, setLocalCategory] = useState(contextCategory);
-    const [localBrand, setLocalBrand] = useState(contextBrand);
-    const [localColor, setLocalColor] = useState(contextColor);
+    const [localBrand, setLocalBrand] = useState(contextBrand); // Now an array
+    const [localColor, setLocalColor] = useState(contextColor); // Now an array
     const [localPriceRange, setLocalPriceRange] = useState(contextPriceRange);
 
-    // Sync local state when context changes (e.g., direct link or Home page click)
+    // Sync local state when context changes
     useEffect(() => {
         setLocalCategory(contextCategory);
         setLocalBrand(contextBrand);
         setLocalColor(contextColor);
         setLocalPriceRange(contextPriceRange);
-    }, [contextCategory, contextBrand, contextColor, contextPriceRange]);
+    }, [contextCategory, JSON.stringify(contextBrand), JSON.stringify(contextColor), contextPriceRange]);
 
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -156,18 +243,17 @@ const Product = () => {
 
                 // Improved local filtering
                 const filteredProducts = allProducts.filter(product => {
-                    // Category check (redundant but safe)
                     const categoryMatch = contextCategory === "all" ||
                         (product.category && product.category.toLowerCase() === contextCategory.toLowerCase());
 
-                    // Case-insensitive brand match
-                    const brandMatch = contextBrand === "all" ||
-                        (product.brand && product.brand.toLowerCase() === contextBrand.toLowerCase());
+                    // Multi-brand match
+                    const brandMatch = contextBrand.length === 0 ||
+                        (product.brand && contextBrand.some(b => b.toLowerCase() === product.brand.toLowerCase()));
 
-                    // Normalized color match (handles gray/grey)
+                    // Multi-color match
                     const normalizeColor = (c) => c?.toLowerCase().replace('ay', 'ey');
-                    const colorMatch = contextColor === "all" ||
-                        (product.color && normalizeColor(product.color) === normalizeColor(contextColor));
+                    const colorMatch = contextColor.length === 0 ||
+                        (product.color && contextColor.some(c => normalizeColor(c) === normalizeColor(product.color)));
 
                     const priceMatch = (product.price || 0) >= contextPriceRange[0] && (product.price || 0) <= contextPriceRange[1];
 
@@ -236,8 +322,8 @@ const Product = () => {
 
         // Immediate local state reset for UI
         setLocalCategory("all");
-        setLocalBrand("all");
-        setLocalColor("all");
+        setLocalBrand([]);
+        setLocalColor([]);
         setLocalPriceRange([0, 5000]);
         // Note: localSortBy is handled by the immediate sortBy context change if needed
 
@@ -310,21 +396,18 @@ const Product = () => {
                     ]}
                 />
 
-                <CustomDropdown
+                <MultiSelectDropdown
                     label="Brand"
                     value={localBrand}
                     onChange={setLocalBrand}
-                    options={[
-                        { label: "All Brands", value: "all" },
-                        ...brands.map(b => ({ label: b, value: b }))
-                    ]}
+                    options={brands.map(b => ({ label: b, value: b }))}
                 />
 
-                <CustomDropdown
+                <MultiSelectDropdown
                     label="Color"
                     value={localColor}
                     onChange={setLocalColor}
-                    options={colorOptions}
+                    options={colorOptions.filter(opt => opt.value !== "all")}
                 />
 
                 <div>

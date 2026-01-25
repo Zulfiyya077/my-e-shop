@@ -6,11 +6,14 @@ const api = axios.create({
 });
 export const getProducts = async (params = {}) => {
     try {
-        
+
         const response = await api.get("/products", {
-            params
+            params: {
+                limit: 10,
+                ...params
+            }
         });
-        return response.data; 
+        return response.data;
     } catch (error) {
         console.error("Error fetching products:", error);
         throw error;
@@ -54,18 +57,25 @@ export const searchProducts = async (query) => {
                 q: query
             }
         });
-  
-        return response.data; 
+
+        return response.data;
     } catch (error) {
         console.error("Error searching products:", error);
         throw error;
     }
 };
 
+const apiCache = {
+    brands: null,
+    categories: null,
+};
+
 export const getBrands = async () => {
     try {
+        if (apiCache.brands) return apiCache.brands;
         const response = await api.get("/brands");
-        return response.data.data; 
+        apiCache.brands = response.data.data;
+        return apiCache.brands;
     } catch (error) {
         console.error("Error fetching brands:", error);
         throw error;
@@ -74,8 +84,10 @@ export const getBrands = async () => {
 
 export const getCategories = async () => {
     try {
+        if (apiCache.categories) return apiCache.categories;
         const response = await api.get("/categories");
-        return response.data.data; 
+        apiCache.categories = response.data.data;
+        return apiCache.categories;
     } catch (error) {
         console.error("Error fetching categories:", error);
         throw error;
@@ -85,7 +97,7 @@ export const getCategories = async () => {
 export const getProductImages = async (id) => {
     try {
         const response = await api.get(`/products/${id}/images`);
-        return response.data.data; 
+        return response.data.data;
     } catch (error) {
         console.error("Error fetching product images:", error);
         throw error;

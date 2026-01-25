@@ -81,6 +81,17 @@ const Checkout = () => {
 
         if (!validatePayment()) return;
 
+        // Save order to localStorage
+        const order = {
+            id: Date.now(),
+            items: [...cartItems],
+            total: finalTotal,
+            date: new Date().toISOString()
+        };
+
+        const existingOrders = JSON.parse(localStorage.getItem("orders") || "[]");
+        localStorage.setItem("orders", JSON.stringify([...existingOrders, order]));
+
         toast.success("Order Placed Successfully! 🎉", {
             style: { background: "#FF6F20", color: "white" }
         });
